@@ -12,7 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ArrowUp, ArrowDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -61,13 +61,18 @@ export const columns: ColumnDef<Post>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => {
+      const isSorted = column.getIsSorted();
+      const isAsc = isSorted === "asc";
+      const isDesc = isSorted === "desc";
+
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Id
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          Id {isAsc && <ArrowUp className="ml-2 h-4 w-4" />}
+          {isDesc && <ArrowDown className="ml-2 h-4 w-4" />}
+          {!isSorted && <ArrowUpDown className="ml-2 h-4 w-4" />}
         </Button>
       );
     },
@@ -76,13 +81,18 @@ export const columns: ColumnDef<Post>[] = [
   {
     accessorKey: "userId",
     header: ({ column }) => {
+      const isSorted = column.getIsSorted();
+      const isAsc = isSorted === "asc";
+      const isDesc = isSorted === "desc";
+
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          UserId
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          userId {isAsc && <ArrowUp className="ml-2 h-4 w-4" />}
+          {isDesc && <ArrowDown className="ml-2 h-4 w-4" />}
+          {!isSorted && <ArrowUpDown className="ml-2 h-4 w-4" />}
         </Button>
       );
     },
@@ -91,13 +101,18 @@ export const columns: ColumnDef<Post>[] = [
   {
     accessorKey: "title",
     header: ({ column }) => {
+      const isSorted = column.getIsSorted();
+      const isAsc = isSorted === "asc";
+      const isDesc = isSorted === "desc";
+
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Title
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          Title {isAsc && <ArrowUp className="ml-2 h-4 w-4" />}
+          {isDesc && <ArrowDown className="ml-2 h-4 w-4" />}
+          {!isSorted && <ArrowUpDown className="ml-2 h-4 w-4" />}
         </Button>
       );
     },
@@ -106,13 +121,18 @@ export const columns: ColumnDef<Post>[] = [
   {
     accessorKey: "body",
     header: ({ column }) => {
+      const isSorted = column.getIsSorted();
+      const isAsc = isSorted === "asc";
+      const isDesc = isSorted === "desc";
+
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Body
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          Body {isAsc && <ArrowUp className="ml-2 h-4 w-4" />}
+          {isDesc && <ArrowDown className="ml-2 h-4 w-4" />}
+          {!isSorted && <ArrowUpDown className="ml-2 h-4 w-4" />}
         </Button>
       );
     },
