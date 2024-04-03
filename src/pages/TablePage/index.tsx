@@ -24,6 +24,7 @@ const TablePage = () => {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-[80px]">ID</TableHead>
             <TableHead className="w-[100px]">User ID</TableHead>
             <TableHead>Title</TableHead>
             <TableHead>Body</TableHead>
@@ -32,7 +33,8 @@ const TablePage = () => {
         <TableBody>
           {posts.map((post) => (
             <TableRow key={post.id}>
-              <TableCell className="font-medium">{post.userId}</TableCell>
+              <TableCell>{post.id}</TableCell>
+              <TableCell>{post.userId}</TableCell>
               <TableCell>{post.title}</TableCell>
               <TableCell>{post.body}</TableCell>
             </TableRow>
