@@ -2,12 +2,11 @@ import { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from "../../components/ui/table";
+} from "@/components/ui/table";
 import { Post } from "../../interfaces/Post";
 
 const TablePage = () => {
@@ -23,7 +22,6 @@ const TablePage = () => {
   return (
     <section className="TablePage">
       <Table>
-        <TableCaption>A list of your recent posts.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">User ID</TableHead>

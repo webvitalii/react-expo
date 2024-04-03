@@ -17,6 +17,13 @@ const Navbar: React.FC = () => {
       >
         Table
       </Link>
+
+      <Link
+        to="/table-advanced"
+        className="font-bold px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900"
+      >
+        Table advanced
+      </Link>
     </nav>
   );
 };
