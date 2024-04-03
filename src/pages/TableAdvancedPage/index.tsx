@@ -103,7 +103,7 @@ export const columns: ColumnDef<Post>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const post = row.original;
 
       return (
         <DropdownMenu>
@@ -116,13 +116,13 @@ export const columns: ColumnDef<Post>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(post.title)}
             >
-              Copy payment ID
+              Copy post title
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>Edit post</DropdownMenuItem>
+            <DropdownMenuItem>Delete post</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
