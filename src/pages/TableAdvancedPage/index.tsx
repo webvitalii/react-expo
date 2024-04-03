@@ -35,6 +35,27 @@ import {
 
 import { Post } from "../../interfaces/Post";
 
+const generateSortableHeader = (obj) => {
+  console.log("header", obj);
+  const isSorted = obj.column.getIsSorted();
+  const isAsc = isSorted === "asc";
+  const isDesc = isSorted === "desc";
+
+  return (
+    <Button
+      variant="ghost"
+      onClick={() =>
+        obj.column.toggleSorting(obj.column.getIsSorted() === "asc")
+      }
+    >
+      <span className="capitalize">{obj.column.id}</span>{" "}
+      {isAsc && <ArrowUp className="ml-2 h-4 w-4" />}
+      {isDesc && <ArrowDown className="ml-2 h-4 w-4" />}
+      {!isSorted && <ArrowUpDown className="ml-2 h-4 w-4" />}
+    </Button>
+  );
+};
+
 export const columns: ColumnDef<Post>[] = [
   {
     id: "select",
@@ -60,82 +81,22 @@ export const columns: ColumnDef<Post>[] = [
   },
   {
     accessorKey: "id",
-    header: ({ column }) => {
-      const isSorted = column.getIsSorted();
-      const isAsc = isSorted === "asc";
-      const isDesc = isSorted === "desc";
-
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Id {isAsc && <ArrowUp className="ml-2 h-4 w-4" />}
-          {isDesc && <ArrowDown className="ml-2 h-4 w-4" />}
-          {!isSorted && <ArrowUpDown className="ml-2 h-4 w-4" />}
-        </Button>
-      );
-    },
+    header: generateSortableHeader,
     cell: ({ row }) => <div>{row.getValue("id")}</div>,
   },
   {
     accessorKey: "userId",
-    header: ({ column }) => {
-      const isSorted = column.getIsSorted();
-      const isAsc = isSorted === "asc";
-      const isDesc = isSorted === "desc";
-
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          userId {isAsc && <ArrowUp className="ml-2 h-4 w-4" />}
-          {isDesc && <ArrowDown className="ml-2 h-4 w-4" />}
-          {!isSorted && <ArrowUpDown className="ml-2 h-4 w-4" />}
-        </Button>
-      );
-    },
+    header: generateSortableHeader,
     cell: ({ row }) => <div>{row.getValue("userId")}</div>,
   },
   {
     accessorKey: "title",
-    header: ({ column }) => {
-      const isSorted = column.getIsSorted();
-      const isAsc = isSorted === "asc";
-      const isDesc = isSorted === "desc";
-
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Title {isAsc && <ArrowUp className="ml-2 h-4 w-4" />}
-          {isDesc && <ArrowDown className="ml-2 h-4 w-4" />}
-          {!isSorted && <ArrowUpDown className="ml-2 h-4 w-4" />}
-        </Button>
-      );
-    },
+    header: generateSortableHeader,
     cell: ({ row }) => <div>{row.getValue("title")}</div>,
   },
   {
     accessorKey: "body",
-    header: ({ column }) => {
-      const isSorted = column.getIsSorted();
-      const isAsc = isSorted === "asc";
-      const isDesc = isSorted === "desc";
-
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Body {isAsc && <ArrowUp className="ml-2 h-4 w-4" />}
-          {isDesc && <ArrowDown className="ml-2 h-4 w-4" />}
-          {!isSorted && <ArrowUpDown className="ml-2 h-4 w-4" />}
-        </Button>
-      );
-    },
+    header: generateSortableHeader,
     cell: ({ row }) => <div>{row.getValue("body")}</div>,
   },
   {
