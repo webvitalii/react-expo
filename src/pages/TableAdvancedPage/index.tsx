@@ -139,7 +139,6 @@ const TableAdvancedPage = () => {
   const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
-    // data,
     data: posts,
     columns,
     onSortingChange: setSorting,
@@ -165,8 +164,13 @@ const TableAdvancedPage = () => {
       .catch((error) => console.error("Error fetching posts:", error));
   }, []);
 
+  const {
+    pagination: { pageIndex, pageSize },
+  } = table.getState();
+
   return (
     <section className="TableAdvancedPage">
+      <h3>Table with sorting, filtering and pagination</h3>
       <div className="w-full">
         <div className="flex items-center py-4">
           <Input
@@ -235,6 +239,9 @@ const TableAdvancedPage = () => {
             {table.getFilteredRowModel().rows.length} row(s) selected.
           </div>
           <div className="space-x-2">
+            <span>
+              Page {pageIndex + 1} of {pageSize}
+            </span>
             <Button
               variant="outline"
               size="sm"
