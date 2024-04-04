@@ -35,20 +35,26 @@ import {
 
 import { Post } from "../../interfaces/Post";
 
-const generateSortableHeader = (obj) => {
-  console.log("header", obj);
-  const isSorted = obj.column.getIsSorted();
+interface SortableHeaderProps {
+  column: {
+    getIsSorted: () => "asc" | "desc" | false;
+    toggleSorting: (asc: boolean) => void;
+    id: string;
+  };
+}
+
+const generateSortableHeader = ({ column }: SortableHeaderProps) => {
+  console.log("header", column);
+  const isSorted = column.getIsSorted();
   const isAsc = isSorted === "asc";
   const isDesc = isSorted === "desc";
 
   return (
     <Button
       variant="ghost"
-      onClick={() =>
-        obj.column.toggleSorting(obj.column.getIsSorted() === "asc")
-      }
+      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
     >
-      <span className="capitalize">{obj.column.id}</span>{" "}
+      <span className="capitalize">{column.id}</span>{" "}
       {isAsc && <ArrowUp className="ml-2 h-4 w-4" />}
       {isDesc && <ArrowDown className="ml-2 h-4 w-4" />}
       {!isSorted && <ArrowUpDown className="ml-2 h-4 w-4" />}
@@ -213,7 +219,7 @@ const TableAdvancedPage = () => {
 
   return (
     <section className="TableAdvancedPage">
-      <h3>Table with sorting, filtering and pagination</h3>
+      <h3>Table with sorting, filtering and pagination.</h3>
       <div className="w-full">
         <div className="flex items-center py-4">
           <Input
