@@ -4,7 +4,6 @@ import { NavLink } from "react-router-dom";
 const navLinks = [
   { to: "/", text: "Home" },
   { to: "/table", text: "Table" },
-  { to: "/table-advanced", text: "Table advanced" },
   { to: "/form", text: "Form" },
 ];
 
