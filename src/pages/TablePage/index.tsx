@@ -219,7 +219,9 @@ const TablePage = () => {
 
   return (
     <section className="TableAdvancedPage">
-      <h3>Table with sorting, filtering and pagination.</h3>
+      <h1 className="text-2xl font-bold mb-4">
+        Table with sorting, filtering and pagination.
+      </h1>
       <div className="w-full">
         <div className="flex items-center py-4">
           <Input
