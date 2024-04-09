@@ -43,12 +43,6 @@ const FormPage: React.FC = () => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit222(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
-
   function onSubmit(data: z.infer<typeof formSchema>) {
     // ✅ This will be type-safe and validated.
     toast({
