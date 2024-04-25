@@ -21,6 +21,9 @@ const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
   bio: z
     .string()
     .min(10, {
@@ -39,6 +42,8 @@ const FormPage: React.FC = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
+      email: "",
+      bio: "",
     },
   });
 
@@ -80,19 +85,32 @@ const FormPage: React.FC = () => {
 
           <FormField
             control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" {...field} />
+                </FormControl>
+                <FormDescription>
+                  We'll never share your email with anyone else.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="bio"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Bio</FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="Tell us a little bit about yourself"
-                    className="resize-none"
-                    {...field}
-                  />
+                  <Textarea className="resize-none" {...field} />
                 </FormControl>
                 <FormDescription>
-                  You can <span>@mention</span> other users and organizations.
+                  Tell us a little bit about yourself.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
