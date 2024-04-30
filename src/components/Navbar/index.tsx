@@ -6,6 +6,7 @@ const navLinks = [
   { to: "/table", text: "Table" },
   { to: "/form", text: "Form" },
   { to: "/carousel", text: "Carousel" },
+  { to: "/count", text: "Count" },
 ];
 
 const Navbar: React.FC = () => {
