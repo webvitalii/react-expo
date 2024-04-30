@@ -5,7 +5,7 @@ import HomePage from "./pages/HomePage";
 import TablePage from "./pages/TablePage";
 import FormPage from "./pages/FormPage";
 import CarouselPage from "./pages/CarouselPage";
-import CountPage from "./pages/CountPage";
+import CounterPage from "./pages/CounterPage";
 import "./App.css";
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
           <Route path="/table" element={<TablePage />} />
           <Route path="/form" element={<FormPage />} />
           <Route path="/carousel" element={<CarouselPage />} />
-          <Route path="/count" element={<CountPage />} />
+          <Route path="/counter" element={<CounterPage />} />
         </Routes>
       </Router>
       <Toaster />
