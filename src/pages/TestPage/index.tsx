@@ -46,15 +46,17 @@ const Child: React.FC<ChildProps> = (props: ChildProps) => {
       />
       <Button onClick={handleNewMessage}>Change Message</Button>
 
-      <CounterButtonConnected count={count} onClick={handleCounterClick} />
-      <CounterButtonConnected count={count} onClick={handleCounterClick} />
-      <CounterButton />
-      <CounterButton />
+      <div>
+        <CounterButtonSharedState count={count} onClick={handleCounterClick} />
+        <CounterButtonSharedState count={count} onClick={handleCounterClick} />
+        <CounterButton />
+        <CounterButton />
+      </div>
     </div>
   );
 };
 
-const CounterButtonConnected = (props: {
+const CounterButtonSharedState = (props: {
   count: number;
   onClick: () => void;
 }) => {
