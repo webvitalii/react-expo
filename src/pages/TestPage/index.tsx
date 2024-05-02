@@ -26,6 +26,12 @@ interface ChildProps {
 const Child: React.FC<ChildProps> = (props: ChildProps) => {
   const [newMessage, setNewMessage] = useState<string>("");
 
+  const [count, setCount] = useState(0);
+
+  function handleCounterClick() {
+    setCount(count + 1);
+  }
+
   const handleNewMessage = () => {
     props.handleNewMessage(newMessage);
     setNewMessage("");
@@ -39,8 +45,34 @@ const Child: React.FC<ChildProps> = (props: ChildProps) => {
         onChange={(event) => setNewMessage(event.target.value)}
       />
       <Button onClick={handleNewMessage}>Change Message</Button>
+
+      <CounterButtonConnected count={count} onClick={handleCounterClick} />
+      <CounterButtonConnected count={count} onClick={handleCounterClick} />
+      <CounterButton />
+      <CounterButton />
     </div>
   );
+};
+
+const CounterButtonConnected = (props: {
+  count: number;
+  onClick: () => void;
+}) => {
+  return (
+    <Button onClick={props.onClick}>
+      Clicked {props.count} times (connected)
+    </Button>
+  );
+};
+
+const CounterButton = () => {
+  const [count, setCount] = useState(0);
+
+  function handleClick() {
+    setCount(count + 1);
+  }
+
+  return <Button onClick={handleClick}>Clicked {count} times</Button>;
 };
 
 export default TestPage;
