@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
@@ -31,17 +32,14 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  /*gender: z
+  gender: z
     .string()
-    .nonempty({
+    .min(1, {
       message: "Select a gender.",
     })
     .refine((value) => ["male", "female", "other"].includes(value), {
       message: "Invalid gender selection.",
-    }),*/
-  gender: z.string().nonempty({
-    message: "Select a gender.",
-  }),
+    }),
   bio: z
     .string()
     .min(10, {
@@ -50,6 +48,9 @@ const formSchema = z.object({
     .max(100, {
       message: "Bio must not be longer than 100 characters.",
     }),
+  agree: z.boolean().refine((val) => val, {
+    message: "You must agree to the terms of service.",
+  }),
 });
 
 const FormPage: React.FC = () => {
@@ -63,6 +64,7 @@ const FormPage: React.FC = () => {
       email: "",
       gender: "",
       bio: "",
+      agree: false,
     },
   });
 
@@ -160,6 +162,28 @@ const FormPage: React.FC = () => {
                   Tell us a little bit about yourself.
                 </FormDescription>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="agree"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Accept terms and conditions</FormLabel>
+                  <FormDescription>
+                    You must agree to the terms of service.
+                  </FormDescription>
+                </div>
               </FormItem>
             )}
           />
