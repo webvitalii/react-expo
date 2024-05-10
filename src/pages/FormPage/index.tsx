@@ -15,6 +15,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
@@ -23,6 +30,17 @@ const formSchema = z.object({
   }),
   email: z.string().email({
     message: "Please enter a valid email address.",
+  }),
+  /*gender: z
+    .string()
+    .nonempty({
+      message: "Select a gender.",
+    })
+    .refine((value) => ["male", "female", "other"].includes(value), {
+      message: "Invalid gender selection.",
+    }),*/
+  gender: z.string().nonempty({
+    message: "Select a gender.",
   }),
   bio: z
     .string()
@@ -43,12 +61,14 @@ const FormPage: React.FC = () => {
     defaultValues: {
       username: "",
       email: "",
+      gender: "",
       bio: "",
     },
   });
 
   // 2. Define a submit handler.
   function onSubmit(data: z.infer<typeof formSchema>) {
+    console.log(data);
     // ✅ This will be type-safe and validated.
     toast({
       title: "You submitted the following values:",
@@ -95,6 +115,33 @@ const FormPage: React.FC = () => {
                 <FormDescription>
                   We'll never share your email with anyone else.
                 </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Gender</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormDescription>Select your gender.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
