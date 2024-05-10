@@ -117,7 +117,9 @@ const FormPage: React.FC = () => {
             )}
           />
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={!form.formState.isValid}>
+            Submit
+          </Button>
         </form>
       </Form>
     </div>
