@@ -29,8 +29,8 @@ const formSchema = z.object({
     .min(10, {
       message: "Bio must be at least 10 characters.",
     })
-    .max(160, {
-      message: "Bio must not be longer than 30 characters.",
+    .max(100, {
+      message: "Bio must not be longer than 100 characters.",
     }),
 });
 
