@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
+import PageLayout from "@/components/PageLayout";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -83,7 +84,7 @@ const FormPage: React.FC = () => {
   }
 
   return (
-    <div>
+    <PageLayout>
       <h1 className="text-2xl font-bold mb-4">Form with validation</h1>
 
       <Form {...form}>
@@ -193,7 +194,7 @@ const FormPage: React.FC = () => {
           </Button>
         </form>
       </Form>
-    </div>
+    </PageLayout>
   );
 };
 

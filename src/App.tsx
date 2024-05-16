@@ -14,20 +14,18 @@ import "./App.css";
 function App() {
   return (
     <Provider store={store}>
-      <div className="container">
-        <Router>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/table" element={<TablePage />} />
-            <Route path="/form" element={<FormPage />} />
-            <Route path="/carousel" element={<CarouselPage />} />
-            <Route path="/counter" element={<CounterPage />} />
-            <Route path="/test" element={<TestPage />} />
-          </Routes>
-        </Router>
-        <Toaster />
-      </div>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/table" element={<TablePage />} />
+          <Route path="/form" element={<FormPage />} />
+          <Route path="/carousel" element={<CarouselPage />} />
+          <Route path="/counter" element={<CounterPage />} />
+          <Route path="/test" element={<TestPage />} />
+        </Routes>
+      </Router>
+      <Toaster />
     </Provider>
   );
 }

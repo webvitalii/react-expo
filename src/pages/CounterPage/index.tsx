@@ -7,13 +7,14 @@ import {
   incrementAsync,
 } from "@/state/counter/counterSlice";
 import { Button } from "@/components/ui/button";
+import PageLayout from "@/components/PageLayout";
 
 const CounterPage = () => {
   const count = useSelector((state: RootState) => state.counter.value);
   const dispatch = useDispatch<AppDispatch>();
 
   return (
-    <section className="CounterPage">
+    <PageLayout>
       <h1 className="text-2xl font-bold mb-4">Counter: {count}</h1>
 
       <div>
@@ -30,7 +31,7 @@ const CounterPage = () => {
           +10 async (3 seconds)
         </Button>
       </div>
-    </section>
+    </PageLayout>
   );
 };
 

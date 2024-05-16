@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import PageLayout from "@/components/PageLayout";
 import { Post } from "../../interfaces/Post";
 
 const TableSimplePage = () => {
@@ -20,7 +21,7 @@ const TableSimplePage = () => {
   }, []);
 
   return (
-    <section className="TablePage">
+    <PageLayout>
       <Table>
         <TableHeader>
           <TableRow>
@@ -41,7 +42,7 @@ const TableSimplePage = () => {
           ))}
         </TableBody>
       </Table>
-    </section>
+    </PageLayout>
   );
 };
 

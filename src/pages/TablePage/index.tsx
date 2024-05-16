@@ -32,6 +32,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import PageLayout from "@/components/PageLayout";
 
 import { Post } from "../../interfaces/Post";
 
@@ -218,7 +219,7 @@ const TablePage = () => {
   );
 
   return (
-    <section className="TableAdvancedPage">
+    <PageLayout>
       <h1 className="text-2xl font-bold mb-4">
         Table with sorting, filtering and pagination.
       </h1>
@@ -268,7 +269,7 @@ const TablePage = () => {
           </div>
         </div>
       </div>
-    </section>
+    </PageLayout>
   );
 };
 

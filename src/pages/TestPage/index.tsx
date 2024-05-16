@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import PageLayout from "@/components/PageLayout";
 
 const TestPage = () => {
   const [message, setMessage] = useState<string>("");
@@ -10,12 +11,12 @@ const TestPage = () => {
   };
 
   return (
-    <section className="TestPage">
+    <PageLayout>
       <h1 className="text-2xl font-bold mb-4">TestPage</h1>
 
       <h3>{message}</h3>
       <Child handleNewMessage={handleNewMessage} />
-    </section>
+    </PageLayout>
   );
 };
 
