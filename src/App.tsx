@@ -2,20 +2,19 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Provider } from "react-redux";
 import { store } from "@/state/store.ts";
-import Navbar from "./components/Navbar";
-import HomePage from "./pages/HomePage";
-import TablePage from "./pages/TablePage";
-import FormPage from "./pages/FormPage";
-import CarouselPage from "./pages/CarouselPage";
-import CounterPage from "./pages/CounterPage";
-import TestPage from "./pages/TestPage";
-import "./App.css";
+
+import HomePage from "@/pages/HomePage";
+import TablePage from "@/pages/TablePage";
+import FormPage from "@/pages/FormPage";
+import CarouselPage from "@/pages/CarouselPage";
+import CounterPage from "@/pages/CounterPage";
+import TestPage from "@/pages/TestPage";
+import "@/App.css";
 
 function App() {
   return (
     <Provider store={store}>
       <Router>
-        <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/table" element={<TablePage />} />
