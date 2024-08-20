@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import PageLayout from "@/components/PageLayout";
-import { Post } from "../../interfaces/Post";
+import { Post } from "@/types/Post";
 
 const TableSimplePage = () => {
   const [posts, setPosts] = useState<Post[]>([]);

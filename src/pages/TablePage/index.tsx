@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import { Link } from "react-router-dom";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -34,7 +34,7 @@ import {
 } from "@/components/ui/table";
 import PageLayout from "@/components/PageLayout";
 
-import { Post } from "../../interfaces/Post";
+import { Post } from "@/types/Post";
 
 interface SortableHeaderProps {
   column: {
@@ -223,6 +223,11 @@ const TablePage = () => {
       <h1 className="text-2xl font-bold mb-4">
         Table with sorting, filtering and pagination.
       </h1>
+
+      <p>
+        <Link to="/table-simple">Go to Table Simple</Link>
+      </p>
+
       <div className="w-full">
         <div className="flex items-center py-4">
           <Input
