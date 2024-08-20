@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Table,
   TableBody,
@@ -11,14 +11,31 @@ import PageLayout from "@/components/PageLayout";
 import { Post } from "@/types/Post";
 
 const TableSimplePage = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const {
+    data: posts,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<Post[]>({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/posts"
+      );
+      if (!response.ok) {
+        throw new Error("Error fetching posts");
+      }
+      return (await response.json()) as Post[];
+    },
+  });
 
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((response) => response.json())
-      .then((data) => setPosts(data))
-      .catch((error) => console.error("Error fetching posts:", error));
-  }, []);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <PageLayout>
@@ -32,7 +49,7 @@ const TableSimplePage = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {posts.map((post) => (
+          {posts?.map((post) => (
             <TableRow key={post.id}>
               <TableCell>{post.id}</TableCell>
               <TableCell>{post.userId}</TableCell>
