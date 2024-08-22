@@ -18,6 +18,7 @@ const TableSimplePage = () => {
     error,
   } = useQuery<Post[]>({
     queryKey: ["posts"],
+    staleTime: 10000,
     queryFn: async () => {
       const response = await fetch(
         "https://jsonplaceholder.typicode.com/posts"

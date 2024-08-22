@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -138,15 +139,32 @@ const columns: ColumnDef<Post>[] = [
 ];
 
 const TablePage = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const table = useReactTable({
+  const {
     data: posts,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<Post[]>({
+    queryKey: ["posts"],
+    staleTime: 10000,
+    queryFn: async () => {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/posts"
+      );
+      if (!response.ok) {
+        throw new Error("Error fetching posts");
+      }
+      return (await response.json()) as Post[];
+    },
+  });
+
+  const table = useReactTable({
+    data: posts ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -164,12 +182,13 @@ const TablePage = () => {
     },
   });
 
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((response) => response.json())
-      .then((data) => setPosts(data))
-      .catch((error) => console.error("Error fetching posts:", error));
-  }, []);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
 
   const {
     pagination: { pageIndex, pageSize },
