@@ -7,6 +7,7 @@ const navLinks = [
   { to: "/form", text: "Form" },
   { to: "/carousel", text: "Carousel" },
   { to: "/counter", text: "Counter" },
+  { to: "/diff", text: "Diff" },
 ];
 
 const Navbar: React.FC = () => {
