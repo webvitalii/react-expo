@@ -1,9 +1,10 @@
 import PageLayout from "@/components/PageLayout";
+import PageTitle from "@/components/PageTitle";
 
 const HomePage = () => {
   return (
     <PageLayout>
-      <h1 className="text-2xl font-bold mb-4">Libraries used</h1>
+      <PageTitle>Libraries used</PageTitle>
       <ul className="list-disc pl-4">
         <li>React / TypeScript / Vite</li>
         <li>Tailwind CSS</li>

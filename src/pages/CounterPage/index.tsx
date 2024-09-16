@@ -8,6 +8,7 @@ import {
 } from "@/state/counter/counterSlice";
 import { Button } from "@/components/ui/button";
 import PageLayout from "@/components/PageLayout";
+import PageTitle from "@/components/PageTitle";
 
 const CounterPage = () => {
   const count = useSelector((state: RootState) => state.counter.value);
@@ -15,7 +16,7 @@ const CounterPage = () => {
 
   return (
     <PageLayout>
-      <h1 className="text-2xl font-bold mb-4">Counter: {count}</h1>
+      <PageTitle>Counter: {count}</PageTitle>
 
       <div>
         <Button onClick={() => dispatch(decrement())} className="mr-3">

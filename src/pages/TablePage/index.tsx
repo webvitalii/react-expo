@@ -34,6 +34,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import PageLayout from "@/components/PageLayout";
+import PageTitle from "@/components/PageTitle";
 
 import { Post } from "@/types/Post";
 
@@ -239,9 +240,7 @@ const TablePage = () => {
 
   return (
     <PageLayout>
-      <h1 className="text-2xl font-bold mb-4">
-        Table with sorting, filtering and pagination.
-      </h1>
+      <PageTitle>Table with sorting, filtering and pagination.</PageTitle>
 
       <p>
         <Link to="/table-simple">Go to Table Simple</Link>

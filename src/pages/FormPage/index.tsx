@@ -25,6 +25,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import PageLayout from "@/components/PageLayout";
+import PageTitle from "@/components/PageTitle";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -85,7 +86,7 @@ const FormPage: React.FC = () => {
 
   return (
     <PageLayout>
-      <h1 className="text-2xl font-bold mb-4">Form with validation</h1>
+      <PageTitle>Form with validation</PageTitle>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

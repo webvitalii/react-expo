@@ -1,4 +1,5 @@
 import PageLayout from "@/components/PageLayout";
+import PageTitle from "@/components/PageTitle";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -11,7 +12,7 @@ import {
 const CarouselPage = () => {
   return (
     <PageLayout>
-      <h1 className="text-2xl font-bold mb-4">Carousel</h1>
+      <PageTitle>Carousel</PageTitle>
 
       <div className="flex justify-center mb-16">
         <Carousel className="w-full max-w-xs">
