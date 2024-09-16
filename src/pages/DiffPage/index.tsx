@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect, useCallback } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -13,7 +12,7 @@ const DiffPage = () => {
   const [diffResult, setDiffResult] = useState("");
   const [diffMethod, setDiffMethod] = useState("lines");
 
-  const compareTexts = () => {
+  const compareTexts = useCallback(() => {
     let diff;
     switch (diffMethod) {
       case "chars":
@@ -39,8 +38,14 @@ const DiffPage = () => {
         return `<span style="color: ${color}; background-color: ${backgroundColor};">${part.value}</span>`;
       })
       .join("");
+
     setDiffResult(formattedDiff);
-  };
+    console.log("compareTexts() called ");
+  }, [leftText, rightText, diffMethod]);
+
+  useEffect(() => {
+    compareTexts();
+  }, [compareTexts]);
 
   return (
     <PageLayout>
@@ -85,7 +90,6 @@ const DiffPage = () => {
             <Label htmlFor="lines">Lines</Label>
           </div>
         </RadioGroup>
-        <Button onClick={compareTexts}>Compare</Button>
       </div>
 
       {diffResult && (
