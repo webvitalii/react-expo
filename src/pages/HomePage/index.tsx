@@ -11,6 +11,12 @@ const HomePage = () => {
         <li>Radix UI</li>
         <li>Shadcn/ui</li>
       </ul>
+
+      <p>
+        <a href="https://github.com/webvitalii/react-expo" target="_blank">
+          Source code on GitHub
+        </a>
+      </p>
     </PageLayout>
   );
 };
