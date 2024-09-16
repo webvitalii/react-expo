@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import PageLayout from "@/components/PageLayout";
 import PageTitle from "@/components/PageTitle";
@@ -11,19 +12,25 @@ const DiffPage = () => {
   const [rightText, setRightText] = useState("");
   const [diffResult, setDiffResult] = useState("");
   const [diffMethod, setDiffMethod] = useState("lines");
+  const [ignoreCase, setIgnoreCase] = useState(false);
 
   const compareTexts = useCallback(() => {
     let diff;
+    const options = { ignoreCase };
+
+    const leftCompare = ignoreCase ? leftText.toLowerCase() : leftText;
+    const rightCompare = ignoreCase ? rightText.toLowerCase() : rightText;
+
     switch (diffMethod) {
       case "chars":
-        diff = diffChars(leftText, rightText);
+        diff = diffChars(leftCompare, rightCompare, options);
         break;
       case "words":
-        diff = diffWords(leftText, rightText);
+        diff = diffWords(leftCompare, rightCompare, options);
         break;
       case "lines":
       default:
-        diff = diffLines(leftText, rightText);
+        diff = diffLines(leftCompare, rightCompare, options);
         break;
     }
 
@@ -40,8 +47,7 @@ const DiffPage = () => {
       .join("");
 
     setDiffResult(formattedDiff);
-    console.log("compareTexts() called ");
-  }, [leftText, rightText, diffMethod]);
+  }, [leftText, rightText, diffMethod, ignoreCase]);
 
   useEffect(() => {
     compareTexts();
@@ -50,7 +56,7 @@ const DiffPage = () => {
   return (
     <PageLayout>
       <PageTitle>Diff Page</PageTitle>
-      <div className="flex space-x-4 mb-4">
+      <section className="flex space-x-4 mb-4">
         <div className="flex-1">
           <Textarea
             value={leftText}
@@ -69,9 +75,9 @@ const DiffPage = () => {
             className="h-80"
           />
         </div>
-      </div>
+      </section>
 
-      <div className="flex items-center justify-center space-x-4 mb-4">
+      <section className="flex items-center justify-center space-x-4 mb-4">
         <RadioGroup
           value={diffMethod}
           onValueChange={setDiffMethod}
@@ -90,7 +96,15 @@ const DiffPage = () => {
             <Label htmlFor="lines">Lines</Label>
           </div>
         </RadioGroup>
-      </div>
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="ignoreCase"
+            checked={ignoreCase}
+            onCheckedChange={(checked) => setIgnoreCase(checked as boolean)}
+          />
+          <Label htmlFor="ignoreCase">Ignore Case</Label>
+        </div>
+      </section>
 
       {diffResult && (
         <div className="border p-4 mt-4">
