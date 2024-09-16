@@ -8,8 +8,14 @@ import PageTitle from "@/components/PageTitle";
 import { diffChars, diffLines, diffWords, Change } from "diff";
 
 const DiffPage = () => {
-  const [leftText, setLeftText] = useState("");
-  const [rightText, setRightText] = useState("");
+  const initialLeftText = `const add = (a, b) => {
+  return a + b;
+}`;
+  const initialRightText = `const addNumbers = (x, y) => {
+  return x + y;
+}`;
+  const [leftText, setLeftText] = useState(initialLeftText);
+  const [rightText, setRightText] = useState(initialRightText);
   const [diffResult, setDiffResult] = useState("");
   const [diffMethod, setDiffMethod] = useState("lines");
   const [ignoreCase, setIgnoreCase] = useState(false);
