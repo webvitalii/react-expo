@@ -1,4 +1,3 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
 
 const navLinks = [
@@ -11,7 +10,7 @@ const navLinks = [
   { to: "/rating", text: "Rating" },
 ];
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   return (
     <nav className="flex justify-center space-x-4">
       {navLinks.map((link) => (

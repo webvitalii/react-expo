@@ -1,4 +1,3 @@
-import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -55,7 +54,7 @@ const formSchema = z.object({
   }),
 });
 
-const FormPage: React.FC = () => {
+const FormPage = () => {
   const { toast } = useToast();
 
   // 1. Define your form.

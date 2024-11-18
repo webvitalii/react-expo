@@ -25,7 +25,7 @@ interface ChildProps {
   handleNewMessage: (newMessage: string) => void;
 }
 
-const Child: React.FC<ChildProps> = (props: ChildProps) => {
+const Child = (props: ChildProps) => {
   const [newMessage, setNewMessage] = useState<string>("");
 
   const [count, setCount] = useState(0);
