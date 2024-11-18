@@ -8,6 +8,7 @@ const navLinks = [
   { to: "/carousel", text: "Carousel" },
   { to: "/counter", text: "Counter" },
   { to: "/diff", text: "Diff" },
+  { to: "/rating", text: "Rating" },
 ];
 
 const Navbar: React.FC = () => {

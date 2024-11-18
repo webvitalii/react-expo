@@ -10,6 +10,7 @@ import FormPage from "@/pages/FormPage";
 import CarouselPage from "@/pages/CarouselPage";
 import CounterPage from "@/pages/CounterPage";
 import DiffPage from "@/pages/DiffPage";
+import RatingPage from "@/pages/RatingPage";
 import TestPage from "@/pages/TestPage";
 import "@/App.css";
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/carousel" element={<CarouselPage />} />
           <Route path="/counter" element={<CounterPage />} />
           <Route path="/diff" element={<DiffPage />} />
+          <Route path="/rating" element={<RatingPage />} />
           <Route path="/test" element={<TestPage />} />
         </Routes>
       </Router>
