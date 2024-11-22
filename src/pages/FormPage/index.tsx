@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import PageLayout from "@/components/PageLayout";
 import PageTitle from "@/components/PageTitle";
@@ -52,6 +53,7 @@ const formSchema = z.object({
   agree: z.boolean().refine((val) => val, {
     message: "You must agree to the terms of service.",
   }),
+  newsletter: z.boolean().optional(),
 });
 
 const FormPage = () => {
@@ -66,6 +68,7 @@ const FormPage = () => {
       gender: "",
       bio: "",
       agree: false,
+      newsletter: false,
     },
   });
 
@@ -185,6 +188,27 @@ const FormPage = () => {
                     You must agree to the terms of service.
                   </FormDescription>
                 </div>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="newsletter"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                <div className="space-y-0.5">
+                  <FormLabel>Subscribe to Newsletter</FormLabel>
+                  <FormDescription>
+                    Receive our latest updates and special offers.
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
               </FormItem>
             )}
           />
