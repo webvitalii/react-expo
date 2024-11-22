@@ -26,6 +26,7 @@ import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import PageLayout from "@/components/PageLayout";
 import PageTitle from "@/components/PageTitle";
+import { useToggle } from "@/hooks/useToggle";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -58,6 +59,8 @@ const formSchema = z.object({
 
 const FormPage = () => {
   const { toast } = useToast();
+  const { isToggled: isNewsletterEnabled, toggle: toggleNewsletter } =
+    useToggle();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -68,7 +71,7 @@ const FormPage = () => {
       gender: "",
       bio: "",
       agree: false,
-      newsletter: false,
+      newsletter: isNewsletterEnabled,
     },
   });
 
@@ -205,9 +208,13 @@ const FormPage = () => {
                 </div>
                 <FormControl>
                   <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
+                    checked={isNewsletterEnabled}
+                    onCheckedChange={() => {
+                      toggleNewsletter(); // Toggle the state
+                      field.onChange(!field.value); // Update form value
+                    }}
                   />
+                  {/* checked={field.value} onCheckedChange={field.onChange} */}
                 </FormControl>
               </FormItem>
             )}
