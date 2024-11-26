@@ -12,6 +12,7 @@ import CounterPage from "@/pages/CounterPage";
 import DiffPage from "@/pages/DiffPage";
 import RatingPage from "@/pages/RatingPage";
 import TestPage from "@/pages/TestPage";
+import MoviesPage from "@/pages/MoviesPage";
 import "@/App.css";
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path="/diff" element={<DiffPage />} />
           <Route path="/rating" element={<RatingPage />} />
           <Route path="/test" element={<TestPage />} />
+          <Route path="/movies" element={<MoviesPage />} />
         </Routes>
       </Router>
       <Toaster />

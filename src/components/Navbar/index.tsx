@@ -8,6 +8,7 @@ const navLinks = [
   { to: "/counter", text: "Counter" },
   { to: "/diff", text: "Diff" },
   { to: "/rating", text: "Rating" },
+  { to: "/movies", text: "Movies" },
 ];
 
 const Navbar = () => {
