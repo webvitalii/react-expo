@@ -3,12 +3,14 @@ import PageLayout from '@/components/PageLayout';
 import PageTitle from '@/components/PageTitle';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import TMDBAttribution from '@/components/TMDBAttribution';
 
 interface Movie {
   id: number;
   title: string;
   overview: string;
   poster_path: string;
+  backdrop_path: string;
   vote_average: number;
   release_date: string;
 }
@@ -92,6 +94,8 @@ const MoviesPage = () => {
               Next
             </Button>
           </div>
+
+          <TMDBAttribution />
         </>
       )}
     </PageLayout>
