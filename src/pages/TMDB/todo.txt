@@ -10,3 +10,4 @@ Todo:
 * [PDP] collection
 * [PDP] recommendations
 * search movies
+* add URL params

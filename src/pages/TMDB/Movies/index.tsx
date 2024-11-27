@@ -12,6 +12,15 @@ import {
 } from '@/components/ui/select';
 import type { Movie, TMDBResponse, Genre, GenreResponse } from '@/types/TMDB';
 
+const SORT_OPTIONS = {
+  popularity: { label: 'Popular', value: 'popularity.desc' },
+  rating: { label: 'Top Rated', value: 'vote_average.desc' },
+  votes: { label: 'Most Voted', value: 'vote_count.desc' },
+  revenue: { label: 'Revenue', value: 'revenue.desc' },
+} as const;
+
+type SortOption = keyof typeof SORT_OPTIONS;
+
 const fetchGenres = async (): Promise<Genre[]> => {
   try {
     const response = await fetch(`${TMDB_API.movie.genres}?api_key=${TMDB_API_KEY}`);
@@ -26,10 +35,14 @@ const fetchGenres = async (): Promise<Genre[]> => {
   }
 };
 
-const fetchMovies = async (page: number, genreId?: string): Promise<TMDBResponse<Movie>> => {
+const fetchMovies = async (
+  page: number,
+  genreId?: string,
+  sortBy: string = SORT_OPTIONS.popularity.value
+): Promise<TMDBResponse<Movie>> => {
   try {
     const genreParam = genreId && genreId !== 'all' ? `&with_genres=${genreId}` : '';
-    const url = `${TMDB_API.movie.discover}?api_key=${TMDB_API_KEY}&page=${page}&sort_by=popularity.desc${genreParam}`;
+    const url = `${TMDB_API.movie.discover}?api_key=${TMDB_API_KEY}&page=${page}&sort_by=${sortBy}&vote_count.gte=200${genreParam}`;
 
     const response = await fetch(url);
     if (!response.ok) {
@@ -46,6 +59,7 @@ const fetchMovies = async (page: number, genreId?: string): Promise<TMDBResponse
 function Movies() {
   const [page, setPage] = useState(1);
   const [selectedGenre, setSelectedGenre] = useState<string>('all');
+  const [selectedSort, setSelectedSort] = useState<SortOption>('popularity');
 
   const { data: genres, error: genresError } = useQuery({
     queryKey: ['movie-genres'],
@@ -53,8 +67,8 @@ function Movies() {
   });
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['movies', page, selectedGenre],
-    queryFn: () => fetchMovies(page, selectedGenre),
+    queryKey: ['movies', page, selectedGenre, selectedSort],
+    queryFn: () => fetchMovies(page, selectedGenre, SORT_OPTIONS[selectedSort].value),
   });
 
   const handlePreviousPage = () => {
@@ -72,39 +86,47 @@ function Movies() {
     setPage(1); // Reset to first page when changing genre
   };
 
-  if (genresError) {
-    return <div>Error loading genres</div>;
-  }
+  const handleSortChange = (value: SortOption) => {
+    setSelectedSort(value);
+    setPage(1); // Reset to first page when changing sort
+  };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error loading movies</div>;
-  }
-
-  if (!data) {
-    return null;
-  }
+  if (genresError) return <div>Error loading genres</div>;
+  if (error) return <div>Error loading movies</div>;
+  if (isLoading) return <div>Loading...</div>;
+  if (!data) return null;
 
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Movies</h2>
-        <Select value={selectedGenre} onValueChange={handleGenreChange}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select Genre" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Genres</SelectItem>
-            {genres?.map((genre) => (
-              <SelectItem key={genre.id} value={genre.id.toString()}>
-                {genre.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex gap-2">
+          <Select value={selectedSort} onValueChange={handleSortChange}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(SORT_OPTIONS).map(([key, { label }]) => (
+                <SelectItem key={key} value={key}>
+                  {label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={selectedGenre} onValueChange={handleGenreChange}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select Genre" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Genres</SelectItem>
+              {genres?.map((genre) => (
+                <SelectItem key={genre.id} value={genre.id.toString()}>
+                  {genre.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.results.map((movie) => (
