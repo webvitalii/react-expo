@@ -4,6 +4,7 @@ import PageTitle from '@/components/PageTitle';
 import { useState } from 'react';
 import Attribution from '@/components/TMDB/Attribution';
 import Pagination from '@/components/TMDB/Pagination';
+import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
 
 interface Movie {
   id: number;
@@ -23,9 +24,7 @@ interface MovieResponse {
 }
 
 const fetchMovies = async (page: number): Promise<MovieResponse> => {
-  const response = await fetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=3486f39b28a881925228f179ea6ddaf9&page=${page}`
-  );
+  const response = await fetch(`${TMDB_API.movie.popular}?api_key=${TMDB_API_KEY}&page=${page}`);
   const data: MovieResponse = await response.json();
   return data;
 };
@@ -61,7 +60,7 @@ const TMDBPage = () => {
             {data.results.map((movie) => (
               <div key={movie.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <img
-                  src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
+                  src={TMDB_API.image.backdrop(movie.poster_path)}
                   alt={movie.title}
                   className="w-full"
                 />
