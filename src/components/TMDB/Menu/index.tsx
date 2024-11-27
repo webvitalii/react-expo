@@ -1,8 +1,8 @@
 import { NavLink } from 'react-router-dom';
 
 const tmdbLinks = [
-  { to: 'movies', text: 'Movies' },
-  { to: 'tv', text: 'TV Series' },
+  { to: 'popular-movies', text: 'Movies' },
+  { to: 'popular-tv-shows', text: 'TV Series' },
   { to: 'search', text: 'Search' },
 ];
 

@@ -11,7 +11,7 @@ const fetchMovies = async (page: number): Promise<TMDBResponse<Movie>> => {
   return data;
 };
 
-const MovieList = () => {
+const PopularMovies = () => {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, error } = useQuery({
@@ -54,4 +54,4 @@ const MovieList = () => {
   );
 };
 
-export default MovieList;
+export default PopularMovies;

@@ -3,8 +3,8 @@ import PageLayout from '@/components/PageLayout';
 import PageTitle from '@/components/PageTitle';
 import Attribution from '@/components/TMDB/Attribution';
 import Menu from '@/components/TMDB/Menu';
-import MovieList from '@/pages/TMDB/MovieList';
-import TVList from '@/pages/TMDB/TVList';
+import PopularMovies from '@/pages/TMDB/PopularMovies';
+import PopularTVShows from '@/pages/TMDB/PopularTVShows';
 import Search from '@/pages/TMDB/Search';
 
 const TMDBLayout = () => {
@@ -14,9 +14,9 @@ const TMDBLayout = () => {
       <Menu />
 
       <Routes>
-        <Route path="/" element={<Navigate to="movies" replace />} />
-        <Route path="movies" element={<MovieList />} />
-        <Route path="tv" element={<TVList />} />
+        <Route path="/" element={<Navigate to="popular-movies" replace />} />
+        <Route path="popular-movies" element={<PopularMovies />} />
+        <Route path="popular-tv-shows" element={<PopularTVShows />} />
         <Route path="search" element={<Search />} />
       </Routes>
 
