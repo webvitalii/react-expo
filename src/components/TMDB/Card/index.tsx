@@ -1,10 +1,11 @@
-import type { Movie, TVShow, SearchResult } from '@/types/TMDB';
+import type { Movie, TVShow, SearchResult, Genre } from '@/types/TMDB';
 
 interface CardProps {
   item: Movie | TVShow | SearchResult;
+  genres?: Genre[];
 }
 
-const Card = ({ item }: CardProps) => {
+const Card = ({ item, genres = [] }: CardProps) => {
   const getTitle = () => {
     if ('title' in item) {
       return item.title;
@@ -23,6 +24,13 @@ const Card = ({ item }: CardProps) => {
     const mediaType = 'media_type' in item ? item.media_type : ('title' in item ? 'movie' : 'tv');
     return `https://www.themoviedb.org/${mediaType}/${item.id}`;
   };
+
+  const getGenres = () => {
+    if (!genres?.length || !item.genre_ids?.length) return [];
+    return genres.filter(genre => item.genre_ids.includes(genre.id));
+  };
+
+  const itemGenres = getGenres();
 
   return (
     <div className="border rounded-lg p-4 hover:shadow-lg transition-shadow">
@@ -47,6 +55,19 @@ const Card = ({ item }: CardProps) => {
           {getTitle()}
         </a>
       </h3>
+
+      {itemGenres.length > 0 && (
+        <div className="flex flex-wrap gap-1 mt-2">
+          {itemGenres.map(genre => (
+            <span 
+              key={genre.id} 
+              className="text-xs px-2 py-0.5 bg-gray-100 rounded-full text-gray-600"
+            >
+              {genre.name}
+            </span>
+          ))}
+        </div>
+      )}
 
       <div className="flex justify-between items-center mt-1">
         <span className="text-sm text-gray-500">

@@ -111,7 +111,7 @@ function Movies() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.results.map((movie) => (
-          <Card key={movie.id} item={movie} />
+          <Card key={movie.id} item={movie} genres={genres} />
         ))}
       </div>
       <Pagination

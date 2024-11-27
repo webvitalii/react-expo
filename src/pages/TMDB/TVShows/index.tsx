@@ -110,7 +110,7 @@ const TVShows = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.results.map((show) => (
-          <Card key={show.id} item={show} />
+          <Card key={show.id} item={show} genres={genres} />
         ))}
       </div>
       <Pagination
