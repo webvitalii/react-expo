@@ -1,29 +1,13 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import Pagination from '@/components/TMDB/Pagination';
 import Card from '@/components/TMDB/Card';
+import Pagination from '@/components/TMDB/Pagination';
 import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
+import type { TVShow, TMDBResponse } from '@/types/TMDB';
 
-interface TVShow {
-  id: number;
-  name: string;
-  overview: string;
-  poster_path: string;
-  backdrop_path: string;
-  vote_average: number;
-  first_air_date: string;
-}
-
-interface TVResponse {
-  results: TVShow[];
-  page: number;
-  total_pages: number;
-  total_results: number;
-}
-
-const fetchTVShows = async (page: number): Promise<TVResponse> => {
+const fetchTVShows = async (page: number): Promise<TMDBResponse<TVShow>> => {
   const response = await fetch(`${TMDB_API.tv.popular}?api_key=${TMDB_API_KEY}&page=${page}`);
-  const data: TVResponse = await response.json();
+  const data: TMDBResponse<TVShow> = await response.json();
   return data;
 };
 

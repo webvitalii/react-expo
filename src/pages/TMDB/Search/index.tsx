@@ -1,35 +1,17 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
-import Pagination from '@/components/TMDB/Pagination';
 import Card from '@/components/TMDB/Card';
+import Pagination from '@/components/TMDB/Pagination';
 import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
+import type { Movie, TVShow, SearchResult, TMDBResponse } from '@/types/TMDB';
 
-interface SearchResult {
-  id: number;
-  title?: string;
-  name?: string;
-  overview: string;
-  poster_path: string;
-  media_type: 'movie' | 'tv' | 'person';
-  release_date?: string;
-  first_air_date?: string;
-  vote_average?: number;
-}
-
-interface SearchResponse {
-  results: SearchResult[];
-  page: number;
-  total_pages: number;
-  total_results: number;
-}
-
-const fetchSearchResults = async (query: string, page: number): Promise<SearchResponse> => {
+const fetchSearch = async (query: string, page: number): Promise<TMDBResponse<SearchResult>> => {
   if (!query) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const response = await fetch(
     `${TMDB_API.search.multi}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}`
   );
-  const data: SearchResponse = await response.json();
+  const data: TMDBResponse<SearchResult> = await response.json();
   return data;
 };
 
@@ -39,7 +21,7 @@ const Search = () => {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['search', searchQuery, page],
-    queryFn: () => fetchSearchResults(searchQuery, page),
+    queryFn: () => fetchSearch(searchQuery, page),
     enabled: !!searchQuery,
   });
 
@@ -54,15 +36,17 @@ const Search = () => {
   };
 
   const getTitle = (result: SearchResult) => {
-    if (result.media_type === 'movie') return result.title;
-    if (result.media_type === 'tv') return result.name;
-    return '';
+    if (result.media_type === 'movie') {
+      return (result as Movie).title;
+    }
+    return (result as TVShow).name;
   };
 
   const getDate = (result: SearchResult) => {
-    if (result.media_type === 'movie') return result.release_date;
-    if (result.media_type === 'tv') return result.first_air_date;
-    return '';
+    if (result.media_type === 'movie') {
+      return (result as Movie).release_date;
+    }
+    return (result as TVShow).first_air_date;
   };
 
   return (

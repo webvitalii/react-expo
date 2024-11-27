@@ -6,7 +6,7 @@ const tmdbLinks = [
   { to: 'search', text: 'Search' },
 ];
 
-const TMDBMenu = () => {
+const Menu = () => {
   return (
     <nav className="flex justify-center space-x-4 mb-6">
       {tmdbLinks.map((link) => (
@@ -26,4 +26,4 @@ const TMDBMenu = () => {
   );
 };
 
-export default TMDBMenu;
+export default Menu;

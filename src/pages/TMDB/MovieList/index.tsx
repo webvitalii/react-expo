@@ -1,29 +1,13 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import Pagination from '@/components/TMDB/Pagination';
 import Card from '@/components/TMDB/Card';
+import Pagination from '@/components/TMDB/Pagination';
 import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
+import type { Movie, TMDBResponse } from '@/types/TMDB';
 
-interface Movie {
-  id: number;
-  title: string;
-  overview: string;
-  poster_path: string;
-  backdrop_path: string;
-  vote_average: number;
-  release_date: string;
-}
-
-interface MovieResponse {
-  results: Movie[];
-  page: number;
-  total_pages: number;
-  total_results: number;
-}
-
-const fetchMovies = async (page: number): Promise<MovieResponse> => {
+const fetchMovies = async (page: number): Promise<TMDBResponse<Movie>> => {
   const response = await fetch(`${TMDB_API.movie.popular}?api_key=${TMDB_API_KEY}&page=${page}`);
-  const data: MovieResponse = await response.json();
+  const data: TMDBResponse<Movie> = await response.json();
   return data;
 };
 
