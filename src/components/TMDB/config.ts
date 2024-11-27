@@ -17,6 +17,7 @@ export const TMDB_API = {
     popular: `${TMDB_BASE_URL}/tv/popular`,
     upcoming: `${TMDB_BASE_URL}/tv/on_the_air`,
     discover: `${TMDB_BASE_URL}/discover/tv`,
+    genres: `${TMDB_BASE_URL}/genre/tv/list`,
   },
   search: {
     movie: `${TMDB_BASE_URL}/search/movie`,
