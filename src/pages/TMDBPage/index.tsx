@@ -60,7 +60,7 @@ const TMDBPage = () => {
             {data.results.map((movie) => (
               <div key={movie.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <img
-                  src={TMDB_API.image.backdrop(movie.poster_path)}
+                  src={TMDB_API.image.poster(movie.poster_path)}
                   alt={movie.title}
                   className="w-full"
                 />
