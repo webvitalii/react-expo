@@ -40,11 +40,7 @@ const TVList = () => {
         {data.results.map((show) => (
           <Card
             key={show.id}
-            title={show.name}
-            date={show.first_air_date}
-            overview={show.overview}
-            posterPath={show.poster_path}
-            vote_average={show.vote_average}
+            item={show}
           />
         ))}
       </div>

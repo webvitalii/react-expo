@@ -40,11 +40,7 @@ const MovieList = () => {
         {data.results.map((movie) => (
           <Card
             key={movie.id}
-            title={movie.title}
-            date={movie.release_date}
-            overview={movie.overview}
-            posterPath={movie.poster_path}
-            vote_average={movie.vote_average}
+            item={movie}
           />
         ))}
       </div>

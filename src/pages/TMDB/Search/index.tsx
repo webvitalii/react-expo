@@ -35,20 +35,6 @@ const Search = () => {
     }
   };
 
-  const getTitle = (result: SearchResult) => {
-    if (result.media_type === 'movie') {
-      return (result as Movie).title;
-    }
-    return (result as TVShow).name;
-  };
-
-  const getDate = (result: SearchResult) => {
-    if (result.media_type === 'movie') {
-      return (result as Movie).release_date;
-    }
-    return (result as TVShow).first_air_date;
-  };
-
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Search Movies & TV Shows</h2>
@@ -72,12 +58,7 @@ const Search = () => {
               return (
                 <Card
                   key={result.id}
-                  title={getTitle(result)}
-                  date={getDate(result)}
-                  overview={result.overview}
-                  posterPath={result.poster_path}
-                  mediaType={result.media_type}
-                  vote_average={result.vote_average}
+                  item={result}
                 />
               );
             })}
