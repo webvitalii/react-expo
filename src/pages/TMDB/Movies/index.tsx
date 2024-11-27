@@ -26,10 +26,7 @@ const fetchGenres = async (): Promise<Genre[]> => {
   }
 };
 
-const fetchDiscoverMovies = async (
-  page: number,
-  genreId?: string
-): Promise<TMDBResponse<Movie>> => {
+const fetchMovies = async (page: number, genreId?: string): Promise<TMDBResponse<Movie>> => {
   try {
     const genreParam = genreId && genreId !== 'all' ? `&with_genres=${genreId}` : '';
     const url = `${TMDB_API.movie.discover}?api_key=${TMDB_API_KEY}&page=${page}&sort_by=popularity.desc${genreParam}`;
@@ -41,12 +38,12 @@ const fetchDiscoverMovies = async (
     const data: TMDBResponse<Movie> = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching discover movies:', error);
+    console.error('Error fetching movies:', error);
     throw error;
   }
 };
 
-function DiscoverMovies() {
+function Movies() {
   const [page, setPage] = useState(1);
   const [selectedGenre, setSelectedGenre] = useState<string>('all');
 
@@ -56,8 +53,8 @@ function DiscoverMovies() {
   });
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['discover-movies', page, selectedGenre],
-    queryFn: () => fetchDiscoverMovies(page, selectedGenre),
+    queryKey: ['movies', page, selectedGenre],
+    queryFn: () => fetchMovies(page, selectedGenre),
   });
 
   const handlePreviousPage = () => {
@@ -94,7 +91,7 @@ function DiscoverMovies() {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Discover Movies</h2>
+        <h2 className="text-2xl font-bold">Movies</h2>
         <Select value={selectedGenre} onValueChange={handleGenreChange}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select Genre" />
@@ -124,4 +121,4 @@ function DiscoverMovies() {
   );
 }
 
-export default DiscoverMovies;
+export default Movies;

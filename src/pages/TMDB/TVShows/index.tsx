@@ -3,20 +3,22 @@ import { useQuery } from '@tanstack/react-query';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
 import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
-import type { Movie, TMDBResponse } from '@/types/TMDB';
+import type { TVShow, TMDBResponse } from '@/types/TMDB';
 
-const fetchMovies = async (page: number): Promise<TMDBResponse<Movie>> => {
-  const response = await fetch(`${TMDB_API.movie.popular}?api_key=${TMDB_API_KEY}&page=${page}`);
-  const data: TMDBResponse<Movie> = await response.json();
+const fetchTVShows = async (page: number): Promise<TMDBResponse<TVShow>> => {
+  const response = await fetch(
+    `${TMDB_API.tv.discover}?api_key=${TMDB_API_KEY}&page=${page}&sort_by=popularity.desc`
+  );
+  const data: TMDBResponse<TVShow> = await response.json();
   return data;
 };
 
-const PopularMovies = () => {
+const TVShows = () => {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['movies', page],
-    queryFn: () => fetchMovies(page),
+    queryKey: ['tv-shows', page],
+    queryFn: () => fetchTVShows(page),
   });
 
   const handlePreviousPage = () => {
@@ -30,18 +32,15 @@ const PopularMovies = () => {
   };
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading movies</div>;
+  if (error) return <div>Error loading TV shows</div>;
   if (!data) return null;
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Popular Movies</h2>
+      <h2 className="text-2xl font-bold mb-4">TV Shows</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {data.results.map((movie) => (
-          <Card
-            key={movie.id}
-            item={movie}
-          />
+        {data.results.map((show) => (
+          <Card key={show.id} item={show} />
         ))}
       </div>
       <Pagination
@@ -54,4 +53,4 @@ const PopularMovies = () => {
   );
 };
 
-export default PopularMovies;
+export default TVShows;
