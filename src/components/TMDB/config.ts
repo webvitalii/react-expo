@@ -11,11 +11,17 @@ export const TMDB_API = {
     similar: (id: number) => `${TMDB_BASE_URL}/movie/${id}/similar`,
     recommendations: (id: number) => `${TMDB_BASE_URL}/movie/${id}/recommendations`,
   },
-  image: {
-    poster: (path: string) => `${TMDB_IMAGE_BASE_URL}/w500${path}`,
-    backdrop: (path: string) => `${TMDB_IMAGE_BASE_URL}/w1280${path}`,
+  tv: {
+    popular: `${TMDB_BASE_URL}/tv/popular`,
+    upcoming: `${TMDB_BASE_URL}/tv/on_the_air`,
   },
   search: {
     movie: `${TMDB_BASE_URL}/search/movie`,
+    tv: `${TMDB_BASE_URL}/search/tv`,
+    multi: `${TMDB_BASE_URL}/search/multi`,
+  },
+  image: {
+    poster: (path: string) => `${TMDB_IMAGE_BASE_URL}/w500${path}`,
+    backdrop: (path: string) => `${TMDB_IMAGE_BASE_URL}/original${path}`,
   },
 };

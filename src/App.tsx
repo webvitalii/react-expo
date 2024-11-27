@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { Provider } from 'react-redux';
 import { store } from '@/state/store.ts';
@@ -12,13 +12,13 @@ import CounterPage from '@/pages/CounterPage';
 import DiffPage from '@/pages/DiffPage';
 import RatingPage from '@/pages/RatingPage';
 import TestPage from '@/pages/TestPage';
-import TMDBPage from '@/pages/TMDBPage';
+import TMDBLayout from '@/pages/TMDB';
 import '@/App.css';
 
 function App() {
   return (
     <Provider store={store}>
-      <Router>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/table" element={<TablePage />} />
@@ -29,9 +29,9 @@ function App() {
           <Route path="/diff" element={<DiffPage />} />
           <Route path="/rating" element={<RatingPage />} />
           <Route path="/test" element={<TestPage />} />
-          <Route path="/tmdb" element={<TMDBPage />} />
+          <Route path="/tmdb/*" element={<TMDBLayout />} />
         </Routes>
-      </Router>
+      </BrowserRouter>
       <Toaster />
     </Provider>
   );
