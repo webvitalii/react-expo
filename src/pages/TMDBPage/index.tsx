@@ -30,7 +30,7 @@ const fetchMovies = async (page: number): Promise<MovieResponse> => {
   return data;
 };
 
-const MoviesPage = () => {
+const TMDBPage = () => {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, error } = useQuery({
@@ -96,4 +96,4 @@ const MoviesPage = () => {
   );
 };
 
-export default MoviesPage;
+export default TMDBPage;

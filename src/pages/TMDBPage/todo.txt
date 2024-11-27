@@ -7,3 +7,6 @@ Todo:
 * [PDP] detail page
 * [PDP] reviews
 * [PDP] similar movies
+* [PDP] collection
+* [PDP] recommendations
+* search movies

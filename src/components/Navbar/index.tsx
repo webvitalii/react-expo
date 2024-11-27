@@ -1,14 +1,14 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
 const navLinks = [
-  { to: "/", text: "Home" },
-  { to: "/table", text: "Table" },
-  { to: "/form", text: "Form" },
-  { to: "/carousel", text: "Carousel" },
-  { to: "/counter", text: "Counter" },
-  { to: "/diff", text: "Diff" },
-  { to: "/rating", text: "Rating" },
-  { to: "/movies", text: "Movies" },
+  { to: '/', text: 'Home' },
+  { to: '/table', text: 'Table' },
+  { to: '/form', text: 'Form' },
+  { to: '/carousel', text: 'Carousel' },
+  { to: '/counter', text: 'Counter' },
+  { to: '/diff', text: 'Diff' },
+  { to: '/rating', text: 'Rating' },
+  { to: '/tmdb', text: 'TMDB' },
 ];
 
 const Navbar = () => {
@@ -20,8 +20,8 @@ const Navbar = () => {
           to={link.to}
           className={({ isActive }) =>
             isActive
-              ? "font-bold px-3 py-2 text-slate-900 rounded-lg bg-slate-200"
-              : "font-bold px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900"
+              ? 'font-bold px-3 py-2 text-slate-900 rounded-lg bg-slate-200'
+              : 'font-bold px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900'
           }
         >
           {link.text}

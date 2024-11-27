@@ -1,19 +1,19 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Toaster } from "@/components/ui/toaster";
-import { Provider } from "react-redux";
-import { store } from "@/state/store.ts";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Toaster } from '@/components/ui/toaster';
+import { Provider } from 'react-redux';
+import { store } from '@/state/store.ts';
 
-import HomePage from "@/pages/HomePage";
-import TablePage from "@/pages/TablePage";
-import TableSimplePage from "@/pages/TableSimplePage";
-import FormPage from "@/pages/FormPage";
-import CarouselPage from "@/pages/CarouselPage";
-import CounterPage from "@/pages/CounterPage";
-import DiffPage from "@/pages/DiffPage";
-import RatingPage from "@/pages/RatingPage";
-import TestPage from "@/pages/TestPage";
-import MoviesPage from "@/pages/MoviesPage";
-import "@/App.css";
+import HomePage from '@/pages/HomePage';
+import TablePage from '@/pages/TablePage';
+import TableSimplePage from '@/pages/TableSimplePage';
+import FormPage from '@/pages/FormPage';
+import CarouselPage from '@/pages/CarouselPage';
+import CounterPage from '@/pages/CounterPage';
+import DiffPage from '@/pages/DiffPage';
+import RatingPage from '@/pages/RatingPage';
+import TestPage from '@/pages/TestPage';
+import TMDBPage from '@/pages/TMDBPage';
+import '@/App.css';
 
 function App() {
   return (
@@ -29,7 +29,7 @@ function App() {
           <Route path="/diff" element={<DiffPage />} />
           <Route path="/rating" element={<RatingPage />} />
           <Route path="/test" element={<TestPage />} />
-          <Route path="/movies" element={<MoviesPage />} />
+          <Route path="/tmdb" element={<TMDBPage />} />
         </Routes>
       </Router>
       <Toaster />
