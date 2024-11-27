@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Pagination from '@/components/TMDB/Pagination';
+import Card from '@/components/TMDB/Card';
 import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
 
 interface TVShow {
@@ -53,16 +54,14 @@ const TVList = () => {
       <h2 className="text-2xl font-bold mb-4">Popular TV Shows</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.results.map((show) => (
-          <div key={show.id} className="border rounded-lg p-4">
-            <img
-              src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
-              alt={show.name}
-              className="w-full h-auto rounded-lg"
-            />
-            <h3 className="text-lg font-semibold mt-2">{show.name}</h3>
-            <p className="text-sm text-gray-600">{show.first_air_date}</p>
-            <p className="mt-2">{show.overview}</p>
-          </div>
+          <Card
+            key={show.id}
+            title={show.name}
+            date={show.first_air_date}
+            overview={show.overview}
+            posterPath={show.poster_path}
+            vote_average={show.vote_average}
+          />
         ))}
       </div>
       <Pagination

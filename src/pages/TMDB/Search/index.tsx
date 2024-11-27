@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
 import Pagination from '@/components/TMDB/Pagination';
+import Card from '@/components/TMDB/Card';
 import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
 
 interface SearchResult {
@@ -13,6 +14,7 @@ interface SearchResult {
   media_type: 'movie' | 'tv' | 'person';
   release_date?: string;
   first_air_date?: string;
+  vote_average?: number;
 }
 
 interface SearchResponse {
@@ -84,18 +86,15 @@ const Search = () => {
             {data.results.map((result) => {
               if (result.media_type === 'person') return null;
               return (
-                <div key={result.id} className="border rounded-lg p-4">
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${result.poster_path}`}
-                    alt={getTitle(result)}
-                    className="w-full h-auto rounded-lg"
-                  />
-                  <h3 className="text-lg font-semibold mt-2">{getTitle(result)}</h3>
-                  <p className="text-sm text-gray-600">
-                    {result.media_type.toUpperCase()} | {getDate(result)}
-                  </p>
-                  <p className="mt-2">{result.overview}</p>
-                </div>
+                <Card
+                  key={result.id}
+                  title={getTitle(result)}
+                  date={getDate(result)}
+                  overview={result.overview}
+                  posterPath={result.poster_path}
+                  mediaType={result.media_type}
+                  vote_average={result.vote_average}
+                />
               );
             })}
           </div>

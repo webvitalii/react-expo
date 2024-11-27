@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Pagination from '@/components/TMDB/Pagination';
+import Card from '@/components/TMDB/Card';
 import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
 
 interface Movie {
@@ -53,16 +54,14 @@ const MovieList = () => {
       <h2 className="text-2xl font-bold mb-4">Popular Movies</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.results.map((movie) => (
-          <div key={movie.id} className="border rounded-lg p-4">
-            <img
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title}
-              className="w-full h-auto rounded-lg"
-            />
-            <h3 className="text-lg font-semibold mt-2">{movie.title}</h3>
-            <p className="text-sm text-gray-600">{movie.release_date}</p>
-            <p className="mt-2">{movie.overview}</p>
-          </div>
+          <Card
+            key={movie.id}
+            title={movie.title}
+            date={movie.release_date}
+            overview={movie.overview}
+            posterPath={movie.poster_path}
+            vote_average={movie.vote_average}
+          />
         ))}
       </div>
       <Pagination
