@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
 import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
-import type { Movie, TVShow, SearchResult, TMDBResponse } from '@/types/TMDB';
+import type { SearchResult, TMDBResponse } from '@/types/TMDB';
 
 const fetchSearch = async (query: string, page: number): Promise<TMDBResponse<SearchResult>> => {
   if (!query) return { results: [], page: 1, total_pages: 0, total_results: 0 };
@@ -55,12 +55,7 @@ const Search = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {data.results.map((result) => {
               if (result.media_type === 'person') return null;
-              return (
-                <Card
-                  key={result.id}
-                  item={result}
-                />
-              );
+              return <Card key={result.id} item={result} />;
             })}
           </div>
           <Pagination
