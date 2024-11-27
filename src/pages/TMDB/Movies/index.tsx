@@ -3,23 +3,19 @@ import { useQuery } from '@tanstack/react-query';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
 import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { SortControl } from '@/components/TMDB/SortControl';
+import { GenreControl } from '@/components/TMDB/GenreControl';
 import type { Movie, TMDBResponse, Genre, GenreResponse } from '@/types/TMDB';
+import type { SortOption } from '@/components/TMDB/SortControl';
 
-const SORT_OPTIONS = {
+const SORT_OPTIONS: Record<string, SortOption> = {
   popularity: { label: 'Popular', value: 'popularity.desc' },
   rating: { label: 'Top Rated', value: 'vote_average.desc' },
   votes: { label: 'Most Voted', value: 'vote_count.desc' },
   revenue: { label: 'Revenue', value: 'revenue.desc' },
 } as const;
 
-type SortOption = keyof typeof SORT_OPTIONS;
+type SortOptionKey = keyof typeof SORT_OPTIONS;
 
 const fetchGenres = async (): Promise<Genre[]> => {
   try {
@@ -59,7 +55,7 @@ const fetchMovies = async (
 function Movies() {
   const [page, setPage] = useState(1);
   const [selectedGenre, setSelectedGenre] = useState<string>('all');
-  const [selectedSort, setSelectedSort] = useState<SortOption>('popularity');
+  const [selectedSort, setSelectedSort] = useState<SortOptionKey>('popularity');
 
   const { data: genres, error: genresError } = useQuery({
     queryKey: ['movie-genres'],
@@ -86,8 +82,8 @@ function Movies() {
     setPage(1); // Reset to first page when changing genre
   };
 
-  const handleSortChange = (value: SortOption) => {
-    setSelectedSort(value);
+  const handleSortChange = (value: string) => {
+    setSelectedSort(value as SortOptionKey);
     setPage(1); // Reset to first page when changing sort
   };
 
@@ -101,31 +97,16 @@ function Movies() {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Movies</h2>
         <div className="flex gap-2">
-          <Select value={selectedSort} onValueChange={handleSortChange}>
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.entries(SORT_OPTIONS).map(([key, { label }]) => (
-                <SelectItem key={key} value={key}>
-                  {label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select value={selectedGenre} onValueChange={handleGenreChange}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select Genre" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Genres</SelectItem>
-              {genres?.map((genre) => (
-                <SelectItem key={genre.id} value={genre.id.toString()}>
-                  {genre.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <SortControl
+            sortOptions={SORT_OPTIONS}
+            selectedSort={selectedSort}
+            onSortChange={handleSortChange}
+          />
+          <GenreControl
+            genres={genres}
+            selectedGenre={selectedGenre}
+            onGenreChange={handleGenreChange}
+          />
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
