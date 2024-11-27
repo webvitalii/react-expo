@@ -60,7 +60,6 @@ const MoviesPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             {data.results.map((movie) => (
               <div key={movie.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                {/* poster_path */}
                 <img
                   src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
                   alt={movie.title}
