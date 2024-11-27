@@ -19,6 +19,11 @@ const Card = ({ item }: CardProps) => {
     return item.first_air_date;
   };
 
+  const getTMDBUrl = () => {
+    const mediaType = 'media_type' in item ? item.media_type : ('title' in item ? 'movie' : 'tv');
+    return `https://www.themoviedb.org/${mediaType}/${item.id}`;
+  };
+
   return (
     <div className="border rounded-lg p-4 hover:shadow-lg transition-shadow">
       {item.poster_path ? (
@@ -32,7 +37,16 @@ const Card = ({ item }: CardProps) => {
           <span className="text-gray-400">No image available</span>
         </div>
       )}
-      <h3 className="text-lg font-semibold mt-2 line-clamp-1">{getTitle()}</h3>
+      <h3 className="text-lg font-semibold mt-2 line-clamp-1">
+        <a 
+          href={getTMDBUrl()} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="hover:text-blue-500"
+        >
+          {getTitle()}
+        </a>
+      </h3>
 
       <div className="flex justify-between items-center mt-1">
         <span className="text-sm text-gray-500">
