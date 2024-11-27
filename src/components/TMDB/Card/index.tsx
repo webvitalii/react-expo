@@ -34,13 +34,19 @@ const Card = ({ item }: CardProps) => {
       )}
       <h3 className="text-lg font-semibold mt-2 line-clamp-1">{getTitle()}</h3>
 
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mt-1">
         <span className="text-sm text-gray-500">
           {getDate() && new Date(getDate()).getFullYear()}
           {'media_type' in item && <span className="uppercase"> | {item.media_type}</span>}
+          {'original_language' in item && (
+            <span className="uppercase"> | {item.original_language}</span>
+          )}
         </span>
-        <span className="bg-blue-500 text-white px-2 py-1 rounded-full text-sm">
-          {item.vote_average && item.vote_average.toFixed(1)}
+        <span className="text-sm text-gray-500">
+          <span className="bg-blue-500 text-white px-2 py-1 rounded-full text-sm">
+            {item.vote_average && item.vote_average.toFixed(1)}
+          </span>
+          <span className="text-sm text-gray-500">({item.vote_count})</span>
         </span>
       </div>
 

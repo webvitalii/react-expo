@@ -5,6 +5,8 @@ export interface Movie {
   poster_path: string;
   release_date: string;
   vote_average: number;
+  vote_count: number;
+  original_language: string;
 }
 
 export interface TVShow {
@@ -14,6 +16,8 @@ export interface TVShow {
   poster_path: string;
   first_air_date: string;
   vote_average: number;
+  vote_count: number;
+  original_language: string;
 }
 
 export type SearchResult = (Movie | TVShow) & {
