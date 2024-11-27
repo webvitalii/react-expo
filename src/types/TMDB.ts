@@ -24,6 +24,15 @@ export type SearchResult = (Movie | TVShow) & {
   media_type: 'movie' | 'tv' | 'person';
 };
 
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+export interface GenreResponse {
+  genres: Genre[];
+}
+
 export interface TMDBResponse<T> {
   results: T[];
   page: number;
