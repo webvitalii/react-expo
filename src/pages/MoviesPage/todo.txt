@@ -1,0 +1,9 @@
+Todo:
+
+* [List] movies
+* [TV series] movies
+* popular movies
+* upcoming movies
+* [PDP] detail page
+* [PDP] reviews
+* [PDP] similar movies

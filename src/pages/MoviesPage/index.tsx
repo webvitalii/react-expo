@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import PageLayout from '@/components/PageLayout';
 import PageTitle from '@/components/PageTitle';
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import TMDBAttribution from '@/components/TMDBAttribution';
+import Attribution from '@/components/TMDB/Attribution';
+import Pagination from '@/components/TMDB/Pagination';
 
 interface Movie {
   id: number;
@@ -82,19 +82,14 @@ const MoviesPage = () => {
             ))}
           </div>
 
-          <div className="flex justify-center items-center gap-4 mt-6 mb-8">
-            <Button onClick={handlePreviousPage} disabled={page === 1} variant="outline">
-              Previous
-            </Button>
-            <span className="text-sm">
-              Page {page} of {data.total_pages}
-            </span>
-            <Button onClick={handleNextPage} disabled={page >= data.total_pages} variant="outline">
-              Next
-            </Button>
-          </div>
+          <Pagination
+            currentPage={page}
+            totalPages={data.total_pages}
+            onPrevious={handlePreviousPage}
+            onNext={handleNextPage}
+          />
 
-          <TMDBAttribution />
+          <Attribution />
         </>
       )}
     </PageLayout>

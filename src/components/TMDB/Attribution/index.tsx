@@ -1,6 +1,6 @@
 import tmdbLogo from '@/assets/tmdb_logo.svg';
 
-const TMDBAttribution = () => {
+const Attribution = () => {
   return (
     <div className="flex flex-col items-center gap-2 text-sm text-gray-500 my-4">
       {/* https://www.themoviedb.org/about/logos-attribution */}
@@ -13,4 +13,4 @@ const TMDBAttribution = () => {
   );
 };
 
-export default TMDBAttribution;
+export default Attribution;
