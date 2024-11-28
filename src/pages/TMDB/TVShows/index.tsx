@@ -39,7 +39,7 @@ const fetchTVShows = async (
   try {
     const genreParam = genreId && genreId !== 'all' ? `&with_genres=${genreId}` : '';
     const response = await fetch(
-      `${TMDB_API.tv.discover}?api_key=${TMDB_API_KEY}&page=${page}&sort_by=${sortBy}&vote_count.gte=200${genreParam}`
+      `${TMDB_API.tv.discover}?api_key=${TMDB_API_KEY}&page=${page}&sort_by=${sortBy}&vote_count.gte=200&include_adult=true${genreParam}`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

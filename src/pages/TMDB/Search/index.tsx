@@ -10,7 +10,7 @@ import type { SearchResult, TMDBResponse } from '@/types/TMDB';
 const fetchSearch = async (query: string, page: number): Promise<TMDBResponse<SearchResult>> => {
   if (!query) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const response = await fetch(
-    `${TMDB_API.search.multi}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}`
+    `${TMDB_API.search.multi}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}&include_adult=true`
   );
   const data: TMDBResponse<SearchResult> = await response.json();
   return data;
