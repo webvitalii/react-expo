@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
 import { TMDB_API, TMDB_API_KEY, TMDB_CACHE_PERIOD } from '@/components/TMDB/config';
@@ -52,9 +53,30 @@ const fetchTVShows = async (
 };
 
 const TVShows = () => {
-  const [page, setPage] = useState(1);
-  const [selectedGenre, setSelectedGenre] = useState<string>('all');
-  const [selectedSort, setSelectedSort] = useState<SortOptionKey>('popularity');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageParam = searchParams.get('page');
+  const genreParam = searchParams.get('genre');
+  const sortParam = searchParams.get('sort_by');
+
+  const [page, setPage] = useState(pageParam ? parseInt(pageParam) : 1);
+  const [selectedGenre, setSelectedGenre] = useState<string>(genreParam || 'all');
+  const [selectedSort, setSelectedSort] = useState<SortOptionKey>((sortParam || 'popularity') as SortOptionKey);
+
+  // Update URL when state changes
+  useEffect(() => {
+    const params = new URLSearchParams();
+    params.set('page', page.toString());
+    params.set('genre', selectedGenre);
+    params.set('sort_by', selectedSort);
+    setSearchParams(params);
+  }, [page, selectedGenre, selectedSort, setSearchParams]);
+
+  // Update state from URL on initial load
+  useEffect(() => {
+    if (pageParam) setPage(parseInt(pageParam));
+    if (genreParam) setSelectedGenre(genreParam);
+    if (sortParam && sortParam in SORT_OPTIONS) setSelectedSort(sortParam as SortOptionKey);
+  }, []);
 
   const { data: genres, error: genresError } = useQuery({
     queryKey: ['tv-genres'],

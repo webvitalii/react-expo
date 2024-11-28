@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
@@ -16,8 +17,26 @@ const fetchSearch = async (query: string, page: number): Promise<TMDBResponse<Se
 };
 
 const Search = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryParam = searchParams.get('query');
+  const pageParam = searchParams.get('page');
+
+  const [searchQuery, setSearchQuery] = useState(queryParam || '');
+  const [page, setPage] = useState(pageParam ? parseInt(pageParam) : 1);
+
+  // Update URL when state changes
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (searchQuery) params.set('query', searchQuery);
+    params.set('page', page.toString());
+    setSearchParams(params);
+  }, [searchQuery, page, setSearchParams]);
+
+  // Update state from URL on initial load
+  useEffect(() => {
+    if (queryParam) setSearchQuery(queryParam);
+    if (pageParam) setPage(parseInt(pageParam));
+  }, []);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['search', searchQuery, page],
@@ -43,7 +62,10 @@ const Search = () => {
       <div className="flex gap-2 mb-6">
         <Input
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setPage(1); // Reset to first page when search query changes
+          }}
           className="max-w-xl"
         />
       </div>
