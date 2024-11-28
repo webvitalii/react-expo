@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
-import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
+import { TMDB_API, TMDB_API_KEY, TMDB_CACHE_PERIOD } from '@/components/TMDB/config';
 import type { SearchResult, TMDBResponse } from '@/types/TMDB';
 
 const fetchSearch = async (query: string, page: number): Promise<TMDBResponse<SearchResult>> => {
@@ -23,6 +23,8 @@ const Search = () => {
     queryKey: ['search', searchQuery, page],
     queryFn: () => fetchSearch(searchQuery, page),
     enabled: !!searchQuery,
+    staleTime: TMDB_CACHE_PERIOD,
+    gcTime: TMDB_CACHE_PERIOD,
   });
 
   const handlePreviousPage = () => {
@@ -40,7 +42,6 @@ const Search = () => {
       <h2 className="text-2xl font-bold mb-4">Search Movies & TV Shows</h2>
       <div className="flex gap-2 mb-6">
         <Input
-          placeholder="Search for movies or TV shows..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="max-w-xl"

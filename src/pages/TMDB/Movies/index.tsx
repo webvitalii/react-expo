@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
-import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
+import { TMDB_API, TMDB_API_KEY, TMDB_CACHE_PERIOD } from '@/components/TMDB/config';
 import { SortControl } from '@/components/TMDB/SortControl';
 import { GenreControl } from '@/components/TMDB/GenreControl';
 import type { Movie, TMDBResponse, Genre, GenreResponse } from '@/types/TMDB';
@@ -60,11 +60,15 @@ function Movies() {
   const { data: genres, error: genresError } = useQuery({
     queryKey: ['movie-genres'],
     queryFn: fetchGenres,
+    staleTime: TMDB_CACHE_PERIOD,
+    gcTime: TMDB_CACHE_PERIOD,
   });
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['movies', page, selectedGenre, selectedSort],
     queryFn: () => fetchMovies(page, selectedGenre, SORT_OPTIONS[selectedSort].value),
+    staleTime: TMDB_CACHE_PERIOD,
+    gcTime: TMDB_CACHE_PERIOD,
   });
 
   const handlePreviousPage = () => {
