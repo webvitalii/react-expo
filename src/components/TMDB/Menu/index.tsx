@@ -8,7 +8,7 @@ const tmdbLinks = [
 
 const Menu = () => {
   return (
-    <nav className="flex justify-center space-x-4 mb-6">
+    <nav className="flex justify-center space-x-1 mb-6">
       {tmdbLinks.map((link) => (
         <NavLink
           key={link.to}

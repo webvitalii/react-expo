@@ -13,7 +13,7 @@ const navLinks = [
 
 const Navbar = () => {
   return (
-    <nav className="flex justify-center space-x-4">
+    <nav className="flex justify-center space-x-1">
       {navLinks.map((link) => (
         <NavLink
           key={link.to}
