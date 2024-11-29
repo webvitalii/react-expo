@@ -39,7 +39,7 @@ const fetchMovies = async (
 ): Promise<TMDBResponse<Movie>> => {
   try {
     const genreParam = genreId && genreId !== 'all' ? `&with_genres=${genreId}` : '';
-    const url = `${TMDB_API.movie.discover}?api_key=${TMDB_API_KEY}&page=${page}&sort_by=${sortBy}&vote_count.gte=100&include_adult=true${genreParam}`;
+    const url = `${TMDB_API.movie.discover}?api_key=${TMDB_API_KEY}&page=${page}&sort_by=${sortBy}&vote_count.gte=100${genreParam}`;
 
     const response = await fetch(url);
     if (!response.ok) {
