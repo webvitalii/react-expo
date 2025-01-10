@@ -2,15 +2,16 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
 import { TMDB_API, TMDB_API_KEY, TMDB_CACHE_PERIOD } from '@/components/TMDB/config';
 import type { SearchResult, TMDBResponse } from '@/types/TMDB';
 
-const fetchSearch = async (query: string, page: number): Promise<TMDBResponse<SearchResult>> => {
+const fetchSearch = async (query: string, page: number, includeAdult: boolean): Promise<TMDBResponse<SearchResult>> => {
   if (!query) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const response = await fetch(
-    `${TMDB_API.search.multi}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}`
+    `${TMDB_API.search.multi}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}&include_adult=${includeAdult}`
   );
   if (!response.ok) {
     throw new Error(`Search failed: ${response.statusText}`);
@@ -23,27 +24,38 @@ const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParam = searchParams.get('query');
   const pageParam = searchParams.get('page');
+  const includeAdultParam = searchParams.get('include_adult');
 
   const [searchQuery, setSearchQuery] = useState(queryParam || '');
   const [page, setPage] = useState(pageParam ? parseInt(pageParam) : 1);
+  const [includeAdult, setIncludeAdult] = useState(includeAdultParam === 'true');
 
   // Update URL when state changes
   useEffect(() => {
     const params = new URLSearchParams();
     if (searchQuery) params.set('query', searchQuery);
     params.set('page', page.toString());
+    params.set('include_adult', includeAdult.toString());
     setSearchParams(params);
-  }, [searchQuery, page, setSearchParams]);
+  }, [searchQuery, page, includeAdult, setSearchParams]);
 
   // Update state from URL on initial load
   useEffect(() => {
     if (queryParam) setSearchQuery(queryParam);
-    if (pageParam) setPage(parseInt(pageParam));
-  }, [queryParam, pageParam]);
+    if (pageParam) {
+      const parsedPage = parseInt(pageParam);
+      if (!isNaN(parsedPage) && parsedPage > 0) {
+        setPage(parsedPage);
+      }
+    }
+    if (includeAdultParam !== null) {
+      setIncludeAdult(includeAdultParam === 'true');
+    }
+  }, [queryParam, pageParam, includeAdultParam]);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['search', searchQuery, page],
-    queryFn: () => fetchSearch(searchQuery, page),
+    queryKey: ['search', searchQuery, page, includeAdult],
+    queryFn: () => fetchSearch(searchQuery, page, includeAdult),
     enabled: !!searchQuery,
     staleTime: TMDB_CACHE_PERIOD,
     gcTime: TMDB_CACHE_PERIOD,
@@ -62,15 +74,28 @@ const Search = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Search Movies & TV Shows</h2>
-      <div className="flex gap-2 mb-6">
+      <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">
         <Input
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
             setPage(1); // Reset to first page when search query changes
           }}
-          className="max-w-xl"
+          className="max-w-xl w-full md:w-80"
         />
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="include_adult"
+            checked={includeAdult}
+            onCheckedChange={(checked) => setIncludeAdult(checked === true)}
+          />
+          <label
+            htmlFor="include_adult"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 whitespace-nowrap"
+          >
+            Include adult content
+          </label>
+        </div>
       </div>
 
       {isLoading && <div className="text-center py-8">Loading search results...</div>}
