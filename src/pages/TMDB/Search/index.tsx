@@ -10,8 +10,11 @@ import type { SearchResult, TMDBResponse } from '@/types/TMDB';
 const fetchSearch = async (query: string, page: number): Promise<TMDBResponse<SearchResult>> => {
   if (!query) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const response = await fetch(
-    `${TMDB_API.search.multi}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}&include_adult=true`
+    `${TMDB_API.search.multi}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}`
   );
+  if (!response.ok) {
+    throw new Error(`Search failed: ${response.statusText}`);
+  }
   const data: TMDBResponse<SearchResult> = await response.json();
   return data;
 };
@@ -36,7 +39,7 @@ const Search = () => {
   useEffect(() => {
     if (queryParam) setSearchQuery(queryParam);
     if (pageParam) setPage(parseInt(pageParam));
-  }, []);
+  }, [queryParam, pageParam]);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['search', searchQuery, page],
@@ -70,8 +73,12 @@ const Search = () => {
         />
       </div>
 
-      {isLoading && <div>Loading...</div>}
-      {error && <div>Error loading search results</div>}
+      {isLoading && <div className="text-center py-8">Loading search results...</div>}
+      {error && (
+        <div className="text-center py-8 text-red-500">
+          {error instanceof Error ? error.message : 'Error loading search results'}
+        </div>
+      )}
 
       {data && data.results.length > 0 && (
         <>

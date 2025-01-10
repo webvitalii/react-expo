@@ -76,10 +76,17 @@ function Movies() {
 
   // Update state from URL on initial load
   useEffect(() => {
-    if (pageParam) setPage(parseInt(pageParam));
+    if (pageParam) {
+      const parsedPage = parseInt(pageParam);
+      if (!isNaN(parsedPage) && parsedPage > 0) {
+        setPage(parsedPage);
+      }
+    }
     if (genreParam) setSelectedGenre(genreParam);
-    if (sortParam && sortParam in SORT_OPTIONS) setSelectedSort(sortParam as SortOptionKey);
-  }, []);
+    if (sortParam && Object.keys(SORT_OPTIONS).includes(sortParam)) {
+      setSelectedSort(sortParam as SortOptionKey);
+    }
+  }, [pageParam, genreParam, sortParam]);
 
   const { data: genres, error: genresError } = useQuery({
     queryKey: ['movie-genres'],
@@ -115,9 +122,26 @@ function Movies() {
     setPage(1); // Reset to first page when changing sort
   };
 
-  if (genresError) return <div>Error loading genres</div>;
-  if (error) return <div>Error loading movies</div>;
-  if (isLoading) return <div>Loading...</div>;
+  if (genresError) {
+    return (
+      <div className="text-center py-8 text-red-500">
+        {genresError instanceof Error ? genresError.message : 'Error loading genres'}
+      </div>
+    );
+  }
+  
+  if (error) {
+    return (
+      <div className="text-center py-8 text-red-500">
+        {error instanceof Error ? error.message : 'Error loading movies'}
+      </div>
+    );
+  }
+  
+  if (isLoading) {
+    return <div className="text-center py-8">Loading movies...</div>;
+  }
+  
   if (!data) return null;
 
   return (
