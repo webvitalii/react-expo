@@ -55,7 +55,7 @@ function Movies() {
     staleTime: TMDB_CACHE_PERIOD,
   });
 
-  const { data: moviesData, isLoading: isLoadingMovies } = useQuery({
+  const { data: moviesData = { results: [], total_pages: 0 }, isLoading: isLoadingMovies } = useQuery({
     queryKey: ['movies', page, genreId, sortBy],
     queryFn: () => getMovies(page, genreId, sortBy),
     staleTime: TMDB_CACHE_PERIOD,

@@ -54,7 +54,7 @@ const TVShows = () => {
     staleTime: TMDB_CACHE_PERIOD,
   });
 
-  const { data: tvShowsData, isLoading: isLoadingShows } = useQuery({
+  const { data: tvShowsData = { results: [], total_pages: 0 }, isLoading: isLoadingShows } = useQuery({
     queryKey: ['tvShows', page, genreId, sortBy],
     queryFn: () => getTVShows(page, genreId, sortBy),
     staleTime: TMDB_CACHE_PERIOD,

@@ -7,10 +7,17 @@ import Pagination from '@/components/TMDB/Pagination';
 import { TMDB_API, TMDB_API_KEY, TMDB_CACHE_PERIOD } from '@/components/TMDB/config';
 import type { SearchResult, TMDBResponse } from '@/types/TMDB';
 
-const getSearchResults = async (query: string, page: number, includeAdult: boolean): Promise<TMDBResponse<SearchResult>> => {
+const getSearchResults = async (
+  query: string,
+  page: number,
+  includeAdult: boolean
+): Promise<TMDBResponse<SearchResult>> => {
   if (!query) return { results: [], page: 1, total_pages: 0, total_results: 0 };
+
   const response = await fetch(
-    `${TMDB_API.search.multi}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}&include_adult=${includeAdult}`
+    `${TMDB_API.search.multi}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(
+      query
+    )}&page=${page}&include_adult=${includeAdult}`
   );
   if (!response.ok) {
     throw new Error(`Search failed: ${response.statusText}`);
@@ -25,7 +32,7 @@ const Search = () => {
   const page = Number(searchParams.get('page')) || 1;
   const includeAdult = searchParams.get('include_adult') === 'true';
 
-  const { data, isLoading } = useQuery({
+  const { data = { results: [], total_pages: 0 }, isLoading } = useQuery({
     queryKey: ['search', query, page, includeAdult],
     queryFn: () => getSearchResults(query, page, includeAdult),
     enabled: !!query,
@@ -55,14 +62,21 @@ const Search = () => {
     });
   };
 
+  if (isLoading) {
+    return <div className="text-center py-8">Loading search results...</div>;
+  }
+
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Search Movies & TV Shows</h2>
-      <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Search Movies & TV Shows</h2>
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-4 mb-6 items-start md:items-center">
         <Input
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
-          className="max-w-xl w-full md:w-80"
+          className="w-full md:w-80"
         />
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -72,16 +86,14 @@ const Search = () => {
           />
           <label
             htmlFor="include_adult"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 whitespace-nowrap"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             Include adult content
           </label>
         </div>
       </div>
 
-      {isLoading && <div className="text-center py-8">Loading search results...</div>}
-
-      {data && data.results.length > 0 && (
+      {data?.results.length > 0 && (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {data.results.map((result) => {
@@ -98,7 +110,7 @@ const Search = () => {
         </>
       )}
 
-      {data && data.results.length === 0 && query && (
+      {data?.results.length === 0 && query && (
         <div className="text-center py-8">No results found for "{query}"</div>
       )}
     </div>
