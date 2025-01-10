@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -8,7 +7,7 @@ import Pagination from '@/components/TMDB/Pagination';
 import { TMDB_API, TMDB_API_KEY, TMDB_CACHE_PERIOD } from '@/components/TMDB/config';
 import type { SearchResult, TMDBResponse } from '@/types/TMDB';
 
-const fetchSearch = async (query: string, page: number, includeAdult: boolean): Promise<TMDBResponse<SearchResult>> => {
+const getSearchResults = async (query: string, page: number, includeAdult: boolean): Promise<TMDBResponse<SearchResult>> => {
   if (!query) return { results: [], page: 1, total_pages: 0, total_results: 0 };
   const response = await fetch(
     `${TMDB_API.search.multi}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${page}&include_adult=${includeAdult}`
@@ -22,53 +21,38 @@ const fetchSearch = async (query: string, page: number, includeAdult: boolean): 
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const queryParam = searchParams.get('query');
-  const pageParam = searchParams.get('page');
-  const includeAdultParam = searchParams.get('include_adult');
+  const query = searchParams.get('query') || '';
+  const page = Number(searchParams.get('page')) || 1;
+  const includeAdult = searchParams.get('include_adult') === 'true';
 
-  const [searchQuery, setSearchQuery] = useState(queryParam || '');
-  const [page, setPage] = useState(pageParam ? parseInt(pageParam) : 1);
-  const [includeAdult, setIncludeAdult] = useState(includeAdultParam === 'true');
-
-  // Update URL when state changes
-  useEffect(() => {
-    const params = new URLSearchParams();
-    if (searchQuery) params.set('query', searchQuery);
-    params.set('page', page.toString());
-    params.set('include_adult', includeAdult.toString());
-    setSearchParams(params);
-  }, [searchQuery, page, includeAdult, setSearchParams]);
-
-  // Update state from URL on initial load
-  useEffect(() => {
-    if (queryParam) setSearchQuery(queryParam);
-    if (pageParam) {
-      const parsedPage = parseInt(pageParam);
-      if (!isNaN(parsedPage) && parsedPage > 0) {
-        setPage(parsedPage);
-      }
-    }
-    if (includeAdultParam !== null) {
-      setIncludeAdult(includeAdultParam === 'true');
-    }
-  }, [queryParam, pageParam, includeAdultParam]);
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['search', searchQuery, page, includeAdult],
-    queryFn: () => fetchSearch(searchQuery, page, includeAdult),
-    enabled: !!searchQuery,
+  const { data, isLoading } = useQuery({
+    queryKey: ['search', query, page, includeAdult],
+    queryFn: () => getSearchResults(query, page, includeAdult),
+    enabled: !!query,
     staleTime: TMDB_CACHE_PERIOD,
-    gcTime: TMDB_CACHE_PERIOD,
   });
 
-  const handlePreviousPage = () => {
-    setPage((prev) => Math.max(1, prev - 1));
+  const handleSearch = (newQuery: string) => {
+    setSearchParams((prev) => {
+      if (newQuery) prev.set('query', newQuery);
+      else prev.delete('query');
+      prev.set('page', '1');
+      return prev;
+    });
   };
 
-  const handleNextPage = () => {
-    if (data && page < data.total_pages) {
-      setPage((prev) => prev + 1);
-    }
+  const handlePageChange = (newPage: number) => {
+    setSearchParams((prev) => {
+      prev.set('page', newPage.toString());
+      return prev;
+    });
+  };
+
+  const handleAdultContentChange = (checked: boolean) => {
+    setSearchParams((prev) => {
+      prev.set('include_adult', checked.toString());
+      return prev;
+    });
   };
 
   return (
@@ -76,18 +60,15 @@ const Search = () => {
       <h2 className="text-2xl font-bold mb-4">Search Movies & TV Shows</h2>
       <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-6">
         <Input
-          value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setPage(1); // Reset to first page when search query changes
-          }}
+          value={query}
+          onChange={(e) => handleSearch(e.target.value)}
           className="max-w-xl w-full md:w-80"
         />
         <div className="flex items-center space-x-2">
           <Checkbox
             id="include_adult"
             checked={includeAdult}
-            onCheckedChange={(checked) => setIncludeAdult(checked === true)}
+            onCheckedChange={(checked) => handleAdultContentChange(checked === true)}
           />
           <label
             htmlFor="include_adult"
@@ -99,11 +80,6 @@ const Search = () => {
       </div>
 
       {isLoading && <div className="text-center py-8">Loading search results...</div>}
-      {error && (
-        <div className="text-center py-8 text-red-500">
-          {error instanceof Error ? error.message : 'Error loading search results'}
-        </div>
-      )}
 
       {data && data.results.length > 0 && (
         <>
@@ -116,14 +92,14 @@ const Search = () => {
           <Pagination
             currentPage={page}
             totalPages={data.total_pages}
-            onPrevious={handlePreviousPage}
-            onNext={handleNextPage}
+            onPrevious={() => handlePageChange(page - 1)}
+            onNext={() => handlePageChange(page + 1)}
           />
         </>
       )}
 
-      {data && data.results.length === 0 && searchQuery && (
-        <div className="text-center py-8">No results found for "{searchQuery}"</div>
+      {data && data.results.length === 0 && query && (
+        <div className="text-center py-8">No results found for "{query}"</div>
       )}
     </div>
   );

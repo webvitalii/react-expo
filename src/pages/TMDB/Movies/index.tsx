@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import Card from '@/components/TMDB/Card';
@@ -18,131 +17,78 @@ const SORT_OPTIONS: Record<string, SortOption> = {
 
 type SortOptionKey = keyof typeof SORT_OPTIONS;
 
-const fetchGenres = async (): Promise<Genre[]> => {
-  try {
-    const response = await fetch(`${TMDB_API.movie.genres}?api_key=${TMDB_API_KEY}`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data: GenreResponse = await response.json();
-    return data.genres;
-  } catch (error) {
-    console.error('Error fetching genres:', error);
-    throw error;
+const getGenres = async (): Promise<Genre[]> => {
+  const response = await fetch(`${TMDB_API.movie.genres}?api_key=${TMDB_API_KEY}`);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
   }
+  const data: GenreResponse = await response.json();
+  return data.genres;
 };
 
-const fetchMovies = async (
+const getMovies = async (
   page: number,
   genreId?: string,
   sortBy: string = SORT_OPTIONS.popularity.value
 ): Promise<TMDBResponse<Movie>> => {
-  try {
-    const genreParam = genreId && genreId !== 'all' ? `&with_genres=${genreId}` : '';
-    const url = `${TMDB_API.movie.discover}?api_key=${TMDB_API_KEY}&page=${page}&sort_by=${sortBy}&vote_count.gte=100${genreParam}`;
+  const genreParam = genreId && genreId !== 'all' ? `&with_genres=${genreId}` : '';
+  const url = `${TMDB_API.movie.discover}?api_key=${TMDB_API_KEY}&page=${page}&sort_by=${sortBy}&vote_count.gte=100${genreParam}`;
 
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data: TMDBResponse<Movie> = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching movies:', error);
-    throw error;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
   }
+  const data: TMDBResponse<Movie> = await response.json();
+  return data;
 };
 
 function Movies() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageParam = searchParams.get('page');
-  const genreParam = searchParams.get('genre');
-  const sortParam = searchParams.get('sort_by');
+  const page = Number(searchParams.get('page')) || 1;
+  const genreId = searchParams.get('genre') || 'all';
+  const sortKey = (searchParams.get('sort') as SortOptionKey) || 'popularity';
+  const sortBy = SORT_OPTIONS[sortKey]?.value || SORT_OPTIONS.popularity.value;
 
-  const [page, setPage] = useState(pageParam ? parseInt(pageParam) : 1);
-  const [selectedGenre, setSelectedGenre] = useState<string>(genreParam || 'all');
-  const [selectedSort, setSelectedSort] = useState<SortOptionKey>(
-    (sortParam || 'popularity') as SortOptionKey
-  );
-
-  // Update URL when state changes
-  useEffect(() => {
-    const params = new URLSearchParams();
-    params.set('page', page.toString());
-    params.set('genre', selectedGenre);
-    params.set('sort_by', selectedSort);
-    setSearchParams(params);
-  }, [page, selectedGenre, selectedSort, setSearchParams]);
-
-  // Update state from URL on initial load
-  useEffect(() => {
-    if (pageParam) {
-      const parsedPage = parseInt(pageParam);
-      if (!isNaN(parsedPage) && parsedPage > 0) {
-        setPage(parsedPage);
-      }
-    }
-    if (genreParam) setSelectedGenre(genreParam);
-    if (sortParam && Object.keys(SORT_OPTIONS).includes(sortParam)) {
-      setSelectedSort(sortParam as SortOptionKey);
-    }
-  }, [pageParam, genreParam, sortParam]);
-
-  const { data: genres, error: genresError } = useQuery({
-    queryKey: ['movie-genres'],
-    queryFn: fetchGenres,
+  const { data: genres = [], isLoading: isLoadingGenres } = useQuery({
+    queryKey: ['movieGenres'],
+    queryFn: getGenres,
     staleTime: TMDB_CACHE_PERIOD,
-    gcTime: TMDB_CACHE_PERIOD,
   });
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['movies', page, selectedGenre, selectedSort],
-    queryFn: () => fetchMovies(page, selectedGenre, SORT_OPTIONS[selectedSort].value),
+  const { data: moviesData, isLoading: isLoadingMovies } = useQuery({
+    queryKey: ['movies', page, genreId, sortBy],
+    queryFn: () => getMovies(page, genreId, sortBy),
     staleTime: TMDB_CACHE_PERIOD,
-    gcTime: TMDB_CACHE_PERIOD,
   });
 
-  const handlePreviousPage = () => {
-    setPage((prev) => Math.max(1, prev - 1));
+  const handlePageChange = (newPage: number) => {
+    setSearchParams((prev) => {
+      prev.set('page', newPage.toString());
+      return prev;
+    });
   };
 
-  const handleNextPage = () => {
-    if (data && page < data.total_pages) {
-      setPage((prev) => prev + 1);
-    }
+  const handleGenreChange = (newGenreId: string) => {
+    setSearchParams((prev) => {
+      prev.set('genre', newGenreId);
+      prev.set('page', '1');
+      return prev;
+    });
   };
 
-  const handleGenreChange = (value: string) => {
-    setSelectedGenre(value);
-    setPage(1); // Reset to first page when changing genre
+  const handleSortChange = (newSortKey: SortOptionKey) => {
+    setSearchParams((prev) => {
+      prev.set('sort', newSortKey);
+      prev.set('page', '1');
+      return prev;
+    });
   };
 
-  const handleSortChange = (value: string) => {
-    setSelectedSort(value as SortOptionKey);
-    setPage(1); // Reset to first page when changing sort
-  };
-
-  if (genresError) {
-    return (
-      <div className="text-center py-8 text-red-500">
-        {genresError instanceof Error ? genresError.message : 'Error loading genres'}
-      </div>
-    );
-  }
-  
-  if (error) {
-    return (
-      <div className="text-center py-8 text-red-500">
-        {error instanceof Error ? error.message : 'Error loading movies'}
-      </div>
-    );
-  }
-  
-  if (isLoading) {
+  if (isLoadingGenres || isLoadingMovies) {
     return <div className="text-center py-8">Loading movies...</div>;
   }
-  
-  if (!data) return null;
+
+  if (!genres || !moviesData) return null;
 
   return (
     <div>
@@ -151,26 +97,22 @@ function Movies() {
         <div className="flex gap-2">
           <SortControl
             sortOptions={SORT_OPTIONS}
-            selectedSort={selectedSort}
+            selectedSort={sortKey}
             onSortChange={handleSortChange}
           />
-          <GenreControl
-            genres={genres}
-            selectedGenre={selectedGenre}
-            onGenreChange={handleGenreChange}
-          />
+          <GenreControl genres={genres} selectedGenre={genreId} onGenreChange={handleGenreChange} />
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {data.results.map((movie) => (
+        {moviesData.results.map((movie) => (
           <Card key={movie.id} item={movie} genres={genres} />
         ))}
       </div>
       <Pagination
         currentPage={page}
-        totalPages={data.total_pages}
-        onPrevious={handlePreviousPage}
-        onNext={handleNextPage}
+        totalPages={moviesData.total_pages}
+        onPrevious={() => handlePageChange(page - 1)}
+        onNext={() => handlePageChange(page + 1)}
       />
     </div>
   );
