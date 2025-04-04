@@ -28,3 +28,55 @@ export default {
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+
+## Useful CLI Commands
+
+### Setup and Installation
+
+```bash
+# Install dependencies after cloning the repository
+npm install
+```
+
+### Development
+
+```bash
+# Start the development server
+npm run dev
+
+# Start with specific host and port (example)
+npm run dev -- --host 0.0.0.0 --port 3000
+```
+
+### Building and Publishing
+
+```bash
+# Build for production
+npm run build
+
+# Preview the production build locally
+npm run preview
+```
+
+### Testing and Linting
+
+```bash
+# Run linter
+npm run lint
+```
+
+### Other Useful Commands
+
+```bash
+# Update dependencies
+npm update
+
+# Check for outdated packages
+npm outdated
+
+# Run security audit
+npm audit
+
+# View all available npm scripts
+npm run
+```
