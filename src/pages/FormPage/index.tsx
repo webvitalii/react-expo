@@ -200,22 +200,24 @@ const FormPage = () => {
             name="newsletter"
             render={({ field }) => (
               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                <div className="space-y-0.5">
-                  <FormLabel>Subscribe to Newsletter</FormLabel>
-                  <FormDescription>
-                    Receive our latest updates and special offers.
-                  </FormDescription>
+                <div className="flex flex-row items-center gap-3">
+                  <FormControl>
+                    <Switch
+                      checked={isNewsletterEnabled}
+                      onCheckedChange={() => {
+                        toggleNewsletter(); // Toggle the state
+                        field.onChange(!field.value); // Update form value
+                      }}
+                    />
+                    {/* checked={field.value} onCheckedChange={field.onChange} */}
+                  </FormControl>
+                  <div className="space-y-0.5">
+                    <FormLabel>Subscribe to Newsletter</FormLabel>
+                    <FormDescription>
+                      Receive our latest updates and special offers.
+                    </FormDescription>
+                  </div>
                 </div>
-                <FormControl>
-                  <Switch
-                    checked={isNewsletterEnabled}
-                    onCheckedChange={() => {
-                      toggleNewsletter(); // Toggle the state
-                      field.onChange(!field.value); // Update form value
-                    }}
-                  />
-                  {/* checked={field.value} onCheckedChange={field.onChange} */}
-                </FormControl>
               </FormItem>
             )}
           />
