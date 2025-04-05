@@ -39,7 +39,7 @@ const Rating = ({ ...props }: RatingProps) => {
           <button
             key={index}
             type="button"
-            className="focus:outline-none transition-colors hover:scale-110"
+            className="focus:outline-hidden transition-colors hover:scale-110"
             onMouseEnter={() => handleMouseEnter(starValue)}
             onMouseLeave={handleMouseLeave}
             onClick={() => handleClick(starValue)}

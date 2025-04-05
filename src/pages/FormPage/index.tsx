@@ -199,7 +199,7 @@ const FormPage = () => {
             control={form.control}
             name="newsletter"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-xs">
                 <div className="flex flex-row items-center gap-3">
                   <FormControl>
                     <Switch
