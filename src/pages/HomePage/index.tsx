@@ -1,5 +1,5 @@
-import PageLayout from "@/components/PageLayout";
-import PageTitle from "@/components/PageTitle";
+import PageLayout from '@/components/PageLayout';
+import PageTitle from '@/components/PageTitle';
 
 const HomePage = () => {
   return (
@@ -8,8 +8,8 @@ const HomePage = () => {
       <ul className="list-disc pl-4">
         <li>React / TypeScript / Vite</li>
         <li>Tailwind CSS</li>
-        <li>Radix UI</li>
-        <li>Shadcn/ui</li>
+        <li>Shadcn/ui + Radix UI</li>
+        <li>Tanstack Router</li>
       </ul>
 
       <p>
