@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import Card from '@/components/TMDB/Card';
@@ -27,10 +27,11 @@ const getSearchResults = async (
 };
 
 const Search = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('query') || '';
-  const page = Number(searchParams.get('page')) || 1;
-  const includeAdult = searchParams.get('include_adult') === 'true';
+  const navigate = useNavigate({ from: '/tmdb/search' });
+  const searchParams = useSearch({ from: '/tmdb/search' });
+  const query = searchParams.query || '';
+  const page = Number(searchParams.page) || 1;
+  const includeAdult = searchParams.include_adult === 'true';
 
   const { data = { results: [], total_pages: 0 }, isLoading } = useQuery({
     queryKey: ['search', query, page, includeAdult],
@@ -40,25 +41,24 @@ const Search = () => {
   });
 
   const handleSearch = (newQuery: string) => {
-    setSearchParams((prev) => {
-      if (newQuery) prev.set('query', newQuery);
-      else prev.delete('query');
-      prev.set('page', '1');
-      return prev;
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        query: newQuery || undefined,
+        page: 1,
+      }),
     });
   };
 
   const handlePageChange = (newPage: number) => {
-    setSearchParams((prev) => {
-      prev.set('page', newPage.toString());
-      return prev;
+    navigate({
+      search: (prev) => ({ ...prev, page: newPage }),
     });
   };
 
   const handleAdultContentChange = (checked: boolean) => {
-    setSearchParams((prev) => {
-      prev.set('include_adult', checked.toString());
-      return prev;
+    navigate({
+      search: (prev) => ({ ...prev, include_adult: checked.toString() }),
     });
   };
 

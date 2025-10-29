@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
 import { TMDB_API, TMDB_API_KEY, TMDB_CACHE_PERIOD } from '@/components/TMDB/config';
@@ -43,10 +43,11 @@ const getMovies = async (
 };
 
 function Movies() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const page = Number(searchParams.get('page')) || 1;
-  const genreId = searchParams.get('genre') || 'all';
-  const sortKey = (searchParams.get('sort') as SortOptionKey) || 'popularity';
+  const navigate = useNavigate({ from: '/tmdb/movies' });
+  const searchParams = useSearch({ from: '/tmdb/movies' });
+  const page = Number(searchParams.page) || 1;
+  const genreId = searchParams.genre || 'all';
+  const sortKey = (searchParams.sort as SortOptionKey) || 'popularity';
   const sortBy = SORT_OPTIONS[sortKey]?.value || SORT_OPTIONS.popularity.value;
 
   const { data: genres = [], isLoading: isLoadingGenres } = useQuery({
@@ -62,25 +63,20 @@ function Movies() {
   });
 
   const handlePageChange = (newPage: number) => {
-    setSearchParams((prev) => {
-      prev.set('page', newPage.toString());
-      return prev;
+    navigate({
+      search: (prev) => ({ ...prev, page: newPage }),
     });
   };
 
   const handleGenreChange = (newGenreId: string) => {
-    setSearchParams((prev) => {
-      prev.set('genre', newGenreId);
-      prev.set('page', '1');
-      return prev;
+    navigate({
+      search: (prev) => ({ ...prev, genre: newGenreId, page: 1 }),
     });
   };
 
   const handleSortChange = (newSortKey: SortOptionKey) => {
-    setSearchParams((prev) => {
-      prev.set('sort', newSortKey);
-      prev.set('page', '1');
-      return prev;
+    navigate({
+      search: (prev) => ({ ...prev, sort: newSortKey, page: 1 }),
     });
   };
 

@@ -6,3 +6,6 @@ coverage
 .vercel
 .vscode
 .idea
+
+# TanStack Router generated files
+routeTree.gen.ts

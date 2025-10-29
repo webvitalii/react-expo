@@ -28,3 +28,6 @@ dist-ssr
 
 # misc
 .firebase/
+
+# TanStack Router
+routeTree.gen.ts
