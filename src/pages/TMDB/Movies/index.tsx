@@ -50,13 +50,13 @@ function Movies() {
   const sortKey = (searchParams.sort as SortOptionKey) || 'popularity';
   const sortBy = SORT_OPTIONS[sortKey]?.value || SORT_OPTIONS.popularity.value;
 
-  const { data: genres = [], isLoading: isLoadingGenres } = useQuery({
+  const { data: genres = [], isPending: isPendingGenres } = useQuery({
     queryKey: ['movieGenres'],
     queryFn: getGenres,
     staleTime: TMDB_CACHE_PERIOD,
   });
 
-  const { data: moviesData = { results: [], total_pages: 0 }, isLoading: isLoadingMovies } = useQuery({
+  const { data: moviesData = { results: [], total_pages: 0 }, isPending: isPendingMovies } = useQuery({
     queryKey: ['movies', page, genreId, sortBy],
     queryFn: () => getMovies(page, genreId, sortBy),
     staleTime: TMDB_CACHE_PERIOD,
@@ -80,7 +80,7 @@ function Movies() {
     });
   };
 
-  if (isLoadingGenres || isLoadingMovies) {
+  if (isPendingGenres || isPendingMovies) {
     return <div className="text-center py-8">Loading movies...</div>;
   }
 

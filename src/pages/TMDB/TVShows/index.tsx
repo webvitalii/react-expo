@@ -49,13 +49,13 @@ const TVShows = () => {
   const sortKey = (searchParams.sort as SortOptionKey) || 'popularity';
   const sortBy = SORT_OPTIONS[sortKey]?.value || SORT_OPTIONS.popularity.value;
 
-  const { data: genres = [], isLoading: isLoadingGenres } = useQuery({
+  const { data: genres = [], isPending: isPendingGenres } = useQuery({
     queryKey: ['tvGenres'],
     queryFn: getGenres,
     staleTime: TMDB_CACHE_PERIOD,
   });
 
-  const { data: tvShowsData = { results: [], total_pages: 0 }, isLoading: isLoadingShows } = useQuery({
+  const { data: tvShowsData = { results: [], total_pages: 0 }, isPending: isPendingShows } = useQuery({
     queryKey: ['tvShows', page, genreId, sortBy],
     queryFn: () => getTVShows(page, genreId, sortBy),
     staleTime: TMDB_CACHE_PERIOD,
@@ -79,7 +79,7 @@ const TVShows = () => {
     });
   };
 
-  if (isLoadingGenres || isLoadingShows) {
+  if (isPendingGenres || isPendingShows) {
     return <div className="text-center py-8">Loading TV shows...</div>;
   }
 

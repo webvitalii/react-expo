@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from 'react';
+import { Link } from '@tanstack/react-router';
+import { useQuery } from '@tanstack/react-query';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -12,10 +12,10 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { ArrowUpDown, ArrowUp, ArrowDown, MoreHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+} from '@tanstack/react-table';
+import { ArrowUpDown, ArrowUp, ArrowDown, MoreHorizontal } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,8 +23,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -32,32 +32,29 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import PageLayout from "@/components/PageLayout";
-import PageTitle from "@/components/PageTitle";
+} from '@/components/ui/table';
+import PageLayout from '@/components/PageLayout';
+import PageTitle from '@/components/PageTitle';
 
-import { Post } from "@/types/Post";
+import { Post } from '@/types/Post';
 
 interface SortableHeaderProps {
   column: {
-    getIsSorted: () => "asc" | "desc" | false;
+    getIsSorted: () => 'asc' | 'desc' | false;
     toggleSorting: (asc: boolean) => void;
     id: string;
   };
 }
 
 const generateSortableHeader = ({ column }: SortableHeaderProps) => {
-  console.log("header", column);
+  // console.log("header", column);
   const isSorted = column.getIsSorted();
-  const isAsc = isSorted === "asc";
-  const isDesc = isSorted === "desc";
+  const isAsc = isSorted === 'asc';
+  const isDesc = isSorted === 'desc';
 
   return (
-    <Button
-      variant="ghost"
-      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    >
-      <span className="capitalize">{column.id}</span>{" "}
+    <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+      <span className="capitalize">{column.id}</span>{' '}
       {isAsc && <ArrowUp className="ml-2 h-4 w-4" />}
       {isDesc && <ArrowDown className="ml-2 h-4 w-4" />}
       {!isSorted && <ArrowUpDown className="ml-2 h-4 w-4" />}
@@ -67,12 +64,11 @@ const generateSortableHeader = ({ column }: SortableHeaderProps) => {
 
 const columns: ColumnDef<Post>[] = [
   {
-    id: "select",
+    id: 'select',
     header: ({ table }) => (
       <Checkbox
         checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
+          table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
@@ -89,27 +85,27 @@ const columns: ColumnDef<Post>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: 'id',
     header: generateSortableHeader,
-    cell: ({ row }) => <div>{row.getValue("id")}</div>,
+    cell: ({ row }) => <div>{row.getValue('id')}</div>,
   },
   {
-    accessorKey: "userId",
+    accessorKey: 'userId',
     header: generateSortableHeader,
-    cell: ({ row }) => <div>{row.getValue("userId")}</div>,
+    cell: ({ row }) => <div>{row.getValue('userId')}</div>,
   },
   {
-    accessorKey: "title",
+    accessorKey: 'title',
     header: generateSortableHeader,
-    cell: ({ row }) => <div>{row.getValue("title")}</div>,
+    cell: ({ row }) => <div>{row.getValue('title')}</div>,
   },
   {
-    accessorKey: "body",
+    accessorKey: 'body',
     header: generateSortableHeader,
-    cell: ({ row }) => <div>{row.getValue("body")}</div>,
+    cell: ({ row }) => <div>{row.getValue('body')}</div>,
   },
   {
-    id: "actions",
+    id: 'actions',
     enableHiding: false,
     cell: ({ row }) => {
       const post = row.original;
@@ -124,9 +120,7 @@ const columns: ColumnDef<Post>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(post.title)}
-            >
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(post.title)}>
               Copy post title
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -147,18 +141,16 @@ const TablePage = () => {
 
   const {
     data: posts,
-    isLoading,
+    isPending,
     isError,
     error,
   } = useQuery<Post[]>({
-    queryKey: ["posts"],
+    queryKey: ['posts'],
     staleTime: 10000,
     queryFn: async () => {
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/posts"
-      );
+      const response = await fetch('https://jsonplaceholder.typicode.com/posts');
       if (!response.ok) {
-        throw new Error("Error fetching posts");
+        throw new Error('Error fetching posts');
       }
       return (await response.json()) as Post[];
     },
@@ -183,7 +175,7 @@ const TablePage = () => {
     },
   });
 
-  if (isLoading) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 
@@ -204,10 +196,7 @@ const TablePage = () => {
               <TableHead key={header.id}>
                 {header.isPlaceholder
                   ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
+                  : flexRender(header.column.columnDef.header, header.getContext())}
               </TableHead>
             );
           })}
@@ -220,7 +209,7 @@ const TablePage = () => {
     <TableBody>
       {table.getRowModel().rows?.length ? (
         table.getRowModel().rows.map((row) => (
-          <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+          <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
             {row.getVisibleCells().map((cell) => (
               <TableCell key={cell.id}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -250,10 +239,8 @@ const TablePage = () => {
         <div className="flex items-center py-4">
           <Input
             placeholder="Filter posts..."
-            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("title")?.setFilterValue(event.target.value)
-            }
+            value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
+            onChange={(event) => table.getColumn('title')?.setFilterValue(event.target.value)}
             className="max-w-sm"
           />
         </div>
@@ -266,7 +253,7 @@ const TablePage = () => {
         </div>
         <div className="flex items-center justify-end space-x-2 py-4">
           <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
+            {table.getFilteredSelectedRowModel().rows.length} of{' '}
             {table.getFilteredRowModel().rows.length} row(s) selected.
           </div>
           <div className="space-x-2">

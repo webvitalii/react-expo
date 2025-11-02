@@ -13,7 +13,7 @@ import { Post } from "@/types/Post";
 const TableSimplePage = () => {
   const {
     data: posts,
-    isLoading,
+    isPending,
     isError,
     error,
   } = useQuery<Post[]>({
@@ -30,7 +30,7 @@ const TableSimplePage = () => {
     },
   });
 
-  if (isLoading) {
+  if (isPending) {
     return <div>Loading...</div>;
   }
 

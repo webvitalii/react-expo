@@ -33,7 +33,7 @@ const Search = () => {
   const page = Number(searchParams.page) || 1;
   const includeAdult = searchParams.include_adult === 'true';
 
-  const { data = { results: [], total_pages: 0 }, isLoading } = useQuery({
+  const { data = { results: [], total_pages: 0 }, isPending } = useQuery({
     queryKey: ['search', query, page, includeAdult],
     queryFn: () => getSearchResults(query, page, includeAdult),
     enabled: !!query,
@@ -62,7 +62,7 @@ const Search = () => {
     });
   };
 
-  if (isLoading) {
+  if (isPending) {
     return <div className="text-center py-8">Loading search results...</div>;
   }
 
