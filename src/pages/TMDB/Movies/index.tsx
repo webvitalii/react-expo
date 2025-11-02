@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
-import { TMDB_API, TMDB_API_KEY, TMDB_CACHE_PERIOD } from '@/components/TMDB/config';
+import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
 import { SortControl } from '@/components/TMDB/SortControl';
 import { GenreControl } from '@/components/TMDB/GenreControl';
 import type { Movie, TMDBResponse, Genre, GenreResponse } from '@/types/TMDB';
@@ -53,13 +53,11 @@ function Movies() {
   const { data: genres = [], isPending: isPendingGenres } = useQuery({
     queryKey: ['movieGenres'],
     queryFn: getGenres,
-    staleTime: TMDB_CACHE_PERIOD,
   });
 
   const { data: moviesData = { results: [], total_pages: 0 }, isPending: isPendingMovies } = useQuery({
     queryKey: ['movies', page, genreId, sortBy],
     queryFn: () => getMovies(page, genreId, sortBy),
-    staleTime: TMDB_CACHE_PERIOD,
   });
 
   const handlePageChange = (newPage: number) => {

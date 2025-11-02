@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
-import { TMDB_API, TMDB_API_KEY, TMDB_CACHE_PERIOD } from '@/components/TMDB/config';
+import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
 import { SortControl } from '@/components/TMDB/SortControl';
 import { GenreControl } from '@/components/TMDB/GenreControl';
 import type { TVShow, TMDBResponse, Genre, GenreResponse } from '@/types/TMDB';
@@ -52,13 +52,11 @@ const TVShows = () => {
   const { data: genres = [], isPending: isPendingGenres } = useQuery({
     queryKey: ['tvGenres'],
     queryFn: getGenres,
-    staleTime: TMDB_CACHE_PERIOD,
   });
 
   const { data: tvShowsData = { results: [], total_pages: 0 }, isPending: isPendingShows } = useQuery({
     queryKey: ['tvShows', page, genreId, sortBy],
     queryFn: () => getTVShows(page, genreId, sortBy),
-    staleTime: TMDB_CACHE_PERIOD,
   });
 
   const handlePageChange = (newPage: number) => {

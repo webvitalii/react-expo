@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
-import { TMDB_API, TMDB_API_KEY, TMDB_CACHE_PERIOD } from '@/components/TMDB/config';
+import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
 import type { SearchResult, TMDBResponse } from '@/types/TMDB';
 
 const getSearchResults = async (
@@ -37,7 +37,6 @@ const Search = () => {
     queryKey: ['search', query, page, includeAdult],
     queryFn: () => getSearchResults(query, page, includeAdult),
     enabled: !!query,
-    staleTime: TMDB_CACHE_PERIOD,
   });
 
   const handleSearch = (newQuery: string) => {

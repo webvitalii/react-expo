@@ -38,6 +38,14 @@ import PageTitle from '@/components/PageTitle';
 
 import { Post } from '@/types/Post';
 
+const fetchPosts = async (): Promise<Post[]> => {
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+  if (!response.ok) {
+    throw new Error('Error fetching posts');
+  }
+  return response.json();
+};
+
 interface SortableHeaderProps {
   column: {
     getIsSorted: () => 'asc' | 'desc' | false;
@@ -146,14 +154,7 @@ const TablePage = () => {
     error,
   } = useQuery<Post[]>({
     queryKey: ['posts'],
-    staleTime: 10000,
-    queryFn: async () => {
-      const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-      if (!response.ok) {
-        throw new Error('Error fetching posts');
-      }
-      return (await response.json()) as Post[];
-    },
+    queryFn: fetchPosts,
   });
 
   const table = useReactTable({
