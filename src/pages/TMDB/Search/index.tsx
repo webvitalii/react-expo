@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
 import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
+import Loading from '@/components/Loading';
 import type { SearchResult, TMDBResponse } from '@/types/TMDB';
 
 const getSearchResults = async (
@@ -61,10 +62,6 @@ const Search = () => {
     });
   };
 
-  if (isPending) {
-    return <div className="text-center py-8">Loading search results...</div>;
-  }
-
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -92,7 +89,9 @@ const Search = () => {
         </div>
       </div>
 
-      {data?.results.length > 0 && (
+      {isPending && query && <Loading message="Loading search results..." />}
+
+      {!isPending && data?.results.length > 0 && (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {data.results.map((result) => {
@@ -109,7 +108,7 @@ const Search = () => {
         </>
       )}
 
-      {data?.results.length === 0 && query && (
+      {!isPending && data?.results.length === 0 && query && (
         <div className="text-center py-8">No results found for "{query}"</div>
       )}
     </div>

@@ -35,6 +35,7 @@ import {
 } from '@/components/ui/table';
 import PageLayout from '@/components/PageLayout';
 import PageTitle from '@/components/PageTitle';
+import Loading from '@/components/Loading';
 
 import { Post } from '@/types/Post';
 
@@ -177,7 +178,7 @@ const TablePage = () => {
   });
 
   if (isPending) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (isError) {

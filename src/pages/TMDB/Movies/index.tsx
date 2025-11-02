@@ -5,6 +5,7 @@ import Pagination from '@/components/TMDB/Pagination';
 import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
 import { SortControl } from '@/components/TMDB/SortControl';
 import { GenreControl } from '@/components/TMDB/GenreControl';
+import Loading from '@/components/Loading';
 import type { Movie, TMDBResponse, Genre, GenreResponse } from '@/types/TMDB';
 import type { SortOption } from '@/components/TMDB/SortControl';
 
@@ -79,7 +80,7 @@ function Movies() {
   };
 
   if (isPendingGenres || isPendingMovies) {
-    return <div className="text-center py-8">Loading movies...</div>;
+    return <Loading message="Loading movies..." />;
   }
 
   if (!genres || !moviesData) return null;

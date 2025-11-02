@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import PageLayout from "@/components/PageLayout";
+import Loading from "@/components/Loading";
 import { Post } from "@/types/Post";
 
 const fetchPosts = async (): Promise<Post[]> => {
@@ -30,7 +31,7 @@ const TableSimplePage = () => {
   });
 
   if (isPending) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (isError) {
