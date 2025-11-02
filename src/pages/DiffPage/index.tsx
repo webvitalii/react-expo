@@ -22,21 +22,20 @@ const DiffPage = () => {
 
   const compareTexts = useCallback(() => {
     let diff;
-    const options = { ignoreCase };
 
     const leftCompare = ignoreCase ? leftText.toLowerCase() : leftText;
     const rightCompare = ignoreCase ? rightText.toLowerCase() : rightText;
 
     switch (diffMethod) {
       case "chars":
-        diff = diffChars(leftCompare, rightCompare, options);
+        diff = diffChars(leftCompare, rightCompare);
         break;
       case "words":
-        diff = diffWords(leftCompare, rightCompare, options);
+        diff = diffWords(leftCompare, rightCompare);
         break;
       case "lines":
       default:
-        diff = diffLines(leftCompare, rightCompare, options);
+        diff = diffLines(leftCompare, rightCompare);
         break;
     }
 
