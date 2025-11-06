@@ -9,3 +9,6 @@ coverage
 
 # TanStack Router generated files
 routeTree.gen.ts
+
+# shadcn/ui components
+src/components/ui
