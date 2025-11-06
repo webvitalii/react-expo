@@ -122,6 +122,18 @@ const Navbar = () => {
             TMDB
           </Link>
         </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <Link
+            to="/posts"
+            className={navigationMenuTriggerStyle()}
+            activeProps={{
+              className: cn(navigationMenuTriggerStyle(), 'bg-slate-200 text-slate-900'),
+            }}
+          >
+            Posts
+          </Link>
+        </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
   );
