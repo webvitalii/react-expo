@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import {
   ColumnDef,
@@ -232,10 +231,6 @@ const TablePage = () => {
   return (
     <PageLayout>
       <PageTitle>Table with sorting, filtering and pagination.</PageTitle>
-
-      <p>
-        <Link to="/table-simple">Go to Table Simple</Link>
-      </p>
 
       <div className="w-full">
         <div className="flex items-center py-4">

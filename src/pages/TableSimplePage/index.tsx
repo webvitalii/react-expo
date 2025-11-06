@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 import {
   Table,
   TableBody,
@@ -6,10 +6,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import PageLayout from "@/components/PageLayout";
-import Loading from "@/components/Loading";
-import { Post } from "@/types/Post";
+} from '@/components/ui/table';
+import PageLayout from '@/components/PageLayout';
+import PageTitle from '@/components/PageTitle';
+import Loading from '@/components/Loading';
+import { Post } from '@/types/Post';
 
 const fetchPosts = async (): Promise<Post[]> => {
   const response = await fetch('https://jsonplaceholder.typicode.com/posts');
@@ -26,7 +27,7 @@ const TableSimplePage = () => {
     isError,
     error,
   } = useQuery<Post[]>({
-    queryKey: ["posts"],
+    queryKey: ['posts'],
     queryFn: fetchPosts,
   });
 
@@ -40,6 +41,8 @@ const TableSimplePage = () => {
 
   return (
     <PageLayout>
+      <PageTitle>Table Simple</PageTitle>
+
       <Table>
         <TableHeader>
           <TableRow>
