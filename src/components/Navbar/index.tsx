@@ -1,35 +1,129 @@
 import { Link } from '@tanstack/react-router';
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu';
+import { cn } from '@/lib/utils';
 
-const navLinks = [
-  { to: '/', text: 'Home' },
-  { to: '/table', text: 'Table' },
-  { to: '/form', text: 'Form' },
-  { to: '/carousel', text: 'Carousel' },
-  { to: '/counter', text: 'Counter' },
-  { to: '/diff', text: 'Diff' },
-  { to: '/rating', text: 'Rating' },
-  { to: '/tmdb', text: 'TMDB' },
+const componentLinks = [
+  { to: '/table-simple', text: 'Table Simple', description: 'Simple data table' },
+  { to: '/table', text: 'Table', description: 'Data table with sorting and filtering' },
+  { to: '/form', text: 'Form', description: 'Form validation with React Hook Form' },
+  { to: '/carousel', text: 'Carousel', description: 'Image carousel component' },
+  { to: '/rating', text: 'Rating', description: 'Star rating component' },
+];
+
+const exampleLinks = [
+  { to: '/counter', text: 'Counter', description: 'Redux state management example' },
 ];
 
 const Navbar = () => {
-  const baseClasses = 'font-bold px-3 py-2 rounded-lg';
-  
   return (
-    <nav className="flex justify-center space-x-1">
-      {navLinks.map((link) => (
-        <Link
-          key={link.to}
-          to={link.to}
-          activeOptions={{ exact: link.to === '/' }}
-          activeProps={{
-            className: `${baseClasses} text-slate-900 bg-slate-200`,
-          }}
-          className={`${baseClasses} text-slate-700 hover:bg-slate-100 hover:text-slate-900`}
-        >
-          {link.text}
-        </Link>
-      ))}
-    </nav>
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <Link
+            to="/"
+            className={navigationMenuTriggerStyle()}
+            activeOptions={{ exact: true }}
+            activeProps={{
+              className: cn(navigationMenuTriggerStyle(), 'bg-slate-200 text-slate-900'),
+            }}
+          >
+            Home
+          </Link>
+        </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
+              {componentLinks.map((link) => (
+                <li key={link.to}>
+                  <NavigationMenuLink asChild>
+                    <Link
+                      to={link.to}
+                      className={cn(
+                        'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                      )}
+                      activeProps={{
+                        className: cn(
+                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold'
+                        ),
+                      }}
+                    >
+                      <div className="text-sm font-medium leading-none">{link.text}</div>
+                      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                        {link.description}
+                      </p>
+                    </Link>
+                  </NavigationMenuLink>
+                </li>
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Examples</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
+              {exampleLinks.map((link) => (
+                <li key={link.to}>
+                  <NavigationMenuLink asChild>
+                    <Link
+                      to={link.to}
+                      className={cn(
+                        'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                      )}
+                      activeProps={{
+                        className: cn(
+                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold'
+                        ),
+                      }}
+                    >
+                      <div className="text-sm font-medium leading-none">{link.text}</div>
+                      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                        {link.description}
+                      </p>
+                    </Link>
+                  </NavigationMenuLink>
+                </li>
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <Link
+            to="/diff"
+            className={navigationMenuTriggerStyle()}
+            activeProps={{
+              className: cn(navigationMenuTriggerStyle(), 'bg-slate-200 text-slate-900'),
+            }}
+          >
+            Diff
+          </Link>
+        </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <Link
+            to="/tmdb"
+            className={navigationMenuTriggerStyle()}
+            activeProps={{
+              className: cn(navigationMenuTriggerStyle(), 'bg-slate-200 text-slate-900'),
+            }}
+          >
+            TMDB
+          </Link>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
   );
 };
 
