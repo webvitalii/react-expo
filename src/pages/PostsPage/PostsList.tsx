@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import Loading from '@/components/Loading';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -30,7 +29,8 @@ const getPosts = async (page: number): Promise<Post[]> => {
 
 function PostsList() {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
+  const { page } = useSearch({ from: '/posts/' });
+  const currentPage = page || 1;
 
   const totalPages = Math.ceil(TOTAL_POSTS / POSTS_PER_PAGE);
 
@@ -43,8 +43,11 @@ function PostsList() {
     return <Loading message="Loading posts..." />;
   }
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const handlePageChange = (newPage: number) => {
+    navigate({
+      to: '/posts',
+      search: { page: newPage },
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
