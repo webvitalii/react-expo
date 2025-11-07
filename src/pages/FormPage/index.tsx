@@ -22,11 +22,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/components/ui/use-toast";
 import PageLayout from "@/components/PageLayout";
 import PageTitle from "@/components/PageTitle";
-import { useToggle } from "@/hooks/useToggle";
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -54,13 +52,10 @@ const formSchema = z.object({
   agree: z.boolean().refine((val) => val, {
     message: "You must agree to the terms of service.",
   }),
-  newsletter: z.boolean().optional(),
 });
 
 const FormPage = () => {
   const { toast } = useToast();
-  const { isToggled: isNewsletterEnabled, toggle: toggleNewsletter } =
-    useToggle();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -71,7 +66,6 @@ const FormPage = () => {
       gender: "",
       bio: "",
       agree: false,
-      newsletter: isNewsletterEnabled,
     },
   });
 
@@ -190,33 +184,6 @@ const FormPage = () => {
                   <FormDescription>
                     You must agree to the terms of service.
                   </FormDescription>
-                </div>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="newsletter"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-xs">
-                <div className="flex flex-row items-center gap-3">
-                  <FormControl>
-                    <Switch
-                      checked={isNewsletterEnabled}
-                      onCheckedChange={() => {
-                        toggleNewsletter(); // Toggle the state
-                        field.onChange(!field.value); // Update form value
-                      }}
-                    />
-                    {/* checked={field.value} onCheckedChange={field.onChange} */}
-                  </FormControl>
-                  <div className="space-y-0.5">
-                    <FormLabel>Subscribe to Newsletter</FormLabel>
-                    <FormDescription>
-                      Receive our latest updates and special offers.
-                    </FormDescription>
-                  </div>
                 </div>
               </FormItem>
             )}
