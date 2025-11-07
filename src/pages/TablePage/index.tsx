@@ -266,6 +266,7 @@ const TablePage = () => {
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious
+                  size="default"
                   onClick={() => table.previousPage()}
                   className={
                     !table.getCanPreviousPage()
@@ -291,6 +292,7 @@ const TablePage = () => {
                   pages.push(
                     <PaginationItem key={1}>
                       <PaginationLink
+                        size="icon"
                         onClick={() => table.setPageIndex(0)}
                         isActive={currentPage === 1}
                       >
@@ -311,6 +313,7 @@ const TablePage = () => {
                   pages.push(
                     <PaginationItem key={i}>
                       <PaginationLink
+                        size="icon"
                         onClick={() => table.setPageIndex(i - 1)}
                         isActive={currentPage === i}
                       >
@@ -331,6 +334,7 @@ const TablePage = () => {
                   pages.push(
                     <PaginationItem key={totalPages}>
                       <PaginationLink
+                        size="icon"
                         onClick={() => table.setPageIndex(totalPages - 1)}
                         isActive={currentPage === totalPages}
                       >
@@ -345,6 +349,7 @@ const TablePage = () => {
 
               <PaginationItem>
                 <PaginationNext
+                  size="default"
                   onClick={() => table.nextPage()}
                   className={
                     !table.getCanNextPage()

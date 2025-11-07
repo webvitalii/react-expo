@@ -1,12 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { z } from 'zod';
 import PostsList from '@/pages/PostsPage/PostsList';
 
-const postsSearchSchema = z.object({
-  page: z.number().int().positive().catch(1),
-});
+type PostsSearch = {
+  page?: number;
+};
 
 export const Route = createFileRoute('/posts/')({
   component: PostsList,
-  validateSearch: postsSearchSchema,
+  validateSearch: (search: Record<string, unknown>): PostsSearch => {
+    return {
+      page: search.page ? Number(search.page) : undefined,
+    };
+  },
 });
