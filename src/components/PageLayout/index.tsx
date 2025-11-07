@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import Navbar from "@/components/Navbar";
+import { ReactNode } from 'react';
+import Navbar from '@/components/Navbar';
 
 interface PageLayoutProps {
   children: ReactNode;
@@ -7,7 +7,7 @@ interface PageLayoutProps {
 
 const PageLayout = ({ children }: PageLayoutProps) => {
   return (
-    <section className="container mx-auto">
+    <section className="container mx-auto p-6">
       <Navbar />
       {children}
     </section>
