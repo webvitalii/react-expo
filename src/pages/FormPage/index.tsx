@@ -31,9 +31,7 @@ const formSchema = z.object({
   username: z.string().min(2, {
     message: 'Username must be at least 2 characters.',
   }),
-  email: z.string().email({
-    message: 'Please enter a valid email address.',
-  }),
+  email: z.email('Please enter a valid email address.'),
   gender: z
     .string()
     .min(1, {
@@ -62,6 +60,8 @@ const FormPage = () => {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onChange', // Clear errors while typing after first validation
     defaultValues: {
       username: '',
       email: '',
