@@ -59,9 +59,7 @@ const TanStackFormPage = () => {
           name="username"
           validators={{
             onBlur: ({ value }) =>
-              value.length < 2
-                ? 'Username must be at least 2 characters.'
-                : undefined,
+              value.length < 2 ? 'Username must be at least 2 characters.' : undefined,
           }}
         >
           {(field) => (
@@ -73,13 +71,9 @@ const TanStackFormPage = () => {
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
               />
-              <p className="text-sm text-muted-foreground">
-                This is your public display name.
-              </p>
+              <p className="text-sm text-muted-foreground">This is your public display name.</p>
               {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                <p className="text-sm font-medium text-destructive">
-                  {field.state.meta.errors[0]}
-                </p>
+                <p className="text-sm font-medium text-destructive">{field.state.meta.errors[0]}</p>
               )}
             </div>
           )}
@@ -109,9 +103,7 @@ const TanStackFormPage = () => {
                 We'll never share your email with anyone else.
               </p>
               {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                <p className="text-sm font-medium text-destructive">
-                  {field.state.meta.errors[0]}
-                </p>
+                <p className="text-sm font-medium text-destructive">{field.state.meta.errors[0]}</p>
               )}
             </div>
           )}
@@ -150,9 +142,7 @@ const TanStackFormPage = () => {
               </Select>
               <p className="text-sm text-muted-foreground">Select your gender.</p>
               {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                <p className="text-sm font-medium text-destructive">
-                  {field.state.meta.errors[0]}
-                </p>
+                <p className="text-sm font-medium text-destructive">{field.state.meta.errors[0]}</p>
               )}
             </div>
           )}
@@ -183,13 +173,9 @@ const TanStackFormPage = () => {
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
               />
-              <p className="text-sm text-muted-foreground">
-                Tell us a little bit about yourself.
-              </p>
+              <p className="text-sm text-muted-foreground">Tell us a little bit about yourself.</p>
               {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                <p className="text-sm font-medium text-destructive">
-                  {field.state.meta.errors[0]}
-                </p>
+                <p className="text-sm font-medium text-destructive">{field.state.meta.errors[0]}</p>
               )}
             </div>
           )}
@@ -210,9 +196,7 @@ const TanStackFormPage = () => {
               <Label>Notification Preferences</Label>
               <RadioGroup
                 value={field.state.value}
-                onValueChange={(value) =>
-                  field.handleChange(value as 'all' | 'mentions' | 'none')
-                }
+                onValueChange={(value) => field.handleChange(value as 'all' | 'mentions' | 'none')}
                 className="flex space-x-4"
               >
                 <div className="flex items-center space-x-2">
@@ -238,9 +222,7 @@ const TanStackFormPage = () => {
                 Choose how you want to receive notifications.
               </p>
               {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                <p className="text-sm font-medium text-destructive">
-                  {field.state.meta.errors[0]}
-                </p>
+                <p className="text-sm font-medium text-destructive">{field.state.meta.errors[0]}</p>
               )}
             </div>
           )}
@@ -250,7 +232,7 @@ const TanStackFormPage = () => {
         <form.Field
           name="agree"
           validators={{
-            onBlur: ({ value }) =>
+            onChange: ({ value }) =>
               !value ? 'You must agree to the terms of service.' : undefined,
           }}
         >
@@ -260,9 +242,7 @@ const TanStackFormPage = () => {
                 <Checkbox
                   id={field.name}
                   checked={field.state.value}
-                  onCheckedChange={(checked) =>
-                    field.handleChange(checked as boolean)
-                  }
+                  onCheckedChange={(checked) => field.handleChange(checked as boolean)}
                 />
                 <div className="space-y-1 leading-none">
                   <Label htmlFor={field.name}>Accept terms and conditions</Label>
