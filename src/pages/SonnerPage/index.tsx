@@ -26,9 +26,12 @@ type ToastPosition = (typeof toastPositionValues)[number];
 const SonnerPage = () => {
   const [position, setPosition] = useState<ToastPosition>('bottom-right');
   const [expand, setExpand] = useState(false);
+  const [closeButton, setCloseButton] = useState(false);
+  const [richColors, setRichColors] = useState(true);
 
   const handleDefaultToast = () => {
-    toast('Default notification', {
+    // Same as toast()
+    toast.message('Default notification', {
       description: 'This is a default Sonner toast.',
       toasterId: 'sonner-page',
     });
@@ -58,13 +61,6 @@ const SonnerPage = () => {
   const handleWarningToast = () => {
     toast.warning('Warning', {
       description: 'Please pay attention to this warning.',
-      toasterId: 'sonner-page',
-    });
-  };
-
-  const handleMessageToast = () => {
-    toast.message('Message', {
-      description: 'This is a message toast.',
       toasterId: 'sonner-page',
     });
   };
@@ -152,6 +148,28 @@ const SonnerPage = () => {
         </label>
       </div>
 
+      <div className="mb-6 flex items-center gap-2">
+        <Checkbox
+          id="close-button"
+          checked={closeButton}
+          onCheckedChange={(checked) => setCloseButton(!!checked)}
+        />
+        <label htmlFor="close-button" className="text-sm">
+          Show close button (Toaster closeButton={'' + closeButton})
+        </label>
+      </div>
+
+      <div className="mb-6 flex items-center gap-2">
+        <Checkbox
+          id="rich-colors"
+          checked={richColors}
+          onCheckedChange={(checked) => setRichColors(!!checked)}
+        />
+        <label htmlFor="rich-colors" className="text-sm">
+          Use rich colors (Toaster richColors={'' + richColors})
+        </label>
+      </div>
+
       <div className="flex flex-wrap gap-4">
         <Button variant="outline" onClick={handleDefaultToast}>
           Default toast
@@ -168,9 +186,6 @@ const SonnerPage = () => {
         <Button variant="destructive" onClick={handleErrorToast}>
           Error toast
         </Button>
-        <Button variant="outline" onClick={handleMessageToast}>
-          Message toast
-        </Button>
         <Button variant="outline" onClick={handleLoadingToast}>
           Loading toast
         </Button>
@@ -185,7 +200,13 @@ const SonnerPage = () => {
         </Button>
       </div>
 
-      <Toaster id="sonner-page" position={position} richColors expand={expand} />
+      <Toaster
+        id="sonner-page"
+        position={position}
+        richColors={richColors}
+        expand={expand}
+        closeButton={closeButton}
+      />
     </PageLayout>
   );
 };
