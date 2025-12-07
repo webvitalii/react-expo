@@ -26,6 +26,7 @@ const TanStackForm2Page = () => {
     },
     validators: {
       onSubmit: formSchema,
+      onBlur: formSchema,
     },
     onSubmit: async ({ value }) => {
       toast.success('You submitted the following values:', {
@@ -39,7 +40,7 @@ const TanStackForm2Page = () => {
   });
 
   return (
-    <div>
+    <>
       <PageTitle>TanStack Form with validation</PageTitle>
       <form
         id="form-id"
@@ -107,7 +108,7 @@ const TanStackForm2Page = () => {
                 <Button type="button" variant="outline" onClick={() => form.reset()}>
                   Reset
                 </Button>
-                <Button type="submit" form="form-id" disabled={!canSubmit || isSubmitting}>
+                <Button type="submit" disabled={!canSubmit || isSubmitting}>
                   {isSubmitting ? 'Submitting...' : 'Submit'}
                 </Button>
               </Field>
@@ -115,7 +116,7 @@ const TanStackForm2Page = () => {
           </form.Subscribe>
         </FieldGroup>
       </form>
-    </div>
+    </>
   );
 };
 
