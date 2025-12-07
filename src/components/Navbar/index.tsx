@@ -156,6 +156,18 @@ const Navbar = () => {
 
         <NavigationMenuItem>
           <Link
+            to="/sonner"
+            className={navigationMenuTriggerStyle()}
+            activeProps={{
+              className: cn(navigationMenuTriggerStyle(), 'bg-slate-200 text-slate-900'),
+            }}
+          >
+            Sonner
+          </Link>
+        </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <Link
             to="/tmdb"
             className={navigationMenuTriggerStyle()}
             activeProps={{
