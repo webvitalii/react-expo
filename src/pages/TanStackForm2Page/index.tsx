@@ -35,8 +35,9 @@ const TanStackForm2Page = () => {
       gender: 'none',
     },
     validators: {
-      onSubmit: formSchema,
       onBlur: formSchema,
+      // onSubmit: formSchema,
+      // onChange: formSchema,
     },
     onSubmit: async ({ value }) => {
       toast.success('You submitted the following values:', {
