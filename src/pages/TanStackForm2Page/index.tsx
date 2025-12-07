@@ -4,31 +4,35 @@ import * as z from 'zod';
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import PageTitle from '@/components/PageTitle';
 
 const formSchema = z.object({
-  title: z
-    .string()
-    .min(5, 'Title must be at least 5 characters.')
-    .max(30, 'Title must be at most 30 characters.'),
-  description: z
-    .string()
-    .min(20, 'Description must be at least 20 characters.')
-    .max(100, 'Description must be at most 100 characters.'),
   username: z
     .string()
     .min(3, 'Username must be at least 3 characters.')
     .max(10, 'Username must be at most 10 characters.')
     .regex(/^[a-zA-Z0-9]+$/, 'Username can only contain letters and numbers.'),
+  description: z
+    .string()
+    .min(20, 'Description must be at least 20 characters.')
+    .max(100, 'Description must be at most 100 characters.'),
+  gender: z.string().refine((val) => val !== 'none', 'Please select gender.'),
 });
 
 const TanStackForm2Page = () => {
   const form = useForm({
     defaultValues: {
-      title: '',
-      description: '',
       username: '',
+      description: '',
+      gender: 'none',
     },
     validators: {
       onSubmit: formSchema,
@@ -57,12 +61,12 @@ const TanStackForm2Page = () => {
       >
         <FieldGroup>
           <form.Field
-            name="title"
+            name="username"
             children={(field) => {
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Title</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>Username (min, max, regex)</FieldLabel>
                   <Input
                     id={field.name}
                     name={field.name}
@@ -72,7 +76,7 @@ const TanStackForm2Page = () => {
                     aria-invalid={isInvalid}
                     autoComplete="off"
                   />
-                  <FieldDescription>{field.state.value.length}/30 characters</FieldDescription>
+                  <FieldDescription>{field.state.value.length}/10 characters</FieldDescription>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
               );
@@ -85,7 +89,7 @@ const TanStackForm2Page = () => {
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Description</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>Description (min, max)</FieldLabel>
                   <Textarea
                     id={field.name}
                     name={field.name}
@@ -104,22 +108,33 @@ const TanStackForm2Page = () => {
           />
 
           <form.Field
-            name="username"
+            name="gender"
             children={(field) => {
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Username</FieldLabel>
-                  <Input
-                    id={field.name}
-                    name={field.name}
+                  <FieldLabel htmlFor={field.name}>Gender (required)</FieldLabel>
+                  <Select
                     value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    aria-invalid={isInvalid}
-                    autoComplete="off"
-                  />
-                  <FieldDescription>{field.state.value.length}/10 characters</FieldDescription>
+                    onValueChange={(value) => {
+                      field.handleChange(value);
+                      field.handleBlur();
+                    }}
+                  >
+                    <SelectTrigger
+                      id={field.name}
+                      onBlur={field.handleBlur}
+                      aria-invalid={isInvalid}
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none"></SelectItem>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
               );
