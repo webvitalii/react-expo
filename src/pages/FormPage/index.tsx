@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import PageLayout from '@/components/PageLayout';
 import PageTitle from '@/components/PageTitle';
 
@@ -55,8 +55,6 @@ const formSchema = z.object({
 });
 
 const FormPage = () => {
-  const { toast } = useToast();
-
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -76,11 +74,10 @@ const FormPage = () => {
   function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
     // ✅ This will be type-safe and validated.
-    toast({
-      title: 'You submitted the following values:',
+    toast.success('Form submitted successfully!', {
       description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+        <pre className="mt-2 max-h-40 overflow-auto rounded-md bg-slate-950 p-3 text-xs">
+          <code className="text-slate-50">{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),
     });

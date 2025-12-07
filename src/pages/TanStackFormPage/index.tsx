@@ -12,14 +12,12 @@ import {
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import PageLayout from '@/components/PageLayout';
 import PageTitle from '@/components/PageTitle';
 import { Label } from '@/components/ui/label';
 
 const TanStackFormPage = () => {
-  const { toast } = useToast();
-
   const form = useForm({
     defaultValues: {
       username: '',
@@ -31,11 +29,10 @@ const TanStackFormPage = () => {
     },
     onSubmit: async ({ value }) => {
       console.log(value);
-      toast({
-        title: 'You submitted the following values:',
+      toast.success('Form submitted successfully!', {
         description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(value, null, 2)}</code>
+          <pre className="mt-2 max-h-40 overflow-auto rounded-md bg-slate-950 p-3 text-xs">
+            <code className="text-slate-50">{JSON.stringify(value, null, 2)}</code>
           </pre>
         ),
       });
