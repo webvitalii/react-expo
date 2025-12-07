@@ -16,6 +16,11 @@ const formSchema = z.object({
     .string()
     .min(20, 'Description must be at least 20 characters.')
     .max(100, 'Description must be at most 100 characters.'),
+  username: z
+    .string()
+    .min(3, 'Username must be at least 3 characters.')
+    .max(10, 'Username must be at most 10 characters.')
+    .regex(/^[a-zA-Z0-9]+$/, 'Username can only contain letters and numbers.'),
 });
 
 const TanStackForm2Page = () => {
@@ -23,6 +28,7 @@ const TanStackForm2Page = () => {
     defaultValues: {
       title: '',
       description: '',
+      username: '',
     },
     validators: {
       onSubmit: formSchema,
@@ -86,11 +92,34 @@ const TanStackForm2Page = () => {
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={isInvalid}
                     rows={6}
                     className="min-h-24 resize-none"
-                    aria-invalid={isInvalid}
                   />
                   <FieldDescription>{field.state.value.length}/100 characters</FieldDescription>
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+
+          <form.Field
+            name="username"
+            children={(field) => {
+              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Username</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={isInvalid}
+                    autoComplete="off"
+                  />
+                  <FieldDescription>{field.state.value.length}/10 characters</FieldDescription>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
               );
