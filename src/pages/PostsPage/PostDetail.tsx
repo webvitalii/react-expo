@@ -24,7 +24,9 @@ const getComments = async (postId: string): Promise<Comment[]> => {
 };
 
 function PostDetail() {
-  const { postId } = useParams({ from: '/posts/$postId' });
+  const params = useParams({ strict: false }) as { lang?: string; postId: string };
+  const { postId } = params;
+  const currentLang = params.lang || 'en';
   const navigate = useNavigate();
 
   const { data: post, isPending: isPendingPost } = useQuery({
@@ -51,7 +53,11 @@ function PostDetail() {
 
   return (
     <div>
-      <Button variant="ghost" className="mb-4" onClick={() => navigate({ to: '/posts' })}>
+      <Button
+        variant="ghost"
+        className="mb-4"
+        onClick={() => navigate({ to: '/$lang/posts', params: { lang: currentLang } })}
+      >
         <ArrowLeft className="mr-2 h-4 w-4" />
         Back to Posts
       </Button>

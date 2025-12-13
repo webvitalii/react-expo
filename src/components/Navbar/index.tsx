@@ -1,4 +1,5 @@
-import { Link } from '@tanstack/react-router';
+import { Link, useParams } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -9,10 +10,31 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
+import { supportedLanguages, type SupportedLanguage } from '@/i18n';
+
+const LanguageSwitcher = ({ currentLang }: { currentLang: string }) => {
+  return (
+    <div className="flex gap-1">
+      {supportedLanguages.map((lng) => (
+        <Link
+          key={lng}
+          to="/$lang"
+          params={{ lang: lng }}
+          className={cn(
+            'px-2 py-1 text-sm rounded uppercase',
+            currentLang === lng ? 'bg-slate-200 text-slate-900 font-semibold' : 'hover:bg-slate-100'
+          )}
+        >
+          {lng}
+        </Link>
+      ))}
+    </div>
+  );
+};
 
 const formLinks = [
   {
-    to: '/forms/tanstack-form',
+    to: '/$lang/forms/tanstack-form',
     text: 'TanStack Form',
     description: 'Form validation with TanStack Form',
   },
@@ -36,24 +58,32 @@ const exampleLinks = [
 ];
 
 const Navbar = () => {
+  const { t } = useTranslation('navbar');
+  const params = useParams({ strict: false }) as { lang?: string };
+  const lang =
+    params.lang && supportedLanguages.includes(params.lang as SupportedLanguage)
+      ? params.lang
+      : 'en';
+
   return (
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
           <Link
-            to="/"
+            to="/$lang"
+            params={{ lang }}
             className={navigationMenuTriggerStyle()}
             activeOptions={{ exact: true }}
             activeProps={{
               className: cn(navigationMenuTriggerStyle(), 'bg-slate-200 text-slate-900'),
             }}
           >
-            Home
+            {t('home')}
           </Link>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Forms</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t('forms')}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
               {formLinks.map((link) => (
@@ -61,6 +91,7 @@ const Navbar = () => {
                   <NavigationMenuLink asChild>
                     <Link
                       to={link.to}
+                      params={{ lang }}
                       className={cn(
                         'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
                       )}
@@ -180,14 +211,19 @@ const Navbar = () => {
 
         <NavigationMenuItem>
           <Link
-            to="/posts"
+            to="/$lang/posts"
+            params={{ lang }}
             className={navigationMenuTriggerStyle()}
             activeProps={{
               className: cn(navigationMenuTriggerStyle(), 'bg-slate-200 text-slate-900'),
             }}
           >
-            Posts
+            {t('posts')}
           </Link>
+        </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <LanguageSwitcher currentLang={lang} />
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>

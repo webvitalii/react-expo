@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate, useSearch } from '@tanstack/react-router';
+import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
 import Loading from '@/components/Loading';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -29,7 +29,9 @@ const getPosts = async (page: number): Promise<Post[]> => {
 
 function PostsList() {
   const navigate = useNavigate();
-  const { page } = useSearch({ from: '/posts/' });
+  const { lang } = useParams({ strict: false }) as { lang?: string };
+  const currentLang = lang || 'en';
+  const { page } = useSearch({ from: '/$lang/posts/' });
   const currentPage = page || 1;
 
   const totalPages = Math.ceil(TOTAL_POSTS / POSTS_PER_PAGE);
@@ -45,7 +47,8 @@ function PostsList() {
 
   const handlePageChange = (newPage: number) => {
     navigate({
-      to: '/posts',
+      to: '/$lang/posts',
+      params: { lang: currentLang },
       search: { page: newPage },
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -64,10 +67,7 @@ function PostsList() {
     if (startPage > 1) {
       pages.push(
         <PaginationItem key={1}>
-          <PaginationLink
-            onClick={() => handlePageChange(1)}
-            isActive={currentPage === 1}
-          >
+          <PaginationLink onClick={() => handlePageChange(1)} isActive={currentPage === 1}>
             1
           </PaginationLink>
         </PaginationItem>
@@ -84,10 +84,7 @@ function PostsList() {
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
         <PaginationItem key={i}>
-          <PaginationLink
-            onClick={() => handlePageChange(i)}
-            isActive={currentPage === i}
-          >
+          <PaginationLink onClick={() => handlePageChange(i)} isActive={currentPage === i}>
             {i}
           </PaginationLink>
         </PaginationItem>
@@ -125,7 +122,10 @@ function PostsList() {
             key={post.id}
             className="cursor-pointer transition-all hover:shadow-md hover:scale-[1.02]"
             onClick={() =>
-              navigate({ to: '/posts/$postId', params: { postId: post.id.toString() } })
+              navigate({
+                to: '/$lang/posts/$postId',
+                params: { lang: currentLang, postId: post.id.toString() },
+              })
             }
           >
             <CardHeader className="pb-3">
@@ -142,9 +142,7 @@ function PostsList() {
           <PaginationItem>
             <PaginationPrevious
               onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-              className={
-                currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'
-              }
+              className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
             />
           </PaginationItem>
 
@@ -154,9 +152,7 @@ function PostsList() {
             <PaginationNext
               onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
               className={
-                currentPage === totalPages
-                  ? 'pointer-events-none opacity-50'
-                  : 'cursor-pointer'
+                currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'
               }
             />
           </PaginationItem>

@@ -5,7 +5,7 @@ type PostsSearch = {
   page?: number;
 };
 
-export const Route = createFileRoute('/posts/')({
+export const Route = createFileRoute('/$lang/posts/')({
   component: PostsList,
   validateSearch: (search: Record<string, unknown>): PostsSearch => {
     return {

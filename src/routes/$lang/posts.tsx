@@ -1,13 +1,15 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import PageLayout from '@/components/PageLayout';
+import PageTitle from '@/components/PageTitle';
 
-export const Route = createFileRoute('/forms')({
-  component: FormsLayout,
+export const Route = createFileRoute('/$lang/posts')({
+  component: PostsLayout,
 });
 
-function FormsLayout() {
+function PostsLayout() {
   return (
     <PageLayout>
+      <PageTitle>Posts</PageTitle>
       <Outlet />
     </PageLayout>
   );
