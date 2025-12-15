@@ -7,9 +7,26 @@ const HomePage = () => {
       <PageTitle>Libraries used</PageTitle>
       <ul className="list-disc pl-4">
         <li>React / TypeScript / Vite</li>
-        <li>Tailwind CSS</li>
-        <li>Shadcn/ui + Radix UI</li>
-        <li>Tanstack Router</li>
+        <li>
+          <a href="https://tailwindcss.com/" target="_blank">
+            Tailwind
+          </a>
+        </li>
+        <li>
+          <a href="https://ui.shadcn.com/" target="_blank">
+            Shadcn/ui
+          </a>
+        </li>
+        <li>
+          <a href="https://tanstack.com/" target="_blank">
+            Tanstack: Router, Query, Table, Form
+          </a>
+        </li>
+        <li>
+          <a href="https://www.embla-carousel.com/get-started/react/" target="_blank">
+            Embla Carousel
+          </a>
+        </li>
       </ul>
 
       <p>
