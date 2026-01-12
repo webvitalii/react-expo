@@ -43,11 +43,6 @@ const formLinks = [
 const componentLinks = [
   { to: '/table-simple', text: 'Table Simple', description: 'Simple data table' },
   { to: '/table', text: 'Table', description: 'Data table with sorting and filtering' },
-  {
-    to: '/tanstack-form',
-    text: 'TanStack Form',
-    description: 'Form validation with TanStack Form',
-  },
   { to: '/carousel', text: 'Carousel', description: 'Image carousel component' },
   { to: '/rating', text: 'Rating', description: 'Star rating component' },
 ];

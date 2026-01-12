@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import TanStackForm2Page from '@/pages/TanStackForm2Page';
+import TanStackFormPage from '@/pages/TanStackFormPage';
 
 export const Route = createFileRoute('/$lang/forms/tanstack-form')({
-  component: TanStackForm2Page,
+  component: TanStackFormPage,
 });
