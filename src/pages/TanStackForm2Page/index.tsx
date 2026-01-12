@@ -11,7 +11,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import PageTitle from '@/components/PageTitle';
 
 const formSchema = z.object({
@@ -20,19 +23,27 @@ const formSchema = z.object({
     .min(3, 'Username must be at least 3 characters.')
     .max(10, 'Username must be at most 10 characters.')
     .regex(/^[a-zA-Z0-9]+$/, 'Username can only contain letters and numbers.'),
+  email: z.email({ message: 'Please enter a valid email address.' }),
   description: z
     .string()
     .min(20, 'Description must be at least 20 characters.')
     .max(100, 'Description must be at most 100 characters.'),
   gender: z.string().refine((val) => val !== 'none', 'Please select gender.'),
+  notifications: z.enum(['all', 'mentions', 'none'], {
+    message: 'Please select a notification preference.',
+  }),
+  agreeToTerms: z.boolean().refine((val) => val === true, 'You must agree to the terms.'),
 });
 
 const TanStackForm2Page = () => {
   const form = useForm({
     defaultValues: {
       username: '',
+      email: '',
       description: '',
       gender: 'none',
+      notifications: 'all' as 'all' | 'mentions' | 'none',
+      agreeToTerms: false,
     },
     validators: {
       onBlur: formSchema,
@@ -109,6 +120,30 @@ const TanStackForm2Page = () => {
           />
 
           <form.Field
+            name="email"
+            children={(field) => {
+              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Email (valid format)</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    type="email"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={isInvalid}
+                    autoComplete="email"
+                  />
+                  <FieldDescription>We'll never share your email with anyone.</FieldDescription>
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+
+          <form.Field
             name="gender"
             children={(field) => {
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
@@ -136,6 +171,73 @@ const TanStackForm2Page = () => {
                       <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                   </Select>
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+
+          <form.Field
+            name="notifications"
+            children={(field) => {
+              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel>Notification Preferences (radio)</FieldLabel>
+                  <RadioGroup
+                    value={field.state.value}
+                    onValueChange={(value) => {
+                      field.handleChange(value as 'all' | 'mentions' | 'none');
+                      field.handleBlur();
+                    }}
+                    className="flex flex-wrap gap-4"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="all" id="notifications-all" />
+                      <Label htmlFor="notifications-all" className="font-normal">
+                        All notifications
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="mentions" id="notifications-mentions" />
+                      <Label htmlFor="notifications-mentions" className="font-normal">
+                        Mentions only
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="none" id="notifications-none" />
+                      <Label htmlFor="notifications-none" className="font-normal">
+                        None
+                      </Label>
+                    </div>
+                  </RadioGroup>
+                  <FieldDescription>Choose how you want to receive notifications.</FieldDescription>
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          />
+
+          <form.Field
+            name="agreeToTerms"
+            children={(field) => {
+              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <div className="flex flex-row items-start space-x-3">
+                    <Checkbox
+                      id={field.name}
+                      checked={field.state.value}
+                      onCheckedChange={(checked) => {
+                        field.handleChange(checked as boolean);
+                        field.handleBlur();
+                      }}
+                    />
+                    <div className="space-y-1 leading-none">
+                      <Label htmlFor={field.name}>Accept terms and conditions (checkbox)</Label>
+                      <FieldDescription>You must agree to our terms of service.</FieldDescription>
+                    </div>
+                  </div>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
               );
