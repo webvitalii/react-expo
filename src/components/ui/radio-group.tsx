@@ -1,34 +1,38 @@
-import * as React from "react"
-import { RadioGroup } from "@base-ui/react/radio-group"
-import { Circle } from "lucide-react"
+"use client"
+
+import { Radio as RadioPrimitive } from "@base-ui/react/radio"
+import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group"
 
 import { cn } from "@/lib/utils"
 
-function RadioGroupRoot({ className, ...props }: RadioGroup.Root.Props) {
+function RadioGroup({ className, ...props }: RadioGroupPrimitive.Props) {
   return (
-    <RadioGroup.Root
+    <RadioGroupPrimitive
       data-slot="radio-group"
-      className={cn("grid gap-2", className)}
+      className={cn("grid gap-3 w-full", className)}
       {...props}
     />
   )
 }
 
-function RadioGroupItem({ className, ...props }: RadioGroup.Item.Props) {
+function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
   return (
-    <RadioGroup.Item
+    <RadioPrimitive.Root
       data-slot="radio-group-item"
       className={cn(
-        "border-primary text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 aspect-square h-4 w-4 rounded-full border bg-transparent shadow-xs transition-[color,box-shadow] focus-visible:ring-[3px] aria-invalid:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 outline-none",
+        "border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 dark:aria-invalid:border-destructive/50 flex size-4 rounded-full focus-visible:ring-3 aria-invalid:ring-3 group/radio-group-item peer relative aspect-square shrink-0 border outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
       {...props}
     >
-      <RadioGroup.Indicator className="flex items-center justify-center">
-        <Circle className="h-2.5 w-2.5 fill-current text-current" />
-      </RadioGroup.Indicator>
-    </RadioGroup.Item>
+      <RadioPrimitive.Indicator
+        data-slot="radio-group-indicator"
+        className="flex size-4 items-center justify-center"
+      >
+        <span className="bg-primary-foreground absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full" />
+      </RadioPrimitive.Indicator>
+    </RadioPrimitive.Root>
   )
 }
 
-export { RadioGroupRoot as RadioGroup, RadioGroupItem }
+export { RadioGroup, RadioGroupItem }

@@ -1,43 +1,62 @@
-"use client"
-
 import { NavigationMenu as NavigationMenuPrimitive } from "@base-ui/react/navigation-menu"
 import { cva } from "class-variance-authority"
-import { ChevronDownIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { ChevronDownIcon } from "lucide-react"
 
-function NavigationMenu({ className, ...props }: NavigationMenuPrimitive.Root.Props) {
+function NavigationMenu({
+  align = "start",
+  className,
+  children,
+  ...props
+}: NavigationMenuPrimitive.Root.Props &
+  Pick<NavigationMenuPrimitive.Positioner.Props, "align">) {
   return (
     <NavigationMenuPrimitive.Root
       data-slot="navigation-menu"
-      className={cn("relative z-10 flex max-w-max flex-1 items-center justify-center", className)}
+      className={cn(
+        "group/navigation-menu relative flex max-w-max flex-1 items-center justify-center",
+        className
+      )}
       {...props}
-    />
+    >
+      {children}
+      <NavigationMenuPositioner align={align} />
+    </NavigationMenuPrimitive.Root>
   )
 }
 
-function NavigationMenuList({ className, ...props }: NavigationMenuPrimitive.List.Props) {
+function NavigationMenuList({
+  className,
+  ...props
+}: React.ComponentPropsWithRef<typeof NavigationMenuPrimitive.List>) {
   return (
     <NavigationMenuPrimitive.List
       data-slot="navigation-menu-list"
-      className={cn("group flex flex-1 list-none items-center justify-center gap-1", className)}
+      className={cn(
+        "gap-0 group flex flex-1 list-none items-center justify-center",
+        className
+      )}
       {...props}
     />
   )
 }
 
-function NavigationMenuItem({ className, ...props }: NavigationMenuPrimitive.Item.Props) {
+function NavigationMenuItem({
+  className,
+  ...props
+}: React.ComponentPropsWithRef<typeof NavigationMenuPrimitive.Item>) {
   return (
     <NavigationMenuPrimitive.Item
       data-slot="navigation-menu-item"
-      className={className}
+      className={cn("relative", className)}
       {...props}
     />
   )
 }
 
 const navigationMenuTriggerStyle = cva(
-  "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-open:bg-accent/50 data-open:text-accent-foreground group inline-flex h-10 w-max items-center justify-center rounded-md border border-transparent bg-transparent px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-[3px] aria-invalid:ring-[3px] disabled:pointer-events-none disabled:opacity-50 outline-none"
+  "bg-background hover:bg-muted focus:bg-muted data-open:hover:bg-muted data-open:focus:bg-muted data-open:bg-muted/50 focus-visible:ring-ring/50 data-popup-open:bg-muted/50 data-popup-open:hover:bg-muted rounded-md px-4 py-2 text-sm font-medium transition-all focus-visible:ring-3 focus-visible:outline-1 disabled:opacity-50 group/navigation-menu-trigger inline-flex h-9 w-max items-center justify-center disabled:pointer-events-none outline-none"
 )
 
 function NavigationMenuTrigger({
@@ -51,49 +70,51 @@ function NavigationMenuTrigger({
       className={cn(navigationMenuTriggerStyle(), "group", className)}
       {...props}
     >
-      {children}
-      <NavigationMenuPrimitive.Icon
-        data-slot="navigation-menu-icon"
-        className="relative ml-1 h-3 w-3 transition duration-200 group-data-open:rotate-180"
-      >
-        <ChevronDownIcon aria-hidden="true" />
-      </NavigationMenuPrimitive.Icon>
+      {children}{" "}
+      <ChevronDownIcon className="relative top-px ml-1 size-3 transition duration-300 group-data-open/navigation-menu-trigger:rotate-180 group-data-popup-open/navigation-menu-trigger:rotate-180" aria-hidden="true" />
     </NavigationMenuPrimitive.Trigger>
   )
 }
 
 function NavigationMenuContent({
-  align = "start",
-  alignOffset = 0,
-  side = "bottom",
-  sideOffset = 8,
   className,
   ...props
-}: NavigationMenuPrimitive.Content.Props &
-  Pick<
-    NavigationMenuPrimitive.Positioner.Props,
-    "align" | "alignOffset" | "side" | "sideOffset"
-  >) {
+}: NavigationMenuPrimitive.Content.Props) {
+  return (
+    <NavigationMenuPrimitive.Content
+      data-slot="navigation-menu-content"
+      className={cn(
+        "data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 group-data-[viewport=false]/navigation-menu:bg-popover group-data-[viewport=false]/navigation-menu:text-popover-foreground group-data-[viewport=false]/navigation-menu:data-open:animate-in group-data-[viewport=false]/navigation-menu:data-closed:animate-out group-data-[viewport=false]/navigation-menu:data-closed:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-open:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-open:fade-in-0 group-data-[viewport=false]/navigation-menu:data-closed:fade-out-0 group-data-[viewport=false]/navigation-menu:ring-foreground/10 p-2 pr-2.5 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[viewport=false]/navigation-menu:rounded-md group-data-[viewport=false]/navigation-menu:shadow group-data-[viewport=false]/navigation-menu:ring-1 group-data-[viewport=false]/navigation-menu:duration-300 data-ending-style:data-activation-direction=left:translate-x-[50%] data-ending-style:data-activation-direction=right:translate-x-[-50%] data-starting-style:data-activation-direction=left:translate-x-[-50%] data-starting-style:data-activation-direction=right:translate-x-[50%] h-full w-auto transition-[opacity,transform,translate] duration-[0.35s] data-ending-style:opacity-0 data-starting-style:opacity-0 **:data-[slot=navigation-menu-link]:focus:ring-0 **:data-[slot=navigation-menu-link]:focus:outline-none",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function NavigationMenuPositioner({
+  className,
+  side = "bottom",
+  sideOffset = 8,
+  align = "start",
+  alignOffset = 0,
+  ...props
+}: NavigationMenuPrimitive.Positioner.Props) {
   return (
     <NavigationMenuPrimitive.Portal>
       <NavigationMenuPrimitive.Positioner
-        className="isolate z-50 outline-none"
-        align={align}
-        alignOffset={alignOffset}
         side={side}
         sideOffset={sideOffset}
+        align={align}
+        alignOffset={alignOffset}
+        className={cn(
+          "ease-[cubic-bezier(0.22,1,0.36,1)] data-[side=bottom]:before:top-[-10px] data-[side=bottom]:before:right-0 data-[side=bottom]:before:left-0 isolate z-50 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) transition-[top,left,right,bottom] duration-[0.35s] data-instant:transition-none",
+          className
+        )}
+        {...props}
       >
-        <NavigationMenuPrimitive.Popup
-          data-slot="navigation-menu-popup"
-          className="data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 ring-foreground/10 bg-popover text-popover-foreground overflow-hidden rounded-md p-4 shadow-md ring-1 duration-100 origin-(--transform-origin) outline-none"
-        >
-          <NavigationMenuPrimitive.Viewport data-slot="navigation-menu-viewport">
-            <NavigationMenuPrimitive.Content
-              data-slot="navigation-menu-content"
-              className={cn("w-full", className)}
-              {...props}
-            />
-          </NavigationMenuPrimitive.Viewport>
+        <NavigationMenuPrimitive.Popup className="bg-popover text-popover-foreground ring-foreground/10 rounded-lg shadow ring-1 outline-none data-ending-style:scale-90 data-ending-style:opacity-0 data-ending-style:duration-150 data-starting-style:scale-90 data-starting-style:opacity-0 data-[ending-style]:easing-[ease] xs:w-(--popup-width) relative h-(--popup-height) w-(--popup-width) origin-(--transform-origin) transition-[opacity,transform,width,height,scale,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)]">
+          <NavigationMenuPrimitive.Viewport className="relative size-full overflow-hidden" />
         </NavigationMenuPrimitive.Popup>
       </NavigationMenuPrimitive.Positioner>
     </NavigationMenuPrimitive.Portal>
@@ -107,18 +128,38 @@ function NavigationMenuLink({
   return (
     <NavigationMenuPrimitive.Link
       data-slot="navigation-menu-link"
-      className={cn(navigationMenuTriggerStyle(), className)}
+      className={cn("data-[active=true]:focus:bg-muted data-[active=true]:hover:bg-muted data-[active=true]:bg-muted/50 focus-visible:ring-ring/50 hover:bg-muted focus:bg-muted flex items-center gap-1.5 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-3 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4", className)}
       {...props}
     />
   )
 }
 
+function NavigationMenuIndicator({
+  className,
+  ...props
+}: React.ComponentPropsWithRef<typeof NavigationMenuPrimitive.Icon>) {
+  return (
+    <NavigationMenuPrimitive.Icon
+      data-slot="navigation-menu-indicator"
+      className={cn(
+        "data-[state=visible]:animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:fade-in top-full z-1 flex h-1.5 items-end justify-center overflow-hidden",
+        className
+      )}
+      {...props}
+    >
+      <div className="bg-border rounded-tl-sm shadow-md relative top-[60%] h-2 w-2 rotate-45" />
+    </NavigationMenuPrimitive.Icon>
+  )
+}
+
 export {
-  navigationMenuTriggerStyle,
   NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
   NavigationMenuContent,
-  NavigationMenuTrigger,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
   NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+  NavigationMenuPositioner,
 }

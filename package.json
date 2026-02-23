@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@base-ui/react": "^1.0.0",
+    "@base-ui/react": "^1.2.0",
     "@reduxjs/toolkit": "^2.11.1",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "^0.7.0",
