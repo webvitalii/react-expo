@@ -1,134 +1,117 @@
-import * as React from "react"
+"use client"
+
+import { NavigationMenu as NavigationMenuPrimitive } from "@base-ui/react/navigation-menu"
 import { cva } from "class-variance-authority"
-import { ChevronDown } from "lucide-react"
+import { ChevronDownIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-// TODO: Base UI doesn't have a direct NavigationMenu equivalent yet
-// This is a simplified fallback implementation using native HTML elements
-
-const NavigationMenu = React.forwardRef<
-  HTMLElement,
-  React.ComponentPropsWithoutRef<"nav">
->(({ className, children, ...props }, ref) => (
-  <nav
-    ref={ref}
-    className={cn(
-      "relative z-10 flex max-w-max flex-1 items-center justify-center",
-      className
-    )}
-    {...props}
-  >
-    {children}
-  </nav>
-))
-NavigationMenu.displayName = "NavigationMenu"
-
-const NavigationMenuList = React.forwardRef<
-  HTMLUListElement,
-  React.ComponentPropsWithoutRef<"ul">
->(({ className, ...props }, ref) => (
-  <ul
-    ref={ref}
-    className={cn(
-      "group flex flex-1 list-none items-center justify-center space-x-1",
-      className
-    )}
-    {...props}
-  />
-))
-NavigationMenuList.displayName = "NavigationMenuList"
-
-const NavigationMenuItem = React.forwardRef<
-  HTMLLIElement,
-  React.ComponentPropsWithoutRef<"li">
->(({ className, ...props }, ref) => (
-  <li ref={ref} className={className} {...props} />
-))
-NavigationMenuItem.displayName = "NavigationMenuItem"
-
-const navigationMenuTriggerStyle = cva(
-  "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=open]:text-accent-foreground data-[state=open]:bg-accent/50 data-[state=open]:hover:bg-accent data-[state=open]:focus:bg-accent"
-)
-
-const NavigationMenuTrigger = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentPropsWithoutRef<"button">
->(({ className, children, ...props }, ref) => (
-  <button
-    ref={ref}
-    className={cn(navigationMenuTriggerStyle(), "group", className)}
-    {...props}
-  >
-    {children}{" "}
-    <ChevronDown
-      className="relative top-[1px] ml-1 h-3 w-3 transition duration-200"
-      aria-hidden="true"
-    />
-  </button>
-))
-NavigationMenuTrigger.displayName = "NavigationMenuTrigger"
-
-const NavigationMenuContent = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentPropsWithoutRef<"div">
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "left-0 top-0 w-full md:absolute md:w-auto",
-      className
-    )}
-    {...props}
-  />
-))
-NavigationMenuContent.displayName = "NavigationMenuContent"
-
-const NavigationMenuLink = React.forwardRef<
-  HTMLAnchorElement,
-  React.ComponentPropsWithoutRef<"a">
->(({ className, ...props }, ref) => (
-  <a
-    ref={ref}
-    className={cn(navigationMenuTriggerStyle(), className)}
-    {...props}
-  />
-))
-NavigationMenuLink.displayName = "NavigationMenuLink"
-
-const NavigationMenuViewport = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentPropsWithoutRef<"div">
->(({ className, ...props }, ref) => (
-  <div className={cn("absolute left-0 top-full flex justify-center")}>
-    <div
-      className={cn(
-        "origin-top-center relative mt-1.5 w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-lg md:w-auto",
-        className
-      )}
-      ref={ref}
+function NavigationMenu({ className, ...props }: NavigationMenuPrimitive.Root.Props) {
+  return (
+    <NavigationMenuPrimitive.Root
+      data-slot="navigation-menu"
+      className={cn("relative z-10 flex max-w-max flex-1 items-center justify-center", className)}
       {...props}
     />
-  </div>
-))
-NavigationMenuViewport.displayName = "NavigationMenuViewport"
+  )
+}
 
-const NavigationMenuIndicator = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentPropsWithoutRef<"div">
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "top-full z-[1] flex h-1.5 items-end justify-center overflow-hidden",
-      className
-    )}
-    {...props}
-  >
-    <div className="relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm bg-border shadow-md" />
-  </div>
-))
-NavigationMenuIndicator.displayName = "NavigationMenuIndicator"
+function NavigationMenuList({ className, ...props }: NavigationMenuPrimitive.List.Props) {
+  return (
+    <NavigationMenuPrimitive.List
+      data-slot="navigation-menu-list"
+      className={cn("group flex flex-1 list-none items-center justify-center gap-1", className)}
+      {...props}
+    />
+  )
+}
+
+function NavigationMenuItem({ className, ...props }: NavigationMenuPrimitive.Item.Props) {
+  return (
+    <NavigationMenuPrimitive.Item
+      data-slot="navigation-menu-item"
+      className={className}
+      {...props}
+    />
+  )
+}
+
+const navigationMenuTriggerStyle = cva(
+  "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-open:bg-accent/50 data-open:text-accent-foreground group inline-flex h-10 w-max items-center justify-center rounded-md border border-transparent bg-transparent px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-[3px] aria-invalid:ring-[3px] disabled:pointer-events-none disabled:opacity-50 outline-none"
+)
+
+function NavigationMenuTrigger({
+  className,
+  children,
+  ...props
+}: NavigationMenuPrimitive.Trigger.Props) {
+  return (
+    <NavigationMenuPrimitive.Trigger
+      data-slot="navigation-menu-trigger"
+      className={cn(navigationMenuTriggerStyle(), "group", className)}
+      {...props}
+    >
+      {children}
+      <NavigationMenuPrimitive.Icon
+        data-slot="navigation-menu-icon"
+        className="relative ml-1 h-3 w-3 transition duration-200 group-data-open:rotate-180"
+      >
+        <ChevronDownIcon aria-hidden="true" />
+      </NavigationMenuPrimitive.Icon>
+    </NavigationMenuPrimitive.Trigger>
+  )
+}
+
+function NavigationMenuContent({
+  align = "start",
+  alignOffset = 0,
+  side = "bottom",
+  sideOffset = 8,
+  className,
+  ...props
+}: NavigationMenuPrimitive.Content.Props &
+  Pick<
+    NavigationMenuPrimitive.Positioner.Props,
+    "align" | "alignOffset" | "side" | "sideOffset"
+  >) {
+  return (
+    <NavigationMenuPrimitive.Portal>
+      <NavigationMenuPrimitive.Positioner
+        className="isolate z-50 outline-none"
+        align={align}
+        alignOffset={alignOffset}
+        side={side}
+        sideOffset={sideOffset}
+      >
+        <NavigationMenuPrimitive.Popup
+          data-slot="navigation-menu-popup"
+          className="data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 ring-foreground/10 bg-popover text-popover-foreground overflow-hidden rounded-md p-4 shadow-md ring-1 duration-100 origin-(--transform-origin) outline-none"
+        >
+          <NavigationMenuPrimitive.Viewport data-slot="navigation-menu-viewport">
+            <NavigationMenuPrimitive.Content
+              data-slot="navigation-menu-content"
+              className={cn("w-full", className)}
+              {...props}
+            />
+          </NavigationMenuPrimitive.Viewport>
+        </NavigationMenuPrimitive.Popup>
+      </NavigationMenuPrimitive.Positioner>
+    </NavigationMenuPrimitive.Portal>
+  )
+}
+
+function NavigationMenuLink({
+  className,
+  ...props
+}: NavigationMenuPrimitive.Link.Props) {
+  return (
+    <NavigationMenuPrimitive.Link
+      data-slot="navigation-menu-link"
+      className={cn(navigationMenuTriggerStyle(), className)}
+      {...props}
+    />
+  )
+}
 
 export {
   navigationMenuTriggerStyle,
@@ -138,6 +121,4 @@ export {
   NavigationMenuContent,
   NavigationMenuTrigger,
   NavigationMenuLink,
-  NavigationMenuIndicator,
-  NavigationMenuViewport,
 }
