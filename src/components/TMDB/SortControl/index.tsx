@@ -25,7 +25,7 @@ export function SortControl({
   className = '',
 }: SortControlProps) {
   return (
-    <Select value={selectedSort} onValueChange={onSortChange}>
+    <Select value={selectedSort} onValueChange={(value) => value && onSortChange(value)}>
       <SelectTrigger className={`w-[140px] ${className}`}>
         <SelectValue placeholder="Sort by" />
       </SelectTrigger>

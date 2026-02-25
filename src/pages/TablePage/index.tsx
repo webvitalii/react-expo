@@ -84,9 +84,8 @@ const columns: ColumnDef<Post>[] = [
     id: 'select',
     header: ({ table }) => (
       <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
-        }
+        checked={table.getIsAllPageRowsSelected()}
+        indeterminate={table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
       />
@@ -129,12 +128,14 @@ const columns: ColumnDef<Post>[] = [
 
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
+          <DropdownMenuTrigger
+            render={(props) => (
+              <Button {...props} variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            )}
+          />
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => navigator.clipboard.writeText(post.title)}>
@@ -352,9 +353,7 @@ const TablePage = () => {
                   size="default"
                   onClick={() => table.nextPage()}
                   className={
-                    !table.getCanNextPage()
-                      ? 'pointer-events-none opacity-50'
-                      : 'cursor-pointer'
+                    !table.getCanNextPage() ? 'pointer-events-none opacity-50' : 'cursor-pointer'
                   }
                 />
               </PaginationItem>

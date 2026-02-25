@@ -82,25 +82,28 @@ const Navbar = () => {
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
               {formLinks.map((link) => (
                 <li key={link.to}>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      to={link.to}
-                      params={{ lang }}
-                      className={cn(
-                        'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
-                      )}
-                      activeProps={{
-                        className: cn(
-                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold'
-                        ),
-                      }}
-                    >
-                      <div className="text-sm font-medium leading-none">{link.text}</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                        {link.description}
-                      </p>
-                    </Link>
-                  </NavigationMenuLink>
+                  <NavigationMenuLink
+                    render={(props) => (
+                      <Link
+                        {...props}
+                        to={link.to}
+                        params={{ lang }}
+                        className={cn(
+                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                        )}
+                        activeProps={{
+                          className: cn(
+                            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold'
+                          ),
+                        }}
+                      >
+                        <div className="text-sm font-medium leading-none">{link.text}</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                          {link.description}
+                        </p>
+                      </Link>
+                    )}
+                  />
                 </li>
               ))}
             </ul>
@@ -113,24 +116,27 @@ const Navbar = () => {
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
               {componentLinks.map((link) => (
                 <li key={link.to}>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      to={link.to}
-                      className={cn(
-                        'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
-                      )}
-                      activeProps={{
-                        className: cn(
-                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold'
-                        ),
-                      }}
-                    >
-                      <div className="text-sm font-medium leading-none">{link.text}</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                        {link.description}
-                      </p>
-                    </Link>
-                  </NavigationMenuLink>
+                  <NavigationMenuLink
+                    render={(props) => (
+                      <Link
+                        {...props}
+                        to={link.to}
+                        className={cn(
+                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                        )}
+                        activeProps={{
+                          className: cn(
+                            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold'
+                          ),
+                        }}
+                      >
+                        <div className="text-sm font-medium leading-none">{link.text}</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                          {link.description}
+                        </p>
+                      </Link>
+                    )}
+                  />
                 </li>
               ))}
             </ul>
@@ -143,24 +149,27 @@ const Navbar = () => {
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
               {exampleLinks.map((link) => (
                 <li key={link.to}>
-                  <NavigationMenuLink asChild>
-                    <Link
-                      to={link.to}
-                      className={cn(
-                        'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
-                      )}
-                      activeProps={{
-                        className: cn(
-                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold'
-                        ),
-                      }}
-                    >
-                      <div className="text-sm font-medium leading-none">{link.text}</div>
-                      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                        {link.description}
-                      </p>
-                    </Link>
-                  </NavigationMenuLink>
+                  <NavigationMenuLink
+                    render={(props) => (
+                      <Link
+                        {...props}
+                        to={link.to}
+                        className={cn(
+                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                        )}
+                        activeProps={{
+                          className: cn(
+                            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold'
+                          ),
+                        }}
+                      >
+                        <div className="text-sm font-medium leading-none">{link.text}</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                          {link.description}
+                        </p>
+                      </Link>
+                    )}
+                  />
                 </li>
               ))}
             </ul>

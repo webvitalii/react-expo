@@ -21,7 +21,7 @@ export function GenreControl({
   className = '',
 }: GenreControlProps) {
   return (
-    <Select value={selectedGenre} onValueChange={onGenreChange}>
+    <Select value={selectedGenre} onValueChange={(value) => value && onGenreChange(value)}>
       <SelectTrigger className={`w-[180px] ${className}`}>
         <SelectValue placeholder="Select Genre" />
       </SelectTrigger>
