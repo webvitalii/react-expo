@@ -22,7 +22,7 @@ export default {
     project: ['./tsconfig.json', './tsconfig.node.json'],
     tsconfigRootDir: __dirname,
   },
-}
+};
 ```
 
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
@@ -79,4 +79,12 @@ npm audit
 
 # View all available npm scripts
 npm run
+```
+
+## Main shadcn update command:
+
+```bash
+npx shadcn@latest add --all --overwrite
+
+npx shadcn@latest add button input checkbox textarea select radio-group label table dropdown-menu pagination card carousel spinner field separator navigation-menu sonner --overwrite
 ```

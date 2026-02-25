@@ -153,7 +153,7 @@ const TanStackFormPage = () => {
                   <Select
                     value={field.state.value}
                     onValueChange={(value) => {
-                      field.handleChange(value);
+                      if (value) field.handleChange(value);
                       field.handleBlur();
                     }}
                   >
