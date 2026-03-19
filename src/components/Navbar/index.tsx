@@ -202,6 +202,18 @@ const Navbar = () => {
 
         <NavigationMenuItem>
           <Link
+            to="/bmi"
+            className={navigationMenuTriggerStyle()}
+            activeProps={{
+              className: cn(navigationMenuTriggerStyle(), 'bg-slate-200 text-slate-900'),
+            }}
+          >
+            BMI
+          </Link>
+        </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <Link
             to="/tmdb"
             className={navigationMenuTriggerStyle()}
             activeProps={{
