@@ -76,6 +76,7 @@ npm outdated
 
 # Run security audit
 npm audit
+npm audit fix
 
 # View all available npm scripts
 npm run
