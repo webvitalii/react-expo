@@ -1,4 +1,4 @@
-import { Link, useParams } from '@tanstack/react-router';
+import { Link, useParams, useRouterState } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import {
   NavigationMenu,
@@ -13,21 +13,41 @@ import { cn } from '@/lib/utils';
 import { supportedLanguages, type SupportedLanguage } from '@/i18n';
 
 const LanguageSwitcher = ({ currentLang }: { currentLang: string }) => {
+  const routerState = useRouterState();
+  const currentPath = routerState.location.pathname;
+
+  const getNewPath = (newLang: string) => {
+    const segments = currentPath.split('/').filter(Boolean);
+    if (segments[0] && supportedLanguages.includes(segments[0] as SupportedLanguage)) {
+      segments[0] = newLang;
+      return '/' + segments.join('/');
+    }
+    return null;
+  };
+
   return (
     <div className="flex gap-1">
-      {supportedLanguages.map((lng) => (
-        <Link
-          key={lng}
-          to="/$lang"
-          params={{ lang: lng }}
-          className={cn(
-            'px-2 py-1 text-sm rounded uppercase',
-            currentLang === lng ? 'bg-slate-200 text-slate-900 font-semibold' : 'hover:bg-slate-100'
-          )}
-        >
-          {lng}
-        </Link>
-      ))}
+      {supportedLanguages.map((lng) => {
+        const newPath = getNewPath(lng);
+        return (
+          <Link
+            key={lng}
+            to={newPath || currentPath}
+            search={true}
+            hash={true}
+            disabled={!newPath}
+            className={cn(
+              'px-2 py-1 text-sm rounded uppercase',
+              !newPath && 'opacity-50 cursor-not-allowed',
+              currentLang === lng
+                ? 'bg-slate-200 text-slate-900 font-semibold'
+                : 'hover:bg-slate-100'
+            )}
+          >
+            {lng}
+          </Link>
+        );
+      })}
     </div>
   );
 };
