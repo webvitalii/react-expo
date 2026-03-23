@@ -24,6 +24,7 @@ i18n
     supportedLngs: supportedLanguages,
     ns: ['navbar'],
     defaultNS: 'navbar',
+    showSupportNotice: false,
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
