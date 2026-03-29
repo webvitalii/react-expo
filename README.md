@@ -27,11 +27,21 @@ npm run build
 npm run preview
 ```
 
-### Testing and Linting
+### Linting (oxlint)
 
 ```bash
-# Run linter
+# Scan all files in the project (except ignored ones like src/components/ui/**)
 npm run lint
+```
+
+### Formatting (oxfmt)
+
+```bash
+# Format all files in the project (writes changes)
+npm run fmt
+
+# Check if all files are formatted (no writes, useful for CI)
+npm run fmt:check
 ```
 
 ### Other Useful Commands
