@@ -1,14 +1,14 @@
 {
   "name": "react-expo",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "oxlint .",
     "fmt": "oxfmt --write .",
-    "fmt:check": "oxfmt .",
+    "fmt:check": "oxfmt --check .",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -45,8 +45,8 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
-    "oxlint": "latest",
     "oxfmt": "latest",
+    "oxlint": "latest",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3",
     "vite": "^8"
