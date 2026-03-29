@@ -44,6 +44,19 @@ npm run fmt
 npm run fmt:check
 ```
 
+### Alternative: run directly with npx
+
+```bash
+# Lint
+npx oxlint .
+
+# Check formatting
+npx oxfmt --check .
+
+# Fix formatting
+npx oxfmt --write .
+```
+
 ### Other Useful Commands
 
 ```bash
