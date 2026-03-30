@@ -1,0 +1,46 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "warn",
+    "no-empty": "warn",
+    "no-prototype-builtins": "off",
+    "no-constant-condition": "warn",
+    "no-case-declarations": "off",
+    "no-func-assign": "warn",
+    "no-redeclare": "warn",
+    "no-cond-assign": "warn",
+    "no-fallthrough": "warn",
+    "valid-typeof": "warn",
+    "no-control-regex": "off",
+    "no-useless-escape": "warn",
+
+    "no-var": "error",
+    "prefer-const": "error",
+    "eqeqeq": "error",
+
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-uses-react": "off",
+    "react/jsx-uses-vars": "error",
+
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-non-null-assertion": "warn",
+
+    "react-hooks/rules-of-hooks": "warn",
+    "react-hooks/exhaustive-deps": "warn"
+  },
+  "ignorePatterns": [
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    ".vscode/**",
+    "**/routeTree.gen.ts",
+    "src/components/ui/**"
+  ]
+}
