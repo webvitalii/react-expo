@@ -16,7 +16,7 @@
   ➜  press h + enter to show help
 ```
 
-## Build - 903ms
+## Build - 804ms
 
 ```
 >npm run build
