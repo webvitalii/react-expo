@@ -321,11 +321,11 @@ Used by `eslint-plugin-react` for prop-types analysis.
 
 ### Overall Impact
 
-| Metric                      | Before (ESLint + Prettier) | After (Oxlint + Oxfmt) |
-| --------------------------- | -------------------------- | ---------------------- |
-| **Direct devDependencies**  | 9 packages                 | 2 packages             |
-| **Transitive dependencies** | ~228                       | ~5                     |
-| **package-lock.json lines** | 7,341                      | 3,608 **(−51%)**       |
-| **package-lock.json diff**  | —                          | +1,713 / −4,446        |
+| Metric                      | Before (ESLint + Prettier) | After (Oxlint + Oxfmt)  |
+| --------------------------- | -------------------------- | ----------------------- |
+| **Direct devDependencies**  | 9 packages                 | 2 packages              |
+| **Transitive dependencies** | ~228                       | ~5                      |
+| **package-lock.json lines** | 7,341                      | 4,608 **(−37%)**        |
+| **package-lock.json diff**  | —                          | +1,713 / −4,446 = -2733 |
 
 The overwhelming majority of removed packages (~100+) were ES spec polyfills — an artifact of `eslint-plugin-react` doing deep JavaScript value introspection in pure JS. Oxlint avoids this entirely by being a compiled Rust binary with all rules built in.
