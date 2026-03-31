@@ -237,3 +237,95 @@ src/types/Post.tsx (0ms)
 Format issues found in above 36 files. Run without `--check` to fix.
 Finished in 508ms on 80 files using 8 threads.
 ```
+
+## ESLint + Prettier → Oxlint + Oxfmt: Dependency Impact
+
+### Direct Packages Removed (9)
+
+| Package                            | Role                        | Version |
+| ---------------------------------- | --------------------------- | ------- |
+| `eslint`                           | Core linter                 | ^9.39.3 |
+| `@eslint/js`                       | ESLint JS rules             | ^9.39.3 |
+| `eslint-plugin-react`              | React linting rules         | ^7.37.5 |
+| `eslint-plugin-react-hooks`        | React Hooks linting         | ^7.0.1  |
+| `@typescript-eslint/eslint-plugin` | TS linting rules            | ^8.56.1 |
+| `@typescript-eslint/parser`        | TS parser for ESLint        | ^8.56.1 |
+| `typescript-eslint`                | TS-ESLint integration       | ^8.56.1 |
+| `globals`                          | Global variable definitions | ^17.4.0 |
+| `prettier`                         | Code formatter              | ^3.7.4  |
+
+### Direct Packages Added (2)
+
+| Package  | Role                                            |
+| -------- | ----------------------------------------------- |
+| `oxlint` | Rust-based linter (replaces ESLint + 6 plugins) |
+| `oxfmt`  | Rust-based formatter (replaces Prettier)        |
+
+### Transitive Dependencies Removed (~228 packages)
+
+Grouped by why they existed:
+
+#### 1. ESLint Core Infrastructure (15 packages)
+
+These powered ESLint's config system, plugin loading, and file handling.
+
+`@eslint/config-array`, `@eslint/config-helpers`, `@eslint/core`, `@eslint/eslintrc`, `@eslint/object-schema`, `@eslint/plugin-kit`, `@humanfs/core`, `@humanfs/node`, `@humanwhocodes/module-importer`, `@humanwhocodes/retry`, `espree`, `esquery`, `esrecurse`, `estraverse`, `file-entry-cache`
+
+#### 2. TypeScript-ESLint (4 packages)
+
+Bridge between TypeScript and ESLint.
+
+`@typescript-eslint/scope-manager`, `@typescript-eslint/typescript-estree`, `@typescript-eslint/utils`, `ts-api-utils`
+
+#### 3. ESLint CLI & Reporting (12 packages)
+
+Command-line execution, output formatting, option parsing.
+
+`optionator`, `levn`, `prelude-ls`, `type-check`, `deep-is`, `fast-levenshtein`, `word-wrap`, `strip-json-comments`, `natural-compare`, `chalk`, `supports-color`, `has-flag`
+
+#### 4. Config Resolution & Module Loading (8 packages)
+
+Finding and loading config files and plugins.
+
+`resolve`, `resolve-from`, `import-fresh`, `parent-module`, `callsites`, `ajv`, `uri-js`, `punycode`
+
+#### 5. File Discovery & Matching (13 packages)
+
+Globbing, ignoring, and path matching.
+
+`minimatch`, `brace-expansion`, `balanced-match`, `concat-map`, `ignore`, `p-locate`, `p-limit`, `path-exists`, `cross-spawn`, `which`, `isexe`, `shebang-command`, `shebang-regex`
+
+#### 6. ES Specification Polyfills (~100+ packages)
+
+The biggest category — pulled in by `eslint-plugin-react` and `eslint-plugin-react-hooks` to introspect JS values at a spec level.
+
+`es-abstract`, `es-errors`, `es-object-atoms`, `call-bind`, `call-bound`, `get-intrinsic`, `get-proto`, `set-proto`, `define-properties`, `define-data-property`, `has-symbols`, `has-tostringtag`, `has-proto`, `has-property-descriptors`, `gopd`, `side-channel`, `side-channel-list`, `side-channel-map`, `side-channel-weakmap`, `object-keys`, `object.assign`, `object.entries`, `object.fromentries`, `object.values`, `string.prototype.trim`, `string.prototype.trimend`, `string.prototype.trimstart`, `string.prototype.matchall`, `string.prototype.repeat`, `typed-array-buffer`, `typed-array-byte-length`, `typed-array-byte-offset`, `typed-array-length`, `regexp.prototype.flags`, `reflect.getprototypeof`, `safe-array-concat`, `safe-push-apply`, `safe-regex-test`, `which-boxed-primitive`, `which-builtin-type`, `which-collection`, `which-typed-array`, `unbox-primitive`, `is-regex`, `is-string`, `is-symbol`, `is-bigint`, `is-boolean-object`, `is-number-object`, `is-date-object`, `is-map`, `is-set`, `is-weakmap`, `is-weakset`, `is-weakref`, `is-typed-array`, `is-async-function`, `is-generator-function`, `is-finalizationregistry`, `is-core-module`, `isarray`, `for-each`, `available-typed-arrays`, `possible-typed-array-names`, `internal-slot`, `stop-iteration-iterator`, `array.prototype.flatmap`, `function.prototype.name`, `functions-have-names`, `set-function-length`, `set-function-name`, `function-bind`, `dunder-proto`, `math-intrinsics`, `own-keys`, and more.
+
+#### 7. React Plugin Specific (3 packages)
+
+Used by `eslint-plugin-react` for prop-types analysis.
+
+`prop-types`, `react-is`, `object-assign`
+
+#### 8. Other Utilities (5+ packages)
+
+`js-yaml`, `argparse`, `json-stable-stringify-without-jsonify`, `yocto-queue`, `node-exports-info`, `zod-validation-error`, `normalize-path`
+
+### Transitive Dependencies Added (~5 packages)
+
+| Package                          | Role                                                                     |
+| -------------------------------- | ------------------------------------------------------------------------ |
+| `@oxfmt/binding-win32-x64-msvc`  | Native binary for oxfmt (+ 18 platform variants, only your OS installs)  |
+| `@oxlint/binding-win32-x64-msvc` | Native binary for oxlint (+ 18 platform variants, only your OS installs) |
+| `tinypool`                       | Worker pool used by oxfmt                                                |
+
+### Overall Impact
+
+| Metric                      | Before (ESLint + Prettier) | After (Oxlint + Oxfmt) |
+| --------------------------- | -------------------------- | ---------------------- |
+| **Direct devDependencies**  | 9 packages                 | 2 packages             |
+| **Transitive dependencies** | ~228                       | ~5                     |
+| **package-lock.json lines** | 7,341                      | 3,608 **(−51%)**       |
+| **package-lock.json diff**  | —                          | +1,713 / −4,446        |
+
+The overwhelming majority of removed packages (~100+) were ES spec polyfills — an artifact of `eslint-plugin-react` doing deep JavaScript value introspection in pure JS. Oxlint avoids this entirely by being a compiled Rust binary with all rules built in.
