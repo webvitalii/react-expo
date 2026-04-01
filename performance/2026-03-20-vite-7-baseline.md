@@ -1,5 +1,7 @@
 # Performance: Vite 7 Baseline
 
+## npm install: 427 packages
+
 ## Local Development - 3853 ms
 
 ```

@@ -1,5 +1,7 @@
 # Performance: Vite 8 Migration
 
+## npm install: 425 packages
+
 ## Local Development - 1085 ms
 
 ```

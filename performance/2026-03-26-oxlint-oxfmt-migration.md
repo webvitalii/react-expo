@@ -1,5 +1,7 @@
 # Performance: Oxlint + Oxfmt Migration
 
+## npm install: 200 packages
+
 ## Summary
 
 - Removed ESLint, Prettier, and 9 related packages (eslint, @eslint/js, eslint-plugin-react, eslint-plugin-react-hooks, @typescript-eslint/eslint-plugin, @typescript-eslint/parser, typescript-eslint, globals, prettier)
