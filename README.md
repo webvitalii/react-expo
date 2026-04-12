@@ -32,6 +32,9 @@ npm run preview
 ```bash
 # Scan all files in the project (except ignored ones like src/components/ui/**)
 npm run lint
+
+# Auto-fix linting issues
+npm run lint:fix
 ```
 
 ### Formatting (oxfmt)
@@ -48,13 +51,16 @@ npm run fmt:check
 
 ```bash
 # Lint
-npx oxlint .
+npx oxlint
+
+# Lint with auto-fix
+npx oxlint --fix
 
 # Check formatting
-npx oxfmt --check .
+npx oxfmt --check
 
-# Fix formatting
-npx oxfmt --write .
+# Format all files
+npx oxfmt
 ```
 
 ### Other Useful Commands
