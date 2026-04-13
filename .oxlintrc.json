@@ -24,6 +24,7 @@
     "eqeqeq": "error",
 
     "react/react-in-jsx-scope": "off",
+    "react/no-children-prop": "off",
 
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "warn",
