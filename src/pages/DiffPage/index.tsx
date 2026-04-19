@@ -4,7 +4,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import PageLayout from '@/components/PageLayout';
-import PageTitle from '@/components/PageTitle';
 import { diffChars, diffLines, diffWords, Change } from 'diff';
 
 const DiffPage = () => {
@@ -55,8 +54,7 @@ const DiffPage = () => {
   }, [compareTexts]);
 
   return (
-    <PageLayout>
-      <PageTitle>Diff Page</PageTitle>
+    <PageLayout title="Diff Page">
       <section className="flex space-x-4 mb-4">
         <div className="flex-1">
           <Textarea

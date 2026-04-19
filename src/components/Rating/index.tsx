@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Star } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useState } from 'react';
+import { Star } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface RatingProps {
   value?: number;
@@ -30,7 +30,7 @@ const Rating = ({ ...props }: RatingProps) => {
   };
 
   return (
-    <div className={cn("flex gap-1", className)}>
+    <div className={cn('flex gap-1', className)}>
       {Array.from({ length: maxRating }, (_, index) => {
         const starValue = index + 1;
         const isFilled = (hoverValue ?? value) >= starValue;
@@ -47,10 +47,8 @@ const Rating = ({ ...props }: RatingProps) => {
             <Star
               size={size}
               className={cn(
-                "transition-colors",
-                isFilled
-                  ? "fill-yellow-400 text-yellow-400"
-                  : "fill-transparent text-gray-300"
+                'transition-colors',
+                isFilled ? 'fill-yellow-400 text-yellow-400' : 'fill-transparent text-gray-300',
               )}
             />
           </button>

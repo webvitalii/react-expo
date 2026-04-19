@@ -8,7 +8,7 @@ const tmdbLinks = [
 
 const Menu = () => {
   const baseClasses = 'font-bold px-3 py-2 rounded-lg';
-  
+
   return (
     <nav className="flex justify-center space-x-1 mb-6">
       {tmdbLinks.map((link) => (

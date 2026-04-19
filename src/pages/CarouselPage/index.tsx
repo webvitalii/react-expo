@@ -1,19 +1,16 @@
-import PageLayout from "@/components/PageLayout";
-import PageTitle from "@/components/PageTitle";
-import { Card, CardContent } from "@/components/ui/card";
+import PageLayout from '@/components/PageLayout';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
+} from '@/components/ui/carousel';
 
 const CarouselPage = () => {
   return (
-    <PageLayout>
-      <PageTitle>Carousel</PageTitle>
-
+    <PageLayout title="Carousel">
       <div className="flex justify-center mb-16">
         <Carousel className="w-full max-w-xs">
           <CarouselContent>
@@ -22,9 +19,7 @@ const CarouselPage = () => {
                 <div className="p-1">
                   <Card>
                     <CardContent className="flex aspect-square items-center justify-center p-6">
-                      <span className="text-4xl font-semibold">
-                        {index + 1}
-                      </span>
+                      <span className="text-4xl font-semibold">{index + 1}</span>
                     </CardContent>
                   </Card>
                 </div>
@@ -39,7 +34,7 @@ const CarouselPage = () => {
       <div className="flex justify-center mb-12">
         <Carousel
           opts={{
-            align: "start",
+            align: 'start',
           }}
           className="w-full max-w-sm"
         >
@@ -49,9 +44,7 @@ const CarouselPage = () => {
                 <div className="p-1">
                   <Card>
                     <CardContent className="flex aspect-square items-center justify-center p-6">
-                      <span className="text-3xl font-semibold">
-                        {index + 1}
-                      </span>
+                      <span className="text-3xl font-semibold">{index + 1}</span>
                     </CardContent>
                   </Card>
                 </div>

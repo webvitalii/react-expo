@@ -1,6 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate, useParams, useSearch } from '@tanstack/react-router';
-import Loading from '@/components/Loading';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Pagination,
@@ -11,21 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import type { Post } from '@/types/Post';
-
-const POSTS_PER_PAGE = 5;
-const TOTAL_POSTS = 100;
-
-const getPosts = async (page: number): Promise<Post[]> => {
-  const start = (page - 1) * POSTS_PER_PAGE;
-  const response = await fetch(
-    `https://jsonplaceholder.typicode.com/posts?_limit=${POSTS_PER_PAGE}&_start=${start}`
-  );
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  return response.json();
-};
+import { postsListQueryOptions, POSTS_PER_PAGE, TOTAL_POSTS } from '@/queries/posts';
 
 function PostsList() {
   const navigate = useNavigate();
@@ -36,14 +21,7 @@ function PostsList() {
 
   const totalPages = Math.ceil(TOTAL_POSTS / POSTS_PER_PAGE);
 
-  const { data: posts = [], isPending } = useQuery({
-    queryKey: ['posts', currentPage],
-    queryFn: () => getPosts(currentPage),
-  });
-
-  if (isPending) {
-    return <Loading message="Loading posts..." />;
-  }
+  const { data: posts } = useSuspenseQuery(postsListQueryOptions(currentPage));
 
   const handlePageChange = (newPage: number) => {
     navigate({
@@ -70,13 +48,13 @@ function PostsList() {
           <PaginationLink onClick={() => handlePageChange(1)} isActive={currentPage === 1}>
             1
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
       if (startPage > 2) {
         pages.push(
           <PaginationItem key="ellipsis-start">
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
     }
@@ -87,7 +65,7 @@ function PostsList() {
           <PaginationLink onClick={() => handlePageChange(i)} isActive={currentPage === i}>
             {i}
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
     }
 
@@ -96,7 +74,7 @@ function PostsList() {
         pages.push(
           <PaginationItem key="ellipsis-end">
             <PaginationEllipsis />
-          </PaginationItem>
+          </PaginationItem>,
         );
       }
       pages.push(
@@ -107,7 +85,7 @@ function PostsList() {
           >
             {totalPages}
           </PaginationLink>
-        </PaginationItem>
+        </PaginationItem>,
       );
     }
 

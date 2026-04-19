@@ -1,65 +1,31 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
-import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
 import { SortControl } from '@/components/TMDB/SortControl';
 import { GenreControl } from '@/components/TMDB/GenreControl';
-import Loading from '@/components/Loading';
-import type { Movie, TMDBResponse, Genre, GenreResponse } from '@/types/TMDB';
+import { moviesQueryOptions, movieGenresQueryOptions } from '@/queries/tmdb';
 import type { SortOption } from '@/components/TMDB/SortControl';
 
-const SORT_OPTIONS: Record<string, SortOption> = {
+export const MOVIE_SORT_OPTIONS: Record<string, SortOption> = {
   popularity: { label: 'Popular', value: 'popularity.desc' },
   rating: { label: 'Top Rated', value: 'vote_average.desc' },
   votes: { label: 'Most Voted', value: 'vote_count.desc' },
   revenue: { label: 'Revenue', value: 'revenue.desc' },
-} as const;
-
-type SortOptionKey = keyof typeof SORT_OPTIONS;
-
-const getGenres = async (): Promise<Genre[]> => {
-  const response = await fetch(`${TMDB_API.movie.genres}?api_key=${TMDB_API_KEY}`);
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  const data: GenreResponse = await response.json();
-  return data.genres;
 };
 
-const getMovies = async (
-  page: number,
-  genreId?: string,
-  sortBy: string = SORT_OPTIONS.popularity.value
-): Promise<TMDBResponse<Movie>> => {
-  const genreParam = genreId && genreId !== 'all' ? `&with_genres=${genreId}` : '';
-  const url = `${TMDB_API.movie.discover}?api_key=${TMDB_API_KEY}&page=${page}&sort_by=${sortBy}&vote_count.gte=100${genreParam}`;
-
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  const data: TMDBResponse<Movie> = await response.json();
-  return data;
-};
+export type MovieSortKey = keyof typeof MOVIE_SORT_OPTIONS;
 
 function Movies() {
   const navigate = useNavigate({ from: '/tmdb/movies' });
   const searchParams = useSearch({ from: '/tmdb/movies' });
   const page = Number(searchParams.page) || 1;
   const genreId = searchParams.genre || 'all';
-  const sortKey = (searchParams.sort as SortOptionKey) || 'popularity';
-  const sortBy = SORT_OPTIONS[sortKey]?.value || SORT_OPTIONS.popularity.value;
+  const sortKey = (searchParams.sort as MovieSortKey) || 'popularity';
+  const sortBy = MOVIE_SORT_OPTIONS[sortKey]?.value || MOVIE_SORT_OPTIONS.popularity.value;
 
-  const { data: genres = [], isPending: isPendingGenres } = useQuery({
-    queryKey: ['movieGenres'],
-    queryFn: getGenres,
-  });
-
-  const { data: moviesData = { results: [], total_pages: 0 }, isPending: isPendingMovies } = useQuery({
-    queryKey: ['movies', page, genreId, sortBy],
-    queryFn: () => getMovies(page, genreId, sortBy),
-  });
+  const { data: genres } = useSuspenseQuery(movieGenresQueryOptions);
+  const { data: moviesData } = useSuspenseQuery(moviesQueryOptions(page, genreId, sortBy));
 
   const handlePageChange = (newPage: number) => {
     navigate({
@@ -73,17 +39,11 @@ function Movies() {
     });
   };
 
-  const handleSortChange = (newSortKey: SortOptionKey) => {
+  const handleSortChange = (newSortKey: MovieSortKey) => {
     navigate({
       search: (prev) => ({ ...prev, sort: newSortKey, page: 1 }),
     });
   };
-
-  if (isPendingGenres || isPendingMovies) {
-    return <Loading message="Loading movies..." />;
-  }
-
-  if (!genres || !moviesData) return null;
 
   return (
     <div>
@@ -91,7 +51,7 @@ function Movies() {
         <h2 className="text-2xl font-bold">Movies</h2>
         <div className="flex gap-2">
           <SortControl
-            sortOptions={SORT_OPTIONS}
+            sortOptions={MOVIE_SORT_OPTIONS}
             selectedSort={sortKey}
             onSortChange={handleSortChange}
           />

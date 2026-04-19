@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import PageLayout from '@/components/PageLayout';
-import PageTitle from '@/components/PageTitle';
 import Rating from '@/components/Rating';
 
 const RatingPage = () => {
@@ -12,11 +11,13 @@ const RatingPage = () => {
   };
 
   return (
-    <PageLayout>
-      <PageTitle>
-        Rating: {rating} // {rating10}
-      </PageTitle>
-
+    <PageLayout
+      title={
+        <>
+          Rating: {rating} // {rating10}
+        </>
+      }
+    >
       <Rating value={rating} onChange={handleRatingChange} className="mb-5" />
 
       <Rating value={rating} onChange={handleRatingChange} className="mb-5" />

@@ -15,7 +15,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import PageTitle from '@/components/PageTitle';
+import PageLayout from '@/components/PageLayout';
 
 const formSchema = z.object({
   username: z
@@ -62,8 +62,7 @@ const TanStackFormPage = () => {
   });
 
   return (
-    <>
-      <PageTitle>TanStack Form with validation</PageTitle>
+    <PageLayout title="TanStack Form with validation">
       <form
         id="form-id"
         onSubmit={(e) => {
@@ -263,7 +262,7 @@ const TanStackFormPage = () => {
           </form.Subscribe>
         </FieldGroup>
       </form>
-    </>
+    </PageLayout>
   );
 };
 

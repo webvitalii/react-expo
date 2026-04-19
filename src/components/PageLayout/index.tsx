@@ -1,16 +1,23 @@
 import { ReactNode } from 'react';
-import Navbar from '@/components/Navbar';
+import PageTitle from '@/components/PageTitle';
 
 interface PageLayoutProps {
   children: ReactNode;
+  title?: ReactNode;
 }
 
-const PageLayout = ({ children }: PageLayoutProps) => {
+/**
+ * Page wrapper that renders an optional title and children.
+ *
+ * Navbar + container padding are provided by the root route (see `__root.tsx`)
+ * so they remain visible during route chunk loading and on every page.
+ */
+const PageLayout = ({ children, title }: PageLayoutProps) => {
   return (
-    <section className="container mx-auto p-6">
-      <Navbar />
+    <>
+      {title !== undefined && <PageTitle>{title}</PageTitle>}
       {children}
-    </section>
+    </>
   );
 };
 

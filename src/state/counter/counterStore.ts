@@ -1,4 +1,4 @@
-import { Store } from "@tanstack/react-store";
+import { Store } from '@tanstack/react-store';
 
 interface CounterState {
   value: number;
@@ -30,9 +30,9 @@ export const incrementByAmount = (amount: number) => {
 };
 
 export const incrementAsync = async (amount: number) => {
-  console.log("incrementAsync.pending");
+  console.log('incrementAsync.pending');
   await new Promise((resolve) => setTimeout(resolve, 3000));
-  console.log("incrementAsync.fulfilled");
+  console.log('incrementAsync.fulfilled');
   counterStore.setState((state) => ({
     ...state,
     value: state.value + amount,

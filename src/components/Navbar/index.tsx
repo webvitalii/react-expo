@@ -41,7 +41,7 @@ const LanguageSwitcher = ({ currentLang }: { currentLang: string }) => {
               !newPath && 'opacity-50 cursor-not-allowed',
               currentLang === lng
                 ? 'bg-slate-200 text-slate-900 font-semibold'
-                : 'hover:bg-slate-100'
+                : 'hover:bg-slate-100',
             )}
           >
             {lng}
@@ -109,11 +109,11 @@ const Navbar = () => {
                         to={link.to}
                         params={{ lang }}
                         className={cn(
-                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
                         )}
                         activeProps={{
                           className: cn(
-                            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold'
+                            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold',
                           ),
                         }}
                       >
@@ -142,11 +142,11 @@ const Navbar = () => {
                         {...props}
                         to={link.to}
                         className={cn(
-                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
                         )}
                         activeProps={{
                           className: cn(
-                            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold'
+                            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold',
                           ),
                         }}
                       >
@@ -175,11 +175,11 @@ const Navbar = () => {
                         {...props}
                         to={link.to}
                         className={cn(
-                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
                         )}
                         activeProps={{
                           className: cn(
-                            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold'
+                            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold',
                           ),
                         }}
                       >

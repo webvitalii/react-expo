@@ -1,20 +1,17 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import PageLayout from "@/components/PageLayout";
-import PageTitle from "@/components/PageTitle";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import PageLayout from '@/components/PageLayout';
 
 const TestPage = () => {
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<string>('');
 
   const handleNewMessage = (newMessage: string) => {
     setMessage(newMessage);
   };
 
   return (
-    <PageLayout>
-      <PageTitle>TestPage</PageTitle>
-
+    <PageLayout title="TestPage">
       <h3>{message}</h3>
       <Child handleNewMessage={handleNewMessage} />
     </PageLayout>
@@ -26,7 +23,7 @@ interface ChildProps {
 }
 
 const Child = (props: ChildProps) => {
-  const [newMessage, setNewMessage] = useState<string>("");
+  const [newMessage, setNewMessage] = useState<string>('');
 
   const [count, setCount] = useState(0);
 
@@ -36,7 +33,7 @@ const Child = (props: ChildProps) => {
 
   const handleNewMessage = () => {
     props.handleNewMessage(newMessage);
-    setNewMessage("");
+    setNewMessage('');
   };
 
   return (
@@ -58,15 +55,8 @@ const Child = (props: ChildProps) => {
   );
 };
 
-const CounterButtonSharedState = (props: {
-  count: number;
-  onClick: () => void;
-}) => {
-  return (
-    <Button onClick={props.onClick}>
-      Clicked {props.count} times (connected)
-    </Button>
-  );
+const CounterButtonSharedState = (props: { count: number; onClick: () => void }) => {
+  return <Button onClick={props.onClick}>Clicked {props.count} times (connected)</Button>;
 };
 
 const CounterButton = () => {

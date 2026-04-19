@@ -1,7 +1,6 @@
 import { Toaster, toast } from 'sonner';
 import { useState } from 'react';
 import PageLayout from '@/components/PageLayout';
-import PageTitle from '@/components/PageTitle';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -100,7 +99,7 @@ const SonnerPage = () => {
       ),
       {
         toasterId: 'sonner-page',
-      }
+      },
     );
   };
 
@@ -109,8 +108,7 @@ const SonnerPage = () => {
   };
 
   return (
-    <PageLayout>
-      <PageTitle>Sonner Toasts</PageTitle>
+    <PageLayout title="Sonner Toasts">
       <p className="mb-4 text-sm">
         <a
           href="https://sonner.emilkowal.ski/"

@@ -14,4 +14,7 @@ export const Route = createFileRoute('/tmdb/search')({
     page: Number(search.page) || undefined,
     include_adult: (search.include_adult as string) || undefined,
   }),
+  // No loader — the query is dynamic and can be empty. Inner <Suspense> boundary
+  // in the Search component handles loading for the results area only.
+  // Errors bubble to router-level defaultErrorComponent.
 });

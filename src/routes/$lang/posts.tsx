@@ -1,6 +1,5 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import PageLayout from '@/components/PageLayout';
-import PageTitle from '@/components/PageTitle';
 
 export const Route = createFileRoute('/$lang/posts')({
   component: PostsLayout,
@@ -8,8 +7,7 @@ export const Route = createFileRoute('/$lang/posts')({
 
 function PostsLayout() {
   return (
-    <PageLayout>
-      <PageTitle>Posts</PageTitle>
+    <PageLayout title="Posts">
       <Outlet />
     </PageLayout>
   );

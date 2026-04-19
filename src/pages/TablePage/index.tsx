@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -42,18 +42,9 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 import PageLayout from '@/components/PageLayout';
-import PageTitle from '@/components/PageTitle';
-import Loading from '@/components/Loading';
+import { allPostsQueryOptions } from '@/queries/posts';
 
 import { Post } from '@/types/Post';
-
-const fetchPosts = async (): Promise<Post[]> => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-  if (!response.ok) {
-    throw new Error('Error fetching posts');
-  }
-  return response.json();
-};
 
 interface SortableHeaderProps {
   column: {
@@ -157,18 +148,10 @@ const TablePage = () => {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const {
-    data: posts,
-    isPending,
-    isError,
-    error,
-  } = useQuery<Post[]>({
-    queryKey: ['posts'],
-    queryFn: fetchPosts,
-  });
+  const { data: posts } = useSuspenseQuery(allPostsQueryOptions);
 
   const table = useReactTable({
-    data: posts ?? [],
+    data: posts,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -185,14 +168,6 @@ const TablePage = () => {
       rowSelection,
     },
   });
-
-  if (isPending) {
-    return <Loading />;
-  }
-
-  if (isError) {
-    return <div>Error: {error.message}</div>;
-  }
 
   const {
     pagination: { pageIndex },
@@ -239,9 +214,7 @@ const TablePage = () => {
   );
 
   return (
-    <PageLayout>
-      <PageTitle>Table with sorting, filtering and pagination.</PageTitle>
-
+    <PageLayout title="Table with sorting, filtering and pagination.">
       <div className="w-full">
         <div className="flex items-center py-4">
           <Input
@@ -299,13 +272,13 @@ const TablePage = () => {
                       >
                         1
                       </PaginationLink>
-                    </PaginationItem>
+                    </PaginationItem>,
                   );
                   if (startPage > 2) {
                     pages.push(
                       <PaginationItem key="ellipsis-start">
                         <PaginationEllipsis />
-                      </PaginationItem>
+                      </PaginationItem>,
                     );
                   }
                 }
@@ -320,7 +293,7 @@ const TablePage = () => {
                       >
                         {i}
                       </PaginationLink>
-                    </PaginationItem>
+                    </PaginationItem>,
                   );
                 }
 
@@ -329,7 +302,7 @@ const TablePage = () => {
                     pages.push(
                       <PaginationItem key="ellipsis-end">
                         <PaginationEllipsis />
-                      </PaginationItem>
+                      </PaginationItem>,
                     );
                   }
                   pages.push(
@@ -341,7 +314,7 @@ const TablePage = () => {
                       >
                         {totalPages}
                       </PaginationLink>
-                    </PaginationItem>
+                    </PaginationItem>,
                   );
                 }
 

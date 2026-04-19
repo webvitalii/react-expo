@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import PageLayout from '@/components/PageLayout';
-import PageTitle from '@/components/PageTitle';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -74,9 +73,7 @@ const BmiPage = () => {
   ];
 
   return (
-    <PageLayout>
-      <PageTitle>Calculate Your BMI</PageTitle>
-
+    <PageLayout title="Calculate Your BMI">
       <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
         <Card>
           <CardHeader className="pb-4">

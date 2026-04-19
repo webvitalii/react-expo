@@ -1,10 +1,8 @@
 import PageLayout from '@/components/PageLayout';
-import PageTitle from '@/components/PageTitle';
 
 const HomePage = () => {
   return (
-    <PageLayout>
-      <PageTitle>Libraries used</PageTitle>
+    <PageLayout title="Libraries used">
       <ul className="list-disc pl-4">
         <li>React / TypeScript / Vite</li>
         <li>

@@ -8,15 +8,12 @@ import {
 } from '@/state/counter/counterStore';
 import { Button } from '@/components/ui/button';
 import PageLayout from '@/components/PageLayout';
-import PageTitle from '@/components/PageTitle';
 
 const CounterPage = () => {
   const count = useStore(counterStore, (state) => state.value);
 
   return (
-    <PageLayout>
-      <PageTitle>Counter: {count}</PageTitle>
-
+    <PageLayout title={`Counter: ${count}`}>
       <div>
         <Button onClick={() => decrement()} className="mr-3">
           -1

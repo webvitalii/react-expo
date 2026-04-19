@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import {
   Table,
   TableBody,
@@ -8,41 +8,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import PageLayout from '@/components/PageLayout';
-import PageTitle from '@/components/PageTitle';
-import Loading from '@/components/Loading';
-import { Post } from '@/types/Post';
-
-const fetchPosts = async (): Promise<Post[]> => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-  if (!response.ok) {
-    throw new Error('Error fetching posts');
-  }
-  return response.json();
-};
+import { allPostsQueryOptions } from '@/queries/posts';
 
 const TableSimplePage = () => {
-  const {
-    data: posts,
-    isPending,
-    isError,
-    error,
-  } = useQuery<Post[]>({
-    queryKey: ['posts'],
-    queryFn: fetchPosts,
-  });
-
-  if (isPending) {
-    return <Loading />;
-  }
-
-  if (isError) {
-    return <div>Error: {error.message}</div>;
-  }
+  const { data: posts } = useSuspenseQuery(allPostsQueryOptions);
 
   return (
-    <PageLayout>
-      <PageTitle>Table Simple</PageTitle>
-
+    <PageLayout title="Table Simple">
       <Table>
         <TableHeader>
           <TableRow>
@@ -53,7 +25,7 @@ const TableSimplePage = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {posts?.map((post) => (
+          {posts.map((post) => (
             <TableRow key={post.id}>
               <TableCell>{post.id}</TableCell>
               <TableCell>{post.userId}</TableCell>

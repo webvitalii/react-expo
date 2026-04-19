@@ -1,31 +1,44 @@
-import { useQuery } from '@tanstack/react-query';
+import { Suspense } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import Card from '@/components/TMDB/Card';
 import Pagination from '@/components/TMDB/Pagination';
-import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
 import Loading from '@/components/Loading';
-import type { SearchResult, TMDBResponse } from '@/types/TMDB';
+import { searchQueryOptions } from '@/queries/tmdb';
 
-const getSearchResults = async (
-  query: string,
-  page: number,
-  includeAdult: boolean
-): Promise<TMDBResponse<SearchResult>> => {
-  if (!query) return { results: [], page: 1, total_pages: 0, total_results: 0 };
+interface SearchResultsProps {
+  query: string;
+  page: number;
+  includeAdult: boolean;
+  onPageChange: (newPage: number) => void;
+}
 
-  const response = await fetch(
-    `${TMDB_API.search.multi}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(
-      query
-    )}&page=${page}&include_adult=${includeAdult}`
-  );
-  if (!response.ok) {
-    throw new Error(`Search failed: ${response.statusText}`);
+function SearchResults({ query, page, includeAdult, onPageChange }: SearchResultsProps) {
+  const { data } = useSuspenseQuery(searchQueryOptions(query, page, includeAdult));
+
+  if (data.results.length === 0) {
+    return <div className="text-center py-8">No results found for &quot;{query}&quot;</div>;
   }
-  const data: TMDBResponse<SearchResult> = await response.json();
-  return data;
-};
+
+  return (
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {data.results.map((result) => {
+          if (result.media_type === 'person') return null;
+          return <Card key={result.id} item={result} />;
+        })}
+      </div>
+      <Pagination
+        currentPage={page}
+        totalPages={data.total_pages}
+        onPrevious={() => onPageChange(page - 1)}
+        onNext={() => onPageChange(page + 1)}
+      />
+    </>
+  );
+}
 
 const Search = () => {
   const navigate = useNavigate({ from: '/tmdb/search' });
@@ -33,12 +46,6 @@ const Search = () => {
   const query = searchParams.query || '';
   const page = Number(searchParams.page) || 1;
   const includeAdult = searchParams.include_adult === 'true';
-
-  const { data = { results: [], total_pages: 0 }, isPending } = useQuery({
-    queryKey: ['search', query, page, includeAdult],
-    queryFn: () => getSearchResults(query, page, includeAdult),
-    enabled: !!query,
-  });
 
   const handleSearch = (newQuery: string) => {
     navigate({
@@ -89,27 +96,15 @@ const Search = () => {
         </div>
       </div>
 
-      {isPending && query && <Loading message="Loading search results..." />}
-
-      {!isPending && data?.results.length > 0 && (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {data.results.map((result) => {
-              if (result.media_type === 'person') return null;
-              return <Card key={result.id} item={result} />;
-            })}
-          </div>
-          <Pagination
-            currentPage={page}
-            totalPages={data.total_pages}
-            onPrevious={() => handlePageChange(page - 1)}
-            onNext={() => handlePageChange(page + 1)}
+      {query && (
+        <Suspense fallback={<Loading message="Loading search results..." />}>
+          <SearchResults
+            query={query}
+            page={page}
+            includeAdult={includeAdult}
+            onPageChange={handlePageChange}
           />
-        </>
-      )}
-
-      {!isPending && data?.results.length === 0 && query && (
-        <div className="text-center py-8">No results found for "{query}"</div>
+        </Suspense>
       )}
     </div>
   );
