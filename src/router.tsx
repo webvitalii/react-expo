@@ -1,7 +1,7 @@
 import { createRouter } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
 import { queryClient } from '@/lib/queryClient';
-import { PendingInline, ErrorInline } from '@/lib/routeHelpers';
+import { PendingFallback, ErrorFallback } from '@/lib/routeHelpers';
 
 export const router = createRouter({
   routeTree,
@@ -9,12 +9,12 @@ export const router = createRouter({
   defaultPreload: 'intent',
   // Let React Query own data freshness; router only handles route-level staleness.
   defaultPreloadStaleTime: 0,
-  // Loading / error UI for any route that doesn't override. Inline because most
-  // routes are nested under a parent layout route that provides the shell.
-  // Routes without a parent layout (e.g. /table) override these with their own
-  // full-shell versions via pendingWithLayout / errorWithLayout.
-  defaultPendingComponent: PendingInline,
-  defaultErrorComponent: ErrorInline,
+  // Fallbacks for any route without its own pendingComponent / errorComponent.
+  // Inline (no shell): child routes inherit the shell from a parent layout
+  // route, and standalone routes simply show a spinner / error box until their
+  // component renders.
+  defaultPendingComponent: PendingFallback,
+  defaultErrorComponent: ErrorFallback,
 });
 
 // Register router for type safety

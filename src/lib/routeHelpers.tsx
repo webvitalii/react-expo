@@ -1,49 +1,58 @@
+/** Shared fallback components for TanStack Router pending / error states. */
 import type { ReactNode } from 'react';
-import type { ErrorComponentProps } from '@tanstack/react-router';
+import { useRouter, type ErrorComponentProps } from '@tanstack/react-router';
 import PageLayout from '@/components/PageLayout';
 import Loading from '@/components/Loading';
+import { Button } from '@/components/ui/button';
+
+interface PendingFallbackProps {
+  /** Page title, rendered only when `withLayout` is set. */
+  title?: ReactNode;
+  /** Wrap in PageLayout. Use for routes without a parent layout route. */
+  withLayout?: boolean;
+}
+
+/** Route pending component used as the router default and for per-route overrides. */
+export const PendingFallback = ({ title, withLayout }: PendingFallbackProps) => {
+  const body = <Loading />;
+  return withLayout ? <PageLayout title={title}>{body}</PageLayout> : body;
+};
+
+interface ErrorFallbackProps extends ErrorComponentProps {
+  /** Page title, rendered only when `withLayout` is set. */
+  title?: ReactNode;
+  /** Wrap in PageLayout. Use for routes without a parent layout route. */
+  withLayout?: boolean;
+}
 
 /**
- * Minimal pending component (no PageLayout shell). Used as the router-level
- * default; applies to any route nested under a parent layout route.
+ * Route error component. Renders a "Try again" button that resets the error
+ * boundary and invalidates the router so the failed loader re-runs. In
+ * development the original error stack is shown to aid debugging.
  */
-export const PendingInline = () => <Loading />;
-
-/**
- * Minimal error component (no PageLayout shell). Used as the router-level
- * default; applies to any route nested under a parent layout route.
- */
-export const ErrorInline = ({ error }: ErrorComponentProps) => {
+export const ErrorFallback = ({ error, reset, title, withLayout }: ErrorFallbackProps) => {
+  const router = useRouter();
   const message = error instanceof Error ? error.message : 'An unexpected error occurred.';
-  return <div className="text-destructive">Error: {message}</div>;
-};
+  const stack = error instanceof Error ? error.stack : undefined;
 
-/**
- * Route-level pending component that renders a full PageLayout shell (including
- * Navbar + PageTitle) around the Loading spinner. Use for routes that do NOT
- * have a parent layout route providing the shell (i.e. direct children of __root).
- */
-export const pendingWithLayout = (title: ReactNode) => {
-  const Pending = () => (
-    <PageLayout title={title}>
-      <Loading />
-    </PageLayout>
-  );
-  return Pending;
-};
-
-/**
- * Route-level error component that renders within a full PageLayout shell.
- * Use for routes that do NOT have a parent layout route providing the shell.
- */
-export const errorWithLayout = (title: ReactNode) => {
-  const ErrorWithLayout = ({ error }: ErrorComponentProps) => {
-    const message = error instanceof Error ? error.message : 'An unexpected error occurred.';
-    return (
-      <PageLayout title={title}>
-        <div className="text-destructive">Error: {message}</div>
-      </PageLayout>
-    );
+  const handleRetry = () => {
+    reset();
+    router.invalidate();
   };
-  return ErrorWithLayout;
+
+  const body = (
+    <div className="space-y-3">
+      <p className="text-destructive">Error: {message}</p>
+      {import.meta.env.DEV && stack && (
+        <pre className="text-left text-xs bg-muted p-3 rounded-md overflow-auto max-h-48">
+          {stack}
+        </pre>
+      )}
+      <Button size="sm" onClick={handleRetry}>
+        Try again
+      </Button>
+    </div>
+  );
+
+  return withLayout ? <PageLayout title={title}>{body}</PageLayout> : body;
 };
