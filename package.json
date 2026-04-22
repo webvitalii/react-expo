@@ -13,13 +13,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@base-ui/react": "^1.4.0",
-    "@tailwindcss/vite": "^4.2.2",
+    "@base-ui/react": "^1.4.1",
+    "@tailwindcss/vite": "^4.2.4",
     "@tanstack/react-devtools": "^0.10.2",
-    "@tanstack/react-form": "^1.29.0",
-    "@tanstack/react-form-devtools": "^0.2.21",
-    "@tanstack/react-query": "^5.99.1",
-    "@tanstack/react-query-devtools": "^5.99.1",
+    "@tanstack/react-form": "^1.29.1",
+    "@tanstack/react-form-devtools": "^0.2.22",
+    "@tanstack/react-query": "^5.99.2",
+    "@tanstack/react-query-devtools": "^5.99.2",
     "@tanstack/react-router": "^1.168.23",
     "@tanstack/react-router-devtools": "^1.166.13",
     "@tanstack/react-store": "^0.11.0",
@@ -48,8 +48,8 @@
     "@vitejs/plugin-react": "^6.0.1",
     "oxfmt": "latest",
     "oxlint": "latest",
-    "tailwindcss": "^4.2.2",
+    "tailwindcss": "^4.2.4",
     "typescript": "^6.0.3",
-    "vite": "^8.0.8"
+    "vite": "^8.0.9"
   }
 }
