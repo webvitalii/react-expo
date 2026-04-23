@@ -5,6 +5,10 @@
     "browser": true,
     "node": true
   },
+  "options": {
+    "typeAware": true,
+    "typeCheck": true
+  },
   "rules": {
     "@typescript-eslint/no-unused-vars": "warn",
     "no-empty": "warn",
