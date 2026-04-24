@@ -1,40 +1,22 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["typescript", "react"],
-  "env": {
-    "browser": true,
-    "node": true
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
   },
   "options": {
     "typeAware": true,
     "typeCheck": true
   },
   "rules": {
-    "@typescript-eslint/no-unused-vars": "warn",
-    "no-empty": "warn",
-    "no-prototype-builtins": "off",
-    "no-constant-condition": "warn",
-    "no-case-declarations": "off",
-    "no-func-assign": "warn",
-    "no-redeclare": "warn",
-    "no-cond-assign": "warn",
-    "no-fallthrough": "warn",
-    "valid-typeof": "warn",
-    "no-control-regex": "off",
-    "no-useless-escape": "warn",
-
-    "no-var": "error",
-    "prefer-const": "error",
-    "eqeqeq": "error",
-
-    "react/react-in-jsx-scope": "off",
-    "react/no-children-prop": "off",
-
-    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_", "caughtErrorsIgnorePattern": "^_" }
+    ],
     "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/no-non-null-assertion": "warn",
-
-    "react-hooks/rules-of-hooks": "error",
+    "react/react-in-jsx-scope": "off",
     "react-hooks/exhaustive-deps": "warn"
   },
   "ignorePatterns": [
