@@ -10,7 +10,8 @@
     "lint:fix": "oxlint --fix --type-aware --type-check",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "husky"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
@@ -46,11 +47,22 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
     "oxfmt": "latest",
     "oxlint": "latest",
     "oxlint-tsgolint": "^0.21.1",
     "tailwindcss": "^4.2.4",
     "typescript": "^6.0.3",
     "vite": "^8.0.9"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "oxlint --fix",
+      "oxfmt"
+    ],
+    "*.{json,md,css,html,yml,yaml}": [
+      "oxfmt"
+    ]
   }
 }
