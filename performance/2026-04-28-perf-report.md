@@ -17,7 +17,7 @@ up to date, audited 224 packages in 1s
 found 0 vulnerabilities
 ```
 
-## npm dev
+## npm run dev
 
 ```bash
 $ npm run dev

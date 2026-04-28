@@ -6,7 +6,7 @@
 $ npm install
 ```
 
-## npm dev
+## npm run dev
 
 ```bash
 $ npm run dev
