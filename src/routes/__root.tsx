@@ -1,11 +1,8 @@
+import { lazy, Suspense } from 'react';
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import type { QueryClient } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
 import { Toaster } from 'sonner';
-import { TanStackDevtools } from '@tanstack/react-devtools';
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
-import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
-import { formDevtoolsPlugin } from '@tanstack/react-form-devtools';
 import Navbar from '@/components/Navbar';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import NotFound from '@/components/NotFound';
@@ -13,6 +10,8 @@ import NotFound from '@/components/NotFound';
 export interface RouterContext {
   queryClient: QueryClient;
 }
+
+const Devtools = import.meta.env.DEV ? lazy(() => import('@/components/Devtools')) : () => null;
 
 const RootComponent = () => (
   <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
@@ -22,22 +21,9 @@ const RootComponent = () => (
     </section>
     <Toaster richColors />
     {import.meta.env.DEV && (
-      <TanStackDevtools
-        config={{
-          position: 'bottom-right',
-        }}
-        plugins={[
-          {
-            name: 'Tanstack Router',
-            render: <TanStackRouterDevtoolsPanel />,
-          },
-          {
-            name: 'Tanstack Query',
-            render: <ReactQueryDevtoolsPanel />,
-          },
-          formDevtoolsPlugin(),
-        ]}
-      />
+      <Suspense fallback={null}>
+        <Devtools />
+      </Suspense>
     )}
   </ThemeProvider>
 );
