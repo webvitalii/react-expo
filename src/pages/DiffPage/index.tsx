@@ -4,7 +4,14 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import PageLayout from '@/components/PageLayout';
-import { diffChars, diffLines, diffWords, diffWordsWithSpace, type Change } from 'diff';
+import {
+  createTwoFilesPatch,
+  diffChars,
+  diffLines,
+  diffWords,
+  diffWordsWithSpace,
+  type Change,
+} from 'diff';
 
 const initialLeftText = `<section class="cart">
   <h2>Shopping cart</h2>
@@ -150,9 +157,9 @@ const WordSpans = ({ left, right, side }: WordSpansProps) => {
         if (side === 'right' && part.removed) return null;
         const highlight =
           side === 'left' && part.removed
-            ? 'bg-red-200 text-red-900'
+            ? 'bg-red-500/25 text-red-900 dark:text-red-100'
             : side === 'right' && part.added
-              ? 'bg-green-200 text-green-900'
+              ? 'bg-green-500/25 text-green-900 dark:text-green-100'
               : '';
         return (
           // oxlint-disable-next-line no-array-index-key
@@ -167,18 +174,52 @@ const WordSpans = ({ left, right, side }: WordSpansProps) => {
 
 const rowSideClasses = {
   common: 'text-muted-foreground',
-  removed: 'bg-red-50 text-red-900',
-  added: 'bg-green-50 text-green-900',
-  replacedLeft: 'bg-red-50 text-red-900',
-  replacedRight: 'bg-green-50 text-green-900',
+  removed: 'bg-red-500/10 text-red-700 dark:text-red-300',
+  added: 'bg-green-500/10 text-green-700 dark:text-green-300',
+  replacedLeft: 'bg-red-500/10 text-red-700 dark:text-red-300',
+  replacedRight: 'bg-green-500/10 text-green-700 dark:text-green-300',
   empty: 'bg-muted/30',
 } as const;
 
 const gutterClasses = 'select-none px-2 text-right text-xs text-muted-foreground tabular-nums';
 const markerClasses = 'select-none px-1 text-center';
 
-type ViewMode = 'inline' | 'split';
+type ViewMode = 'inline' | 'split' | 'patch';
 type DiffMethod = 'chars' | 'words' | 'lines';
+
+const CONTEXT_LINES = 3;
+
+type ViewItem = { kind: 'row'; row: DiffRow } | { kind: 'collapsed'; rows: DiffRow[]; id: string };
+
+// Group consecutive 'common' rows that lie between changes (or at file start/end)
+// into collapsible blocks, keeping `context` lines on each side as anchors.
+const collapseRows = (rows: DiffRow[], context: number): ViewItem[] => {
+  const items: ViewItem[] = [];
+  let i = 0;
+  while (i < rows.length) {
+    if (rows[i].kind !== 'common') {
+      items.push({ kind: 'row', row: rows[i] });
+      i++;
+      continue;
+    }
+    let j = i;
+    while (j < rows.length && rows[j].kind === 'common') j++;
+    const runLen = j - i;
+    const keepStart = i === 0 ? 0 : context;
+    const keepEnd = j === rows.length ? 0 : context;
+    if (runLen <= keepStart + keepEnd + 1) {
+      for (let k = i; k < j; k++) items.push({ kind: 'row', row: rows[k] });
+    } else {
+      for (let k = i; k < i + keepStart; k++) items.push({ kind: 'row', row: rows[k] });
+      const hidden: DiffRow[] = [];
+      for (let k = i + keepStart; k < j - keepEnd; k++) hidden.push(rows[k]);
+      items.push({ kind: 'collapsed', rows: hidden, id: `hidden-${i}-${j}` });
+      for (let k = j - keepEnd; k < j; k++) items.push({ kind: 'row', row: rows[k] });
+    }
+    i = j;
+  }
+  return items;
+};
 
 const countChanges = (parts: Change[]): { added: number; removed: number } => {
   let added = 0;
@@ -197,6 +238,27 @@ const DiffPage = () => {
   const [diffMethod, setDiffMethod] = useState<DiffMethod>('lines');
   const [ignoreCase, setIgnoreCase] = useState(false);
   const [ignoreWhitespace, setIgnoreWhitespace] = useState(false);
+  const [wordWrap, setWordWrap] = useState(true);
+  const [collapseUnchanged, setCollapseUnchanged] = useState(true);
+  const [expandedBlocks, setExpandedBlocks] = useState<ReadonlySet<string>>(() => new Set());
+  const [patchCopied, setPatchCopied] = useState(false);
+
+  const copyPatch = async () => {
+    try {
+      await navigator.clipboard.writeText(patchText);
+      setPatchCopied(true);
+      setTimeout(() => setPatchCopied(false), 1500);
+    } catch {
+      // Clipboard access denied or unsupported — silently ignore.
+    }
+  };
+
+  const expandBlock = (id: string) =>
+    setExpandedBlocks((prev) => {
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
 
   const normalizedLeft = ignoreCase ? leftText.toLowerCase() : leftText;
   const normalizedRight = ignoreCase ? rightText.toLowerCase() : rightText;
@@ -222,8 +284,90 @@ const DiffPage = () => {
     return buildDiffRows(diffLines(normalizedLeft, normalizedRight, { ignoreWhitespace }));
   }, [viewMode, normalizedLeft, normalizedRight, ignoreWhitespace]);
 
-  const { added, removed } = viewMode === 'split' ? splitDiff : countChanges(inlineParts);
-  const rows = splitDiff.rows;
+  const viewItems = useMemo<ViewItem[]>(() => {
+    if (viewMode !== 'split') return [];
+    if (!collapseUnchanged) return splitDiff.rows.map((row) => ({ kind: 'row', row }));
+    return collapseRows(splitDiff.rows, CONTEXT_LINES);
+  }, [viewMode, collapseUnchanged, splitDiff.rows]);
+
+  const patchText = useMemo(() => {
+    if (viewMode !== 'patch') return '';
+    return createTwoFilesPatch('left', 'right', leftText, rightText, undefined, undefined, {
+      ignoreWhitespace,
+      context: CONTEXT_LINES,
+    });
+  }, [viewMode, leftText, rightText, ignoreWhitespace]);
+
+  const stats = useMemo(() => {
+    if (viewMode === 'split') return { added: splitDiff.added, removed: splitDiff.removed };
+    if (viewMode === 'inline') return countChanges(inlineParts);
+    return countChanges(diffLines(normalizedLeft, normalizedRight, { ignoreWhitespace }));
+  }, [viewMode, splitDiff, inlineParts, normalizedLeft, normalizedRight, ignoreWhitespace]);
+
+  const { added, removed } = stats;
+
+  const wrapClass = wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto';
+
+  const rowKey = (row: DiffRow): string => {
+    const l = 'leftNo' in row ? row.leftNo : 'x';
+    const r = 'rightNo' in row ? row.rightNo : 'x';
+    return `${row.kind}-${l}-${r}`;
+  };
+
+  const NBSP = '\u00A0';
+  const renderRow = (row: DiffRow, key: string) => {
+    const leftNo = 'leftNo' in row ? row.leftNo : '';
+    const rightNo = 'rightNo' in row ? row.rightNo : '';
+    const leftMarker = row.kind === 'removed' || row.kind === 'replaced' ? '-' : ' ';
+    const rightMarker = row.kind === 'added' || row.kind === 'replaced' ? '+' : ' ';
+
+    const leftSideClass =
+      row.kind === 'removed'
+        ? rowSideClasses.removed
+        : row.kind === 'replaced'
+          ? rowSideClasses.replacedLeft
+          : row.kind === 'added'
+            ? rowSideClasses.empty
+            : rowSideClasses.common;
+
+    const rightSideClass =
+      row.kind === 'added'
+        ? rowSideClasses.added
+        : row.kind === 'replaced'
+          ? rowSideClasses.replacedRight
+          : row.kind === 'removed'
+            ? rowSideClasses.empty
+            : rowSideClasses.common;
+
+    const leftContent =
+      row.kind === 'replaced' ? (
+        <WordSpans left={row.left} right={row.right} side="left" />
+      ) : row.kind === 'added' ? (
+        NBSP
+      ) : (
+        row.left || NBSP
+      );
+
+    const rightContent =
+      row.kind === 'replaced' ? (
+        <WordSpans left={row.left} right={row.right} side="right" />
+      ) : row.kind === 'removed' ? (
+        NBSP
+      ) : (
+        row.right || NBSP
+      );
+
+    return (
+      <div key={key} className="contents">
+        <span className={`${gutterClasses} ${leftSideClass}`}>{leftNo}</span>
+        <span className={`${markerClasses} ${leftSideClass}`}>{leftMarker}</span>
+        <span className={`px-2 ${leftSideClass}`}>{leftContent}</span>
+        <span className={`${gutterClasses} ${rightSideClass}`}>{rightNo}</span>
+        <span className={`${markerClasses} ${rightSideClass}`}>{rightMarker}</span>
+        <span className={`px-2 ${rightSideClass}`}>{rightContent}</span>
+      </div>
+    );
+  };
 
   return (
     <PageLayout title="Diff Page">
@@ -259,6 +403,10 @@ const DiffPage = () => {
               <RadioGroupItem value="inline" id="view-inline" />
               <Label htmlFor="view-inline">Inline</Label>
             </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="patch" id="view-patch" />
+              <Label htmlFor="view-patch">Patch</Label>
+            </div>
           </RadioGroup>
 
           {viewMode === 'inline' && (
@@ -284,7 +432,27 @@ const DiffPage = () => {
         </div>
 
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-          {!(viewMode === 'inline' && diffMethod === 'chars') && (
+          {viewMode === 'split' && (
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="collapseUnchanged"
+                checked={collapseUnchanged}
+                onCheckedChange={(checked) => setCollapseUnchanged(Boolean(checked))}
+              />
+              <Label htmlFor="collapseUnchanged">Collapse Unchanged</Label>
+            </div>
+          )}
+
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="wordWrap"
+              checked={wordWrap}
+              onCheckedChange={(checked) => setWordWrap(Boolean(checked))}
+            />
+            <Label htmlFor="wordWrap">Word Wrap</Label>
+          </div>
+
+          {!(viewMode === 'inline' && diffMethod === 'chars') && viewMode !== 'patch' && (
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="ignoreWhitespace"
@@ -295,14 +463,27 @@ const DiffPage = () => {
             </div>
           )}
 
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="ignoreCase"
-              checked={ignoreCase}
-              onCheckedChange={(checked) => setIgnoreCase(Boolean(checked))}
-            />
-            <Label htmlFor="ignoreCase">Ignore Case</Label>
-          </div>
+          {viewMode === 'patch' && (
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="ignoreWhitespace"
+                checked={ignoreWhitespace}
+                onCheckedChange={(checked) => setIgnoreWhitespace(Boolean(checked))}
+              />
+              <Label htmlFor="ignoreWhitespace">Ignore Whitespace</Label>
+            </div>
+          )}
+
+          {viewMode !== 'patch' && (
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="ignoreCase"
+                checked={ignoreCase}
+                onCheckedChange={(checked) => setIgnoreCase(Boolean(checked))}
+              />
+              <Label htmlFor="ignoreCase">Ignore Case</Label>
+            </div>
+          )}
         </div>
       </section>
 
@@ -312,19 +493,28 @@ const DiffPage = () => {
           <div className="flex items-center gap-3 text-sm font-mono">
             <span className="text-green-700">+{added}</span>
             <span className="text-red-700">−{removed}</span>
+            {viewMode === 'patch' && (
+              <button
+                type="button"
+                onClick={copyPatch}
+                className="ml-2 px-2 py-1 text-xs font-sans rounded border bg-background hover:bg-muted cursor-pointer"
+              >
+                {patchCopied ? 'Copied!' : 'Copy patch'}
+              </button>
+            )}
           </div>
         </div>
-        {viewMode === 'inline' ? (
-          <pre className="p-4 font-mono text-sm whitespace-pre-wrap">
+        {viewMode === 'inline' && (
+          <pre className={`p-4 font-mono text-sm ${wrapClass}`}>
             {inlineParts.map((part, i) => (
               // oxlint-disable-next-line no-array-index-key
               <span
                 key={i}
                 className={
                   part.added
-                    ? 'bg-green-100 text-green-800'
+                    ? 'bg-green-500/20 text-green-700 dark:text-green-300'
                     : part.removed
-                      ? 'bg-red-100 text-red-800'
+                      ? 'bg-red-500/20 text-red-700 dark:text-red-300'
                       : 'text-muted-foreground'
                 }
               >
@@ -332,63 +522,46 @@ const DiffPage = () => {
               </span>
             ))}
           </pre>
-        ) : (
+        )}
+
+        {viewMode === 'split' && (
           <pre
-            className="grid font-mono text-sm whitespace-pre-wrap"
+            className={`grid font-mono text-sm ${wrapClass}`}
             style={{ gridTemplateColumns: 'auto auto 1fr auto auto 1fr' }}
           >
-            {rows.map((row, i) => {
-              const leftNo = 'leftNo' in row ? row.leftNo : '';
-              const rightNo = 'rightNo' in row ? row.rightNo : '';
-              const leftMarker = row.kind === 'removed' || row.kind === 'replaced' ? '-' : ' ';
-              const rightMarker = row.kind === 'added' || row.kind === 'replaced' ? '+' : ' ';
+            {viewItems.flatMap((item) => {
+              if (item.kind === 'row') return [renderRow(item.row, `r-${rowKey(item.row)}`)];
+              if (expandedBlocks.has(item.id))
+                return item.rows.map((r) => renderRow(r, `${item.id}-${rowKey(r)}`));
+              return [
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => expandBlock(item.id)}
+                  className="col-span-6 px-4 py-1 text-left text-xs text-muted-foreground bg-muted/40 hover:bg-muted/70 border-y cursor-pointer"
+                >
+                  ▾ Show {item.rows.length} unchanged {item.rows.length === 1 ? 'line' : 'lines'}
+                </button>,
+              ];
+            })}
+          </pre>
+        )}
 
-              const leftSideClass =
-                row.kind === 'removed'
-                  ? rowSideClasses.removed
-                  : row.kind === 'replaced'
-                    ? rowSideClasses.replacedLeft
-                    : row.kind === 'added'
-                      ? rowSideClasses.empty
-                      : rowSideClasses.common;
-
-              const rightSideClass =
-                row.kind === 'added'
-                  ? rowSideClasses.added
-                  : row.kind === 'replaced'
-                    ? rowSideClasses.replacedRight
-                    : row.kind === 'removed'
-                      ? rowSideClasses.empty
-                      : rowSideClasses.common;
-
-              const NBSP = '\u00A0';
-              const leftContent =
-                row.kind === 'replaced' ? (
-                  <WordSpans left={row.left} right={row.right} side="left" />
-                ) : row.kind === 'added' ? (
-                  NBSP
-                ) : (
-                  row.left || NBSP
-                );
-
-              const rightContent =
-                row.kind === 'replaced' ? (
-                  <WordSpans left={row.left} right={row.right} side="right" />
-                ) : row.kind === 'removed' ? (
-                  NBSP
-                ) : (
-                  row.right || NBSP
-                );
-
+        {viewMode === 'patch' && (
+          <pre className={`p-4 font-mono text-xs ${wrapClass}`}>
+            {patchText.split('\n').map((line, i) => {
+              const cls =
+                line.startsWith('+') && !line.startsWith('+++')
+                  ? 'text-green-700 dark:text-green-300'
+                  : line.startsWith('-') && !line.startsWith('---')
+                    ? 'text-red-700 dark:text-red-300'
+                    : line.startsWith('@@')
+                      ? 'text-blue-700 dark:text-blue-300'
+                      : 'text-muted-foreground';
               return (
                 // oxlint-disable-next-line no-array-index-key
-                <div key={i} className="contents">
-                  <span className={`${gutterClasses} ${leftSideClass}`}>{leftNo}</span>
-                  <span className={`${markerClasses} ${leftSideClass}`}>{leftMarker}</span>
-                  <span className={`px-2 ${leftSideClass}`}>{leftContent}</span>
-                  <span className={`${gutterClasses} ${rightSideClass}`}>{rightNo}</span>
-                  <span className={`${markerClasses} ${rightSideClass}`}>{rightMarker}</span>
-                  <span className={`px-2 ${rightSideClass}`}>{rightContent}</span>
+                <div key={i} className={cls}>
+                  {line || '\u00A0'}
                 </div>
               );
             })}
