@@ -244,60 +244,65 @@ const DiffPage = () => {
         </div>
       </section>
 
-      <section className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-4">
-        <RadioGroup
-          value={viewMode}
-          onValueChange={(v) => setViewMode(v as ViewMode)}
-          className="flex space-x-2"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="split" id="view-split" />
-            <Label htmlFor="view-split">Split</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="inline" id="view-inline" />
-            <Label htmlFor="view-inline">Inline</Label>
-          </div>
-        </RadioGroup>
-
-        {viewMode === 'inline' && (
+      <section className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2 mb-4">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <RadioGroup
-            value={diffMethod}
-            onValueChange={(v) => setDiffMethod(v as DiffMethod)}
+            value={viewMode}
+            onValueChange={(v) => setViewMode(v as ViewMode)}
             className="flex space-x-2"
           >
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="chars" id="chars" />
-              <Label htmlFor="chars">Chars</Label>
+              <RadioGroupItem value="split" id="view-split" />
+              <Label htmlFor="view-split">Split</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="words" id="words" />
-              <Label htmlFor="words">Words</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="lines" id="lines" />
-              <Label htmlFor="lines">Lines</Label>
+              <RadioGroupItem value="inline" id="view-inline" />
+              <Label htmlFor="view-inline">Inline</Label>
             </div>
           </RadioGroup>
-        )}
 
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="ignoreCase"
-            checked={ignoreCase}
-            onCheckedChange={(checked) => setIgnoreCase(Boolean(checked))}
-          />
-          <Label htmlFor="ignoreCase">Ignore Case</Label>
+          {viewMode === 'inline' && (
+            <RadioGroup
+              value={diffMethod}
+              onValueChange={(v) => setDiffMethod(v as DiffMethod)}
+              className="flex space-x-2"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="chars" id="chars" />
+                <Label htmlFor="chars">Chars</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="words" id="words" />
+                <Label htmlFor="words">Words</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="lines" id="lines" />
+                <Label htmlFor="lines">Lines</Label>
+              </div>
+            </RadioGroup>
+          )}
         </div>
 
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="ignoreWhitespace"
-            checked={ignoreWhitespace}
-            disabled={viewMode === 'inline' && diffMethod === 'chars'}
-            onCheckedChange={(checked) => setIgnoreWhitespace(Boolean(checked))}
-          />
-          <Label htmlFor="ignoreWhitespace">Ignore Whitespace</Label>
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+          {!(viewMode === 'inline' && diffMethod === 'chars') && (
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="ignoreWhitespace"
+                checked={ignoreWhitespace}
+                onCheckedChange={(checked) => setIgnoreWhitespace(Boolean(checked))}
+              />
+              <Label htmlFor="ignoreWhitespace">Ignore Whitespace</Label>
+            </div>
+          )}
+
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="ignoreCase"
+              checked={ignoreCase}
+              onCheckedChange={(checked) => setIgnoreCase(Boolean(checked))}
+            />
+            <Label htmlFor="ignoreCase">Ignore Case</Label>
+          </div>
         </div>
       </section>
 
