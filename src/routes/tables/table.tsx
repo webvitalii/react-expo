@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
-import TableSimplePage from '@/pages/TableSimplePage';
+import TablePage from '@/pages/TablePage';
 import { allPostsQueryOptions } from '@/queries/posts';
 
-export const Route = createFileRoute('/table-simple')({
-  component: TableSimplePage,
+export const Route = createFileRoute('/tables/table')({
+  component: TablePage,
   loader: ({ context: { queryClient } }) => queryClient.ensureQueryData(allPostsQueryOptions),
 });

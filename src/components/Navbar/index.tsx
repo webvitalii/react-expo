@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
 import { supportedLanguages, type SupportedLanguage } from '@/i18n';
+import { navConfig, needsLangParam, isGroupActive } from '@/components/Navbar/navConfig';
 
 const LanguageSwitcher = ({ currentLang }: { currentLang: string }) => {
   const routerState = useRouterState();
@@ -40,8 +41,8 @@ const LanguageSwitcher = ({ currentLang }: { currentLang: string }) => {
               'px-2 py-1 text-sm rounded uppercase',
               !newPath && 'opacity-50 cursor-not-allowed',
               currentLang === lng
-                ? 'bg-slate-200 text-slate-900 font-semibold'
-                : 'hover:bg-slate-100',
+                ? 'bg-accent text-accent-foreground font-semibold'
+                : 'hover:bg-muted',
             )}
           >
             {lng}
@@ -52,24 +53,11 @@ const LanguageSwitcher = ({ currentLang }: { currentLang: string }) => {
   );
 };
 
-const formLinks = [
-  {
-    to: '/$lang/forms/tanstack-form',
-    text: 'TanStack Form',
-    description: 'Form validation with TanStack Form',
-  },
-];
-
-const componentLinks = [
-  { to: '/table-simple', text: 'Table Simple', description: 'Simple data table' },
-  { to: '/table', text: 'Table', description: 'Data table with sorting and filtering' },
-  { to: '/carousel', text: 'Carousel', description: 'Image carousel component' },
-  { to: '/rating', text: 'Rating', description: 'Star rating component' },
-];
-
-const exampleLinks = [
-  { to: '/counter', text: 'Counter', description: 'Redux state management example' },
-];
+const dropdownItemClass =
+  'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground';
+const dropdownItemActiveClass =
+  'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold';
+const topLinkActiveClass = 'bg-accent text-accent-foreground';
 
 const Navbar = () => {
   const { t } = useTranslation('navbar');
@@ -78,184 +66,74 @@ const Navbar = () => {
     params.lang && supportedLanguages.includes(params.lang as SupportedLanguage)
       ? params.lang
       : 'en';
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
     <NavigationMenu>
       <NavigationMenuList>
-        <NavigationMenuItem>
-          <Link
-            to="/$lang"
-            params={{ lang }}
-            className={navigationMenuTriggerStyle()}
-            activeOptions={{ exact: true }}
-            activeProps={{
-              className: cn(navigationMenuTriggerStyle(), 'bg-slate-200 text-slate-900'),
-            }}
-          >
-            {t('home')}
-          </Link>
-        </NavigationMenuItem>
+        {navConfig.map((entry) => {
+          const label = entry.i18nKey ? t(entry.i18nKey) : entry.label;
 
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>{t('forms')}</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
-              {formLinks.map((link) => (
-                <li key={link.to}>
-                  <NavigationMenuLink
-                    render={(props) => (
-                      <Link
-                        {...props}
-                        to={link.to}
-                        params={{ lang }}
-                        className={cn(
-                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-                        )}
-                        activeProps={{
-                          className: cn(
-                            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold',
-                          ),
-                        }}
-                      >
-                        <div className="text-sm font-medium leading-none">{link.text}</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                          {link.description}
-                        </p>
-                      </Link>
-                    )}
-                  />
-                </li>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
+          if (entry.kind === 'link') {
+            // `to` keeps its typed union (typos caught in navConfig); params
+            // can't be expressed for a wide `to` union, so cast locally.
+            const langProps = (needsLangParam(entry.to) ? { params: { lang } } : {}) as object;
+            return (
+              <NavigationMenuItem key={entry.id}>
+                <Link
+                  to={entry.to}
+                  {...langProps}
+                  className={navigationMenuTriggerStyle()}
+                  {...(entry.exact ? { activeOptions: { exact: true } } : {})}
+                  activeProps={{
+                    className: cn(navigationMenuTriggerStyle(), topLinkActiveClass),
+                  }}
+                >
+                  {label}
+                </Link>
+              </NavigationMenuItem>
+            );
+          }
 
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
-              {componentLinks.map((link) => (
-                <li key={link.to}>
-                  <NavigationMenuLink
-                    render={(props) => (
-                      <Link
-                        {...props}
-                        to={link.to}
-                        className={cn(
-                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-                        )}
-                        activeProps={{
-                          className: cn(
-                            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold',
-                          ),
-                        }}
-                      >
-                        <div className="text-sm font-medium leading-none">{link.text}</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                          {link.description}
-                        </p>
-                      </Link>
-                    )}
-                  />
-                </li>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
+          const groupActive = isGroupActive(entry, pathname, lang);
 
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Examples</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
-              {exampleLinks.map((link) => (
-                <li key={link.to}>
-                  <NavigationMenuLink
-                    render={(props) => (
-                      <Link
-                        {...props}
-                        to={link.to}
-                        className={cn(
-                          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-                        )}
-                        activeProps={{
-                          className: cn(
-                            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors bg-accent text-accent-foreground font-semibold',
-                          ),
-                        }}
-                      >
-                        <div className="text-sm font-medium leading-none">{link.text}</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                          {link.description}
-                        </p>
-                      </Link>
-                    )}
-                  />
-                </li>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <Link
-            to="/diff"
-            className={navigationMenuTriggerStyle()}
-            activeProps={{
-              className: cn(navigationMenuTriggerStyle(), 'bg-slate-200 text-slate-900'),
-            }}
-          >
-            Diff
-          </Link>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <Link
-            to="/sonner"
-            className={navigationMenuTriggerStyle()}
-            activeProps={{
-              className: cn(navigationMenuTriggerStyle(), 'bg-slate-200 text-slate-900'),
-            }}
-          >
-            Sonner
-          </Link>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <Link
-            to="/bmi"
-            className={navigationMenuTriggerStyle()}
-            activeProps={{
-              className: cn(navigationMenuTriggerStyle(), 'bg-slate-200 text-slate-900'),
-            }}
-          >
-            BMI
-          </Link>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <Link
-            to="/tmdb"
-            className={navigationMenuTriggerStyle()}
-            activeProps={{
-              className: cn(navigationMenuTriggerStyle(), 'bg-slate-200 text-slate-900'),
-            }}
-          >
-            TMDB
-          </Link>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <Link
-            to="/$lang/posts"
-            params={{ lang }}
-            className={navigationMenuTriggerStyle()}
-            activeProps={{
-              className: cn(navigationMenuTriggerStyle(), 'bg-slate-200 text-slate-900'),
-            }}
-          >
-            {t('posts')}
-          </Link>
-        </NavigationMenuItem>
+          return (
+            <NavigationMenuItem key={entry.id}>
+              <NavigationMenuTrigger className={cn(groupActive && topLinkActiveClass)}>
+                {label}
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
+                  {entry.items.map((link) => {
+                    const langProps = (
+                      needsLangParam(link.to) ? { params: { lang } } : {}
+                    ) as object;
+                    return (
+                      <li key={link.to}>
+                        <NavigationMenuLink
+                          render={(props) => (
+                            <Link
+                              {...props}
+                              to={link.to}
+                              {...langProps}
+                              className={cn(dropdownItemClass)}
+                              activeProps={{ className: cn(dropdownItemActiveClass) }}
+                            >
+                              <div className="text-sm font-medium leading-none">{link.text}</div>
+                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                                {link.description}
+                              </p>
+                            </Link>
+                          )}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          );
+        })}
 
         <NavigationMenuItem>
           <LanguageSwitcher currentLang={lang} />
