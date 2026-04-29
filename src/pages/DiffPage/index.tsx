@@ -237,7 +237,7 @@ const DiffPage = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('split');
   const [diffMethod, setDiffMethod] = useState<DiffMethod>('lines');
   const [ignoreCase, setIgnoreCase] = useState(false);
-  const [ignoreWhitespace, setIgnoreWhitespace] = useState(false);
+  const [ignoreWhitespace, setIgnoreWhitespace] = useState(true);
   const [wordWrap, setWordWrap] = useState(true);
   const [collapseUnchanged, setCollapseUnchanged] = useState(true);
   const [expandedBlocks, setExpandedBlocks] = useState<ReadonlySet<string>>(() => new Set());
@@ -376,14 +376,14 @@ const DiffPage = () => {
           <Textarea
             value={leftText}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setLeftText(e.target.value)}
-            className="h-80 font-mono"
+            className="h-150 font-mono"
           />
         </div>
         <div className="flex-1">
           <Textarea
             value={rightText}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setRightText(e.target.value)}
-            className="h-80 font-mono"
+            className="h-150 font-mono"
           />
         </div>
       </section>
