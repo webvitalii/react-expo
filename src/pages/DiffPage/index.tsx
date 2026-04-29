@@ -1,57 +1,75 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import PageLayout from '@/components/PageLayout';
-import { diffChars, diffLines, diffWords, Change } from 'diff';
+import { diffChars, diffLines, diffWords } from 'diff';
+
+const initialLeftText = `<section class="cart">
+  <h2>Shopping cart</h2>
+  <ul id="items"></ul>
+  <p>Total: $0.00</p>
+</section>
+
+<script>
+  var TAX_RATE = 0.07;
+
+  function total(items) {
+    var sum = 0;
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].price != null) {
+        sum = sum + items[i].price * items[i].qty;
+      }
+    }
+    return sum + sum * TAX_RATE;
+  }
+
+  console.log('Total:', total(cart));
+</script>`;
+
+const initialRightText = `<section class="cart" aria-label="Shopping cart">
+  <h2>Your cart</h2>
+  <ul id="items"></ul>
+  <p>Total: <span id="total">$0.00</span></p>
+  <button type="button">Checkout</button>
+</section>
+
+<script>
+  const TAX_RATE = 0.07;
+
+  const total = (items) => {
+    const subtotal = items
+      .filter((item) => item.price != null)
+      .reduce((sum, item) => sum + item.price * item.qty, 0);
+    return subtotal * (1 + TAX_RATE);
+  };
+
+  console.log('Total:', total(cart).toFixed(2));
+</script>`;
+
+type DiffMethod = 'chars' | 'words' | 'lines';
 
 const DiffPage = () => {
-  const initialLeftText = `const add = (a, b) => {
-  return a + b;
-}`;
-  const initialRightText = `const addNumbers = (x, y) => {
-  return x + y;
-}`;
   const [leftText, setLeftText] = useState(initialLeftText);
   const [rightText, setRightText] = useState(initialRightText);
-  const [diffResult, setDiffResult] = useState('');
-  const [diffMethod, setDiffMethod] = useState('lines');
+  const [diffMethod, setDiffMethod] = useState<DiffMethod>('lines');
   const [ignoreCase, setIgnoreCase] = useState(false);
 
-  const compareTexts = useCallback(() => {
-    let diff;
-
-    const leftCompare = ignoreCase ? leftText.toLowerCase() : leftText;
-    const rightCompare = ignoreCase ? rightText.toLowerCase() : rightText;
+  const diffParts = useMemo(() => {
+    const left = ignoreCase ? leftText.toLowerCase() : leftText;
+    const right = ignoreCase ? rightText.toLowerCase() : rightText;
 
     switch (diffMethod) {
       case 'chars':
-        diff = diffChars(leftCompare, rightCompare);
-        break;
+        return diffChars(left, right);
       case 'words':
-        diff = diffWords(leftCompare, rightCompare);
-        break;
+        return diffWords(left, right);
       case 'lines':
       default:
-        diff = diffLines(leftCompare, rightCompare);
-        break;
+        return diffLines(left, right);
     }
-
-    const formattedDiff = diff
-      .map((part: Change) => {
-        const color = part.added ? 'green' : part.removed ? 'red' : 'grey';
-        const backgroundColor = part.added ? '#e6ffed' : part.removed ? '#ffeef0' : 'transparent';
-        return `<span style="color: ${color}; background-color: ${backgroundColor};">${part.value}</span>`;
-      })
-      .join('');
-
-    setDiffResult(formattedDiff);
   }, [leftText, rightText, diffMethod, ignoreCase]);
-
-  useEffect(() => {
-    compareTexts();
-  }, [compareTexts]);
 
   return (
     <PageLayout title="Diff Page">
@@ -91,18 +109,32 @@ const DiffPage = () => {
           <Checkbox
             id="ignoreCase"
             checked={ignoreCase}
-            onCheckedChange={(checked) => setIgnoreCase(checked as boolean)}
+            onCheckedChange={(checked) => setIgnoreCase(checked)}
           />
           <Label htmlFor="ignoreCase">Ignore Case</Label>
         </div>
       </section>
 
-      {diffResult && (
-        <div className="border p-4 mt-4">
-          <h2 className="text-lg font-semibold mb-2">Diff Result:</h2>
-          <pre dangerouslySetInnerHTML={{ __html: diffResult }} className="whitespace-pre-wrap" />
-        </div>
-      )}
+      <div className="border p-4 mt-4">
+        <h2 className="text-lg font-semibold mb-2">Diff Result:</h2>
+        <pre className="whitespace-pre-wrap">
+          {diffParts.map((part, i) => (
+            // oxlint-disable-next-line no-array-index-key
+            <span
+              key={i}
+              className={
+                part.added
+                  ? 'bg-green-100 text-green-800'
+                  : part.removed
+                    ? 'bg-red-100 text-red-800'
+                    : 'text-muted-foreground'
+              }
+            >
+              {part.value}
+            </span>
+          ))}
+        </pre>
+      </div>
     </PageLayout>
   );
 };
