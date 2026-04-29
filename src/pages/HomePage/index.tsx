@@ -44,7 +44,7 @@ const HomePage = () => {
         <li>
           <a
             className="text-blue-500 hover:underline"
-            href="https://www.embla-carousel.com/get-started/react/"
+            href="https://www.embla-carousel.com/"
             target="_blank"
           >
             Embla Carousel
@@ -53,18 +53,14 @@ const HomePage = () => {
         <li>
           <a
             className="text-blue-500 hover:underline"
-            href="https://sonner.emilkowal.dev/"
+            href="https://sonner.emilkowal.ski/"
             target="_blank"
           >
             Sonner
           </a>
         </li>
         <li>
-          <a
-            className="text-blue-500 hover:underline"
-            href="https://lucide.dev/guide/react/"
-            target="_blank"
-          >
+          <a className="text-blue-500 hover:underline" href="https://lucide.dev/" target="_blank">
             Lucide Icons
           </a>
         </li>
