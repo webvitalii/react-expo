@@ -1,68 +1,40 @@
 import PageLayout from '@/components/PageLayout';
+import ExternalLink from '@/components/ExternalLink';
 
 const HomePage = () => {
   return (
     <PageLayout title="Libraries used">
       <ul className="list-disc pl-4">
         <li>
-          <a className="text-blue-500 hover:underline" href="https://react.dev/" target="_blank">
-            React / TypeScript
-          </a>
+          <ExternalLink href="https://react.dev/">React / TypeScript</ExternalLink>
         </li>
         <li>
-          <a className="text-blue-500 hover:underline" href="https://vitejs.dev/" target="_blank">
-            Vite
-          </a>
+          <ExternalLink href="https://vitejs.dev/">Vite</ExternalLink>
         </li>
         <li>
-          <a
-            className="text-blue-500 hover:underline"
-            href="https://tailwindcss.com/"
-            target="_blank"
-          >
-            Tailwind
-          </a>
+          <ExternalLink href="https://tailwindcss.com/">Tailwind</ExternalLink>
         </li>
         <li>
-          <a
-            className="text-blue-500 hover:underline"
-            href="https://ui.shadcn.com/"
-            target="_blank"
-          >
-            Shadcn/ui
-          </a>{' '}
-          +{' '}
-          <a className="text-blue-500 hover:underline" href="https://base-ui.com/" target="_blank">
-            Base UI
-          </a>
+          <ExternalLink href="https://ui.shadcn.com/">Shadcn/ui</ExternalLink>+{' '}
+          <ExternalLink href="https://base-ui.com/">Base UI</ExternalLink>
         </li>
         <li>
-          <a className="text-blue-500 hover:underline" href="https://tanstack.com/" target="_blank">
+          <ExternalLink href="https://ui.shadcn.com/">Shadcn/ui</ExternalLink> +{' '}
+          <ExternalLink href="https://base-ui.com/">Base UI</ExternalLink>
+        </li>
+        <li>
+          <ExternalLink href="https://tanstack.com/">
             Tanstack: Router, Query, Table, Form, Store
-          </a>
+          </ExternalLink>
         </li>
         <li>
-          <a
-            className="text-blue-500 hover:underline"
-            href="https://www.embla-carousel.com/"
-            target="_blank"
-          >
-            Embla Carousel
-          </a>
+          <ExternalLink href="https://www.embla-carousel.com/">Embla Carousel</ExternalLink>
         </li>
         <li>
-          <a
-            className="text-blue-500 hover:underline"
-            href="https://sonner.emilkowal.ski/"
-            target="_blank"
-          >
-            Sonner
-          </a>
+          <ExternalLink href="https://sonner.emilkowal.ski/">Sonner</ExternalLink>
         </li>
         <li>
-          <a className="text-blue-500 hover:underline" href="https://lucide.dev/" target="_blank">
-            Lucide Icons
-          </a>
+          <ExternalLink href="https://lucide.dev/">Lucide Icons</ExternalLink>
         </li>
       </ul>
 
@@ -70,19 +42,13 @@ const HomePage = () => {
 
       <ul className="list-disc pl-4">
         <li>
-          <a className="text-blue-500 hover:underline" href="https://oxc.rs/" target="_blank">
-            Oxlint + Oxfmt
-          </a>
+          <ExternalLink href="https://oxc.rs/">Oxlint + Oxfmt</ExternalLink>
         </li>
       </ul>
       <p className="mt-4">
-        <a
-          className="text-blue-500 hover:underline"
-          href="https://github.com/webvitalii/react-expo"
-          target="_blank"
-        >
+        <ExternalLink href="https://github.com/webvitalii/react-expo">
           Source code on GitHub
-        </a>
+        </ExternalLink>
       </p>
     </PageLayout>
   );
