@@ -3,14 +3,14 @@ import { Link, useRouter } from '@tanstack/react-router';
 import { Button, buttonVariants } from '@/components/ui/button';
 import PageLayout from '@/components/PageLayout';
 
-const ErrorBoundary = ({ error, reset }: ErrorComponentProps) => {
+const RouteError = ({ error, reset }: ErrorComponentProps) => {
   const router = useRouter();
   const message = error instanceof Error ? error.message : 'An unexpected error occurred.';
   const stack = error instanceof Error ? error.stack : undefined;
 
   const handleRetry = () => {
     reset();
-    router.invalidate();
+    void router.invalidate();
   };
 
   return (
@@ -36,4 +36,4 @@ const ErrorBoundary = ({ error, reset }: ErrorComponentProps) => {
   );
 };
 
-export default ErrorBoundary;
+export default RouteError;

@@ -4,7 +4,7 @@ import type { QueryClient } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
 import { Toaster } from 'sonner';
 import Navbar from '@/components/Navbar';
-import ErrorBoundary from '@/components/ErrorBoundary';
+import RouteError from '@/components/RouteError';
 import NotFound from '@/components/NotFound';
 
 export interface RouterContext {
@@ -32,6 +32,6 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootComponent,
   // pendingComponent intentionally omitted: the root has no loader, so it never
   // fires here. Router-level defaultPendingComponent handles child routes.
-  errorComponent: ErrorBoundary,
+  errorComponent: RouteError,
   notFoundComponent: NotFound,
 });
