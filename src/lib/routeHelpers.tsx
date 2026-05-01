@@ -4,6 +4,7 @@ import { useRouter, type ErrorComponentProps } from '@tanstack/react-router';
 import PageLayout from '@/components/PageLayout';
 import Loading from '@/components/Loading';
 import { Button } from '@/components/ui/button';
+import { useIsDevMode } from '@/state/devMode/devModeStore';
 
 interface PendingFallbackProps {
   /** Page title, rendered only when `withLayout` is set. */
@@ -32,18 +33,20 @@ interface ErrorFallbackProps extends ErrorComponentProps {
  */
 export const ErrorFallback = ({ error, reset, title, withLayout }: ErrorFallbackProps) => {
   const router = useRouter();
+  const devModeOn = useIsDevMode();
+  const showDetails = import.meta.env.DEV || devModeOn;
   const message = error instanceof Error ? error.message : 'An unexpected error occurred.';
   const stack = error instanceof Error ? error.stack : undefined;
 
   const handleRetry = () => {
     reset();
-    router.invalidate();
+    void router.invalidate();
   };
 
   const body = (
     <div className="space-y-3">
       <p className="text-destructive">Error: {message}</p>
-      {import.meta.env.DEV && stack && (
+      {showDetails && stack && (
         <pre className="text-left text-xs bg-muted p-3 rounded-md overflow-auto max-h-48">
           {stack}
         </pre>

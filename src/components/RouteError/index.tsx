@@ -2,9 +2,12 @@ import type { ErrorComponentProps } from '@tanstack/react-router';
 import { Link, useRouter } from '@tanstack/react-router';
 import { Button, buttonVariants } from '@/components/ui/button';
 import PageLayout from '@/components/PageLayout';
+import { useIsDevMode } from '@/state/devMode/devModeStore';
 
 const RouteError = ({ error, reset }: ErrorComponentProps) => {
   const router = useRouter();
+  const devModeOn = useIsDevMode();
+  const showDetails = import.meta.env.DEV || devModeOn;
   const message = error instanceof Error ? error.message : 'An unexpected error occurred.';
   const stack = error instanceof Error ? error.stack : undefined;
 
@@ -19,7 +22,7 @@ const RouteError = ({ error, reset }: ErrorComponentProps) => {
         <h1 className="text-3xl font-bold">Something went wrong</h1>
         <p className="text-muted-foreground">{message}</p>
 
-        {import.meta.env.DEV && stack && (
+        {showDetails && stack && (
           <pre className="text-left text-xs bg-muted p-4 rounded-md overflow-auto max-h-64">
             {stack}
           </pre>

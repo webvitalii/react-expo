@@ -88,6 +88,11 @@ export const navConfig: NavEntry[] = [
         text: 'Counter',
         description: 'Tanstack Store state management example',
       },
+      {
+        to: '/error-boundary',
+        text: 'ErrorBoundary',
+        description: 'Custom React error boundary demo',
+      },
     ],
   },
   { kind: 'link', id: 'tmdb', to: '/tmdb', label: 'TMDB' },

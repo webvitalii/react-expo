@@ -12,6 +12,7 @@ import {
 import { cn } from '@/lib/utils';
 import { supportedLanguages, type SupportedLanguage } from '@/i18n';
 import { navConfig, needsLangParam, isGroupActive } from '@/components/Navbar/navConfig';
+import DevModeToggle from '@/components/DevModeToggle';
 
 const LanguageSwitcher = ({ currentLang }: { currentLang: string }) => {
   const routerState = useRouterState();
@@ -137,6 +138,9 @@ const Navbar = () => {
 
         <NavigationMenuItem>
           <LanguageSwitcher currentLang={lang} />
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <DevModeToggle />
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>

@@ -1,4 +1,4 @@
-import { useStore } from '@tanstack/react-store';
+import { useSelector } from '@tanstack/react-store';
 import { counterStore } from '@/state/store';
 import {
   decrement,
@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import PageLayout from '@/components/PageLayout';
 
 const CounterPage = () => {
-  const count = useStore(counterStore, (state) => state.value);
+  const count = useSelector(counterStore, (state) => state.value);
 
   return (
     <PageLayout title={`Counter: ${count}`}>
