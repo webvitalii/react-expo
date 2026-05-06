@@ -85,5 +85,5 @@ npm run
 ```bash
 npx shadcn@latest add --all --overwrite
 
-npx shadcn@latest add button input checkbox textarea select radio-group label table dropdown-menu pagination card carousel spinner field separator navigation-menu sonner --overwrite
+npx shadcn@latest add button input checkbox textarea select radio-group label table tabs dropdown-menu pagination card carousel spinner field separator navigation-menu sonner --overwrite
 ```
