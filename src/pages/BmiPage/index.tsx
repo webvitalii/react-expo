@@ -3,6 +3,7 @@ import PageLayout from '@/components/PageLayout';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   Select,
   SelectContent,
@@ -77,28 +78,21 @@ const BmiPage = () => {
       <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
         <Card>
           <CardHeader className="pb-4">
-            <CardTitle className="text-xl">BMI CALCULATOR</CardTitle>
+            <CardTitle className="text-xl">BMI Calculator</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex gap-2">
-              <Button
-                variant={unitSystem === 'imperial' ? 'outline' : 'default'}
-                onClick={() => setUnitSystem('metric')}
-                className="flex-1"
-              >
-                Metric
-              </Button>
-              <Button
-                variant={unitSystem === 'metric' ? 'outline' : 'default'}
-                onClick={() => setUnitSystem('imperial')}
-                className="flex-1"
-              >
-                Imperial
-              </Button>
-            </div>
+            <Tabs
+              value={unitSystem}
+              onValueChange={(value) => {
+                if (value === 'metric' || value === 'imperial') setUnitSystem(value);
+              }}
+            >
+              <TabsList className="w-full">
+                <TabsTrigger value="metric">Metric</TabsTrigger>
+                <TabsTrigger value="imperial">Imperial</TabsTrigger>
+              </TabsList>
 
-            {unitSystem === 'metric' ? (
-              <>
+              <TabsContent value="metric" className="space-y-4">
                 <div className="space-y-2">
                   <label htmlFor="height" className="text-sm font-medium">
                     Height
@@ -134,9 +128,9 @@ const BmiPage = () => {
                     </span>
                   </div>
                 </div>
-              </>
-            ) : (
-              <>
+              </TabsContent>
+
+              <TabsContent value="imperial" className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Height</label>
                   <div className="flex gap-2">
@@ -188,8 +182,8 @@ const BmiPage = () => {
                     </span>
                   </div>
                 </div>
-              </>
-            )}
+              </TabsContent>
+            </Tabs>
 
             <div className="flex gap-3 pt-2">
               <Button onClick={calculateBMI} className="flex-1">
