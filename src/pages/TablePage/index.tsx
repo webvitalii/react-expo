@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+  type VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -44,7 +44,7 @@ import {
 import PageLayout from '@/components/PageLayout';
 import { allPostsQueryOptions } from '@/queries/posts';
 
-import { Post } from '@/types/Post';
+import type { Post } from '@/types/Post';
 
 interface SortableHeaderProps {
   column: {

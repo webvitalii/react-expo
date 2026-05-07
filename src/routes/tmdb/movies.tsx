@@ -22,7 +22,7 @@ export const Route = createFileRoute('/tmdb/movies')({
     sort: (sort as MovieSortKey) ?? 'popularity',
   }),
   loader: ({ context: { queryClient }, deps: { page, genre, sort } }) => {
-    const sortBy = MOVIE_SORT_OPTIONS[sort]?.value ?? MOVIE_SORT_OPTIONS.popularity.value;
+    const sortBy = MOVIE_SORT_OPTIONS[sort]?.value ?? MOVIE_SORT_OPTIONS.popularity!.value;
     return Promise.all([
       queryClient.ensureQueryData(movieGenresQueryOptions),
       queryClient.ensureQueryData(moviesQueryOptions(page, genre, sortBy)),

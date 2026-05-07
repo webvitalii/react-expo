@@ -36,7 +36,7 @@ export const buildDiffRows = (parts: Change[]): DiffSummary => {
   let removed = 0;
 
   for (let i = 0; i < parts.length; i++) {
-    const part = parts[i];
+    const part = parts[i]!;
     const lines = splitLines(part.value);
 
     if (!part.added && !part.removed) {
@@ -53,13 +53,13 @@ export const buildDiffRows = (parts: Change[]): DiffSummary => {
     }
 
     if (part.removed && parts[i + 1]?.added) {
-      const addedLines = splitLines(parts[i + 1].value);
+      const addedLines = splitLines(parts[i + 1]!.value);
       const pair = Math.min(lines.length, addedLines.length);
       for (let j = 0; j < pair; j++) {
         rows.push({
           kind: 'replaced',
-          left: lines[j],
-          right: addedLines[j],
+          left: lines[j]!,
+          right: addedLines[j]!,
           leftNo: leftNo++,
           rightNo: rightNo++,
         });
@@ -67,11 +67,11 @@ export const buildDiffRows = (parts: Change[]): DiffSummary => {
         added++;
       }
       for (let j = pair; j < lines.length; j++) {
-        rows.push({ kind: 'removed', left: lines[j], leftNo: leftNo++ });
+        rows.push({ kind: 'removed', left: lines[j]!, leftNo: leftNo++ });
         removed++;
       }
       for (let j = pair; j < addedLines.length; j++) {
-        rows.push({ kind: 'added', right: addedLines[j], rightNo: rightNo++ });
+        rows.push({ kind: 'added', right: addedLines[j]!, rightNo: rightNo++ });
         added++;
       }
       i++;
@@ -100,24 +100,24 @@ export const collapseRows = (rows: DiffRow[], context: number): ViewItem[] => {
   const items: ViewItem[] = [];
   let i = 0;
   while (i < rows.length) {
-    if (rows[i].kind !== 'common') {
-      items.push({ kind: 'row', row: rows[i] });
+    if (rows[i]!.kind !== 'common') {
+      items.push({ kind: 'row', row: rows[i]! });
       i++;
       continue;
     }
     let j = i;
-    while (j < rows.length && rows[j].kind === 'common') j++;
+    while (j < rows.length && rows[j]!.kind === 'common') j++;
     const runLen = j - i;
     const keepStart = i === 0 ? 0 : context;
     const keepEnd = j === rows.length ? 0 : context;
     if (runLen <= keepStart + keepEnd + 1) {
-      for (let k = i; k < j; k++) items.push({ kind: 'row', row: rows[k] });
+      for (let k = i; k < j; k++) items.push({ kind: 'row', row: rows[k]! });
     } else {
-      for (let k = i; k < i + keepStart; k++) items.push({ kind: 'row', row: rows[k] });
+      for (let k = i; k < i + keepStart; k++) items.push({ kind: 'row', row: rows[k]! });
       const hidden: DiffRow[] = [];
-      for (let k = i + keepStart; k < j - keepEnd; k++) hidden.push(rows[k]);
+      for (let k = i + keepStart; k < j - keepEnd; k++) hidden.push(rows[k]!);
       items.push({ kind: 'collapsed', rows: hidden, id: `hidden-${i}-${j}` });
-      for (let k = j - keepEnd; k < j; k++) items.push({ kind: 'row', row: rows[k] });
+      for (let k = j - keepEnd; k < j; k++) items.push({ kind: 'row', row: rows[k]! });
     }
     i = j;
   }

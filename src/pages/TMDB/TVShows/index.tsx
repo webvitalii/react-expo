@@ -21,25 +21,25 @@ const TVShows = () => {
   const page = Number(searchParams.page) || 1;
   const genreId = searchParams.genre || 'all';
   const sortKey = (searchParams.sort as TVSortKey) || 'popularity';
-  const sortBy = TV_SORT_OPTIONS[sortKey]?.value || TV_SORT_OPTIONS.popularity.value;
+  const sortBy = TV_SORT_OPTIONS[sortKey]?.value || TV_SORT_OPTIONS.popularity!.value;
 
   const { data: genres } = useSuspenseQuery(tvGenresQueryOptions);
   const { data: tvShowsData } = useSuspenseQuery(tvShowsQueryOptions(page, genreId, sortBy));
 
   const handlePageChange = (newPage: number) => {
-    navigate({
+    void navigate({
       search: (prev) => ({ ...prev, page: newPage }),
     });
   };
 
   const handleGenreChange = (newGenreId: string) => {
-    navigate({
+    void navigate({
       search: (prev) => ({ ...prev, genre: newGenreId, page: 1 }),
     });
   };
 
   const handleSortChange = (newSortKey: TVSortKey) => {
-    navigate({
+    void navigate({
       search: (prev) => ({ ...prev, sort: newSortKey, page: 1 }),
     });
   };
