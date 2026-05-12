@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -32,6 +33,7 @@ export function DiffControls({
   collapseUnchanged,
   setCollapseUnchanged,
 }: Props) {
+  const { t } = useTranslation('diff');
   const showIgnoreWhitespace = !(viewMode === 'inline' && diffMethod === 'chars');
   const showIgnoreCase = viewMode !== 'patch';
 
@@ -45,15 +47,15 @@ export function DiffControls({
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="split" id="view-split" />
-            <Label htmlFor="view-split">Split</Label>
+            <Label htmlFor="view-split">{t('view.split', 'Split')}</Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="inline" id="view-inline" />
-            <Label htmlFor="view-inline">Inline</Label>
+            <Label htmlFor="view-inline">{t('view.inline', 'Inline')}</Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="patch" id="view-patch" />
-            <Label htmlFor="view-patch">Patch</Label>
+            <Label htmlFor="view-patch">{t('view.patch', 'Patch')}</Label>
           </div>
         </RadioGroup>
 
@@ -65,15 +67,15 @@ export function DiffControls({
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="chars" id="chars" />
-              <Label htmlFor="chars">Chars</Label>
+              <Label htmlFor="chars">{t('method.chars', 'Chars')}</Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="words" id="words" />
-              <Label htmlFor="words">Words</Label>
+              <Label htmlFor="words">{t('method.words', 'Words')}</Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="lines" id="lines" />
-              <Label htmlFor="lines">Lines</Label>
+              <Label htmlFor="lines">{t('method.lines', 'Lines')}</Label>
             </div>
           </RadioGroup>
         )}
@@ -87,7 +89,9 @@ export function DiffControls({
               checked={collapseUnchanged}
               onCheckedChange={(checked) => setCollapseUnchanged(Boolean(checked))}
             />
-            <Label htmlFor="collapseUnchanged">Collapse Unchanged</Label>
+            <Label htmlFor="collapseUnchanged">
+              {t('options.collapseUnchanged', 'Collapse Unchanged')}
+            </Label>
           </div>
         )}
 
@@ -97,7 +101,7 @@ export function DiffControls({
             checked={wordWrap}
             onCheckedChange={(checked) => setWordWrap(Boolean(checked))}
           />
-          <Label htmlFor="wordWrap">Word Wrap</Label>
+          <Label htmlFor="wordWrap">{t('options.wordWrap', 'Word Wrap')}</Label>
         </div>
 
         {showIgnoreWhitespace && (
@@ -107,7 +111,9 @@ export function DiffControls({
               checked={ignoreWhitespace}
               onCheckedChange={(checked) => setIgnoreWhitespace(Boolean(checked))}
             />
-            <Label htmlFor="ignoreWhitespace">Ignore Whitespace</Label>
+            <Label htmlFor="ignoreWhitespace">
+              {t('options.ignoreWhitespace', 'Ignore Whitespace')}
+            </Label>
           </div>
         )}
 
@@ -118,7 +124,7 @@ export function DiffControls({
               checked={ignoreCase}
               onCheckedChange={(checked) => setIgnoreCase(Boolean(checked))}
             />
-            <Label htmlFor="ignoreCase">Ignore Case</Label>
+            <Label htmlFor="ignoreCase">{t('options.ignoreCase', 'Ignore Case')}</Label>
           </div>
         )}
       </div>

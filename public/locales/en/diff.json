@@ -1,0 +1,22 @@
+{
+  "copied": "Copied!",
+  "copy": "Copy patch",
+  "method": {
+    "chars": "Chars",
+    "lines": "Lines",
+    "words": "Words"
+  },
+  "options": {
+    "collapseUnchanged": "Collapse Unchanged",
+    "ignoreCase": "Ignore Case",
+    "ignoreWhitespace": "Ignore Whitespace",
+    "wordWrap": "Word Wrap"
+  },
+  "result": "Diff Result",
+  "title": "Diff Page",
+  "view": {
+    "inline": "Inline",
+    "patch": "Patch",
+    "split": "Split"
+  }
+}

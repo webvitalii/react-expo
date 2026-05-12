@@ -1,5 +1,10 @@
 {
-  "home": "Accueil",
+  "components": "Composants",
+  "examples": "Exemples",
   "forms": "Formulaires",
-  "posts": "Publications"
+  "home": "Accueil",
+  "posts": "Publications",
+  "tables": "Tableaux",
+  "tmdb": "TMDB",
+  "tools": "Outils"
 }

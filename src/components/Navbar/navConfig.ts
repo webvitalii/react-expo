@@ -50,15 +50,17 @@ export const navConfig: NavEntry[] = [
     kind: 'group',
     id: 'tools',
     label: 'Tools',
+    i18nKey: 'tools',
     items: [
       { to: '/tools/bmi', text: 'BMI', description: 'Body Mass Index calculator' },
-      { to: '/tools/diff', text: 'Diff', description: 'Text diff viewer' },
+      { to: '/$lang/tools/diff', text: 'Diff', description: 'Text diff viewer' },
     ],
   },
   {
     kind: 'group',
     id: 'tables',
     label: 'Tables',
+    i18nKey: 'tables',
     items: [
       { to: '/tables/table-simple', text: 'Table Simple', description: 'Simple data table' },
       {
@@ -72,6 +74,7 @@ export const navConfig: NavEntry[] = [
     kind: 'group',
     id: 'components',
     label: 'Components',
+    i18nKey: 'components',
     items: [
       { to: '/carousel', text: 'Carousel', description: 'Image carousel component' },
       { to: '/rating', text: 'Rating', description: 'Star rating component' },
@@ -82,6 +85,7 @@ export const navConfig: NavEntry[] = [
     kind: 'group',
     id: 'examples',
     label: 'Examples',
+    i18nKey: 'examples',
     items: [
       {
         to: '/counter',
@@ -95,7 +99,7 @@ export const navConfig: NavEntry[] = [
       },
     ],
   },
-  { kind: 'link', id: 'tmdb', to: '/tmdb', label: 'TMDB' },
+  { kind: 'link', id: 'tmdb', to: '/tmdb', label: 'TMDB', i18nKey: 'tmdb' },
   { kind: 'link', id: 'posts', to: '/$lang/posts', label: 'Posts', i18nKey: 'posts' },
 ];
 

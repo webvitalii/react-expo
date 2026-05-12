@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Textarea } from '@/components/ui/textarea';
 import PageLayout from '@/components/PageLayout';
 import { createTwoFilesPatch, diffChars, diffLines, diffWords, diffWordsWithSpace } from 'diff';
@@ -18,6 +19,7 @@ import { SplitView } from './SplitView';
 import { PatchView } from './PatchView';
 
 const DiffPage = () => {
+  const { t } = useTranslation('diff');
   const [leftText, setLeftText] = useState(initialLeftText);
   const [rightText, setRightText] = useState(initialRightText);
   const [viewMode, setViewMode] = useState<ViewMode>('split');
@@ -94,7 +96,7 @@ const DiffPage = () => {
   };
 
   return (
-    <PageLayout title="Diff Page">
+    <PageLayout title={t('title', 'Diff Page')}>
       <section className="flex space-x-4 mb-4">
         <div className="flex-1">
           <Textarea
@@ -129,7 +131,7 @@ const DiffPage = () => {
 
       <div className="border rounded-md mt-4 overflow-hidden">
         <div className="flex items-center justify-between px-4 py-2 bg-muted/50 border-b">
-          <h2 className="text-lg font-semibold">Diff Result</h2>
+          <h2 className="text-lg font-semibold">{t('result', 'Diff Result')}</h2>
           <div className="flex items-center gap-3 text-sm font-mono">
             <span className="text-green-700">+{added}</span>
             <span className="text-red-700">−{removed}</span>
@@ -139,7 +141,7 @@ const DiffPage = () => {
                 onClick={copyPatch}
                 className="ml-2 px-2 py-1 text-xs font-sans rounded border bg-background hover:bg-muted cursor-pointer"
               >
-                {patchCopied ? 'Copied!' : 'Copy patch'}
+                {patchCopied ? t('copied', 'Copied!') : t('copy', 'Copy patch')}
               </button>
             )}
           </div>

@@ -6,14 +6,8 @@ export const supportedLanguages = ['en', 'fr'] as const;
 export type SupportedLanguage = (typeof supportedLanguages)[number];
 export const defaultLanguage: SupportedLanguage = 'en';
 
-export const getLanguageFromPath = (pathname: string): SupportedLanguage => {
-  const segments = pathname.split('/').filter(Boolean);
-  const lang = segments[0];
-  if (supportedLanguages.includes(lang as SupportedLanguage)) {
-    return lang as SupportedLanguage;
-  }
-  return defaultLanguage;
-};
+export const isSupportedLanguage = (v: unknown): v is SupportedLanguage =>
+  typeof v === 'string' && (supportedLanguages as readonly string[]).includes(v);
 
 i18n
   .use(HttpBackend)
@@ -22,6 +16,8 @@ i18n
     lng: defaultLanguage,
     fallbackLng: defaultLanguage,
     supportedLngs: supportedLanguages,
+    // Only globally-visible namespaces are preloaded. Per-page namespaces
+    // are fetched by route loaders via `i18n.loadNamespaces(...)`.
     ns: ['navbar'],
     defaultNS: 'navbar',
     backend: {
@@ -30,6 +26,7 @@ i18n
     interpolation: {
       escapeValue: false,
     },
-  });
+  })
+  .catch((err: unknown) => console.error('i18n init failed', err));
 
 export default i18n;

@@ -1,0 +1,22 @@
+{
+  "copied": "Copié !",
+  "copy": "Copier le patch",
+  "method": {
+    "chars": "Caractères",
+    "lines": "Lignes",
+    "words": "Mots"
+  },
+  "options": {
+    "collapseUnchanged": "Replier les lignes inchangées",
+    "ignoreCase": "Ignorer la casse",
+    "ignoreWhitespace": "Ignorer les espaces",
+    "wordWrap": "Retour à la ligne"
+  },
+  "result": "Résultat",
+  "title": "Comparateur",
+  "view": {
+    "inline": "Aligné",
+    "patch": "Patch",
+    "split": "Côte à côte"
+  }
+}

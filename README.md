@@ -80,6 +80,12 @@ npm audit fix
 npm run
 ```
 
+### Internationalization
+
+Translations use **i18next** + **i18next-cli** with Tailwind-style automatic
+key pruning. See [`docs/i18n.md`](./docs/i18n.md) for the full workflow,
+file structure, and conventions.
+
 ## Main shadcn update command:
 
 ```bash

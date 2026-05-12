@@ -15,10 +15,6 @@ const HomePage = () => {
           <ExternalLink href="https://tailwindcss.com/">Tailwind</ExternalLink>
         </li>
         <li>
-          <ExternalLink href="https://ui.shadcn.com/">Shadcn/ui</ExternalLink>+{' '}
-          <ExternalLink href="https://base-ui.com/">Base UI</ExternalLink>
-        </li>
-        <li>
           <ExternalLink href="https://ui.shadcn.com/">Shadcn/ui</ExternalLink> +{' '}
           <ExternalLink href="https://base-ui.com/">Base UI</ExternalLink>
         </li>
@@ -35,6 +31,10 @@ const HomePage = () => {
         </li>
         <li>
           <ExternalLink href="https://lucide.dev/">Lucide Icons</ExternalLink>
+        </li>
+        <li>
+          <ExternalLink href="https://react.i18next.com/">i18next</ExternalLink> +{' '}
+          <ExternalLink href="https://www.locize.com/blog/i18next-cli/">i18next-cli</ExternalLink>
         </li>
       </ul>
 

@@ -1,5 +1,10 @@
 {
-  "home": "Home",
+  "components": "Components",
+  "examples": "Examples",
   "forms": "Forms",
-  "posts": "Posts"
+  "home": "Home",
+  "posts": "Posts",
+  "tables": "Tables",
+  "tmdb": "TMDB",
+  "tools": "Tools"
 }
