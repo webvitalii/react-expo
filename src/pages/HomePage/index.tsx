@@ -9,9 +9,6 @@ const HomePage = () => {
           <ExternalLink href="https://react.dev/">React / TypeScript</ExternalLink>
         </li>
         <li>
-          <ExternalLink href="https://vitejs.dev/">Vite</ExternalLink>
-        </li>
-        <li>
           <ExternalLink href="https://tailwindcss.com/">Tailwind</ExternalLink>
         </li>
         <li>
@@ -41,6 +38,9 @@ const HomePage = () => {
       <h3 className="mt-4 text-lg font-semibold">Development tools</h3>
 
       <ul className="list-disc pl-4">
+        <li>
+          <ExternalLink href="https://vitejs.dev/">Vite</ExternalLink>
+        </li>
         <li>
           <ExternalLink href="https://oxc.rs/">Oxlint + Oxfmt</ExternalLink>
         </li>

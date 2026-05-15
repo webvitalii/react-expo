@@ -1,95 +1,37 @@
 # React + TypeScript + Vite
 
-### Setup and Installation
+A simple playground / showcase app exploring a modern React stack: typed
+routing, server state, forms, tables, i18n, theming, and a component
+library built on Tailwind.
 
-```bash
-# Install dependencies
-npm install
-```
+### Stack
 
-### Development
+- [React / TypeScript](https://react.dev/)
+- [Tailwind](https://tailwindcss.com/)
+- [Shadcn/ui](https://ui.shadcn.com/) + [Base UI](https://base-ui.com/)
+- [Tanstack: Router, Query, Table, Form, Store](https://tanstack.com/)
+- [Embla Carousel](https://www.embla-carousel.com/)
+- [Sonner](https://sonner.emilkowal.ski/)
+- [Lucide Icons](https://lucide.dev/)
+- [i18next](https://react.i18next.com/) + [i18next-cli](https://www.locize.com/blog/i18next-cli/)
 
-```bash
-# Start the development server
-npm run dev
+### Development tools
 
-# Start with specific host and port (example)
-npm run dev -- --host 0.0.0.0 --port 3000
-```
+- [Vite](https://vitejs.dev/)
+- [Oxlint + Oxfmt](https://oxc.rs/)
 
-### Building and Publishing
+### npm scripts & CLI
 
-```bash
-# Build for production
-npm run build
+All `npm` / `npx` commands for setup, dev, build, lint, format, i18n, and
+shadcn live in [`docs/npm.md`](./docs/npm.md).
 
-# Preview the production build locally
-npm run preview
-```
+### Git workflow
 
-### Linting (oxlint)
+Day-to-day Git commands and husky hook bypass tips are in
+[`docs/git.md`](./docs/git.md).
 
-```bash
-# Scan all files in the project (except ignored ones like src/components/ui/**)
-npm run lint
-
-# Auto-fix linting issues
-npm run lint:fix
-```
-
-### Formatting (oxfmt)
-
-```bash
-# Format all files in the project (writes changes)
-npm run fmt
-
-# Check if all files are formatted (no writes, useful for CI)
-npm run fmt:check
-```
-
-### Alternative: run directly with npx
-
-```bash
-# Lint
-npx oxlint
-
-# Lint with auto-fix
-npx oxlint --fix
-
-# Check formatting
-npx oxfmt --check
-
-# Format all files
-npx oxfmt
-```
-
-### Other Useful Commands
-
-```bash
-# Update dependencies
-npm update
-
-# Check for outdated packages
-npm outdated
-
-# Run security audit
-npm audit
-npm audit fix
-
-# View all available npm scripts
-npm run
-```
-
-### Internationalization
+### Internationalization (i18n)
 
 Translations use **i18next** + **i18next-cli** with Tailwind-style automatic
 key pruning. See [`docs/i18n.md`](./docs/i18n.md) for the full workflow,
 file structure, and conventions.
-
-## Main shadcn update command:
-
-```bash
-npx shadcn@latest add --all --overwrite
-
-npx shadcn@latest add button input checkbox textarea select radio-group label table tabs dropdown-menu pagination card carousel spinner field separator navigation-menu sonner --overwrite
-```
