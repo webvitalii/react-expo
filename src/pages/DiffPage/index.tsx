@@ -18,6 +18,7 @@ import { InlineView } from './InlineView';
 import { SplitView } from './SplitView';
 import { PatchView } from './PatchView';
 
+// Spec: ./spec/README.md
 const DiffPage = () => {
   const { t } = useTranslation('diff');
   const [leftText, setLeftText] = useState(initialLeftText);
