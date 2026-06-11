@@ -23,6 +23,10 @@ Every page under `src/pages/<PageName>/` is documented **colocated with its code
 component is `index.tsx` and its spec is `spec/README.md`. **Specs and code MUST stay in
 sync.**
 
+**Before editing any file under a page folder, read that page's `spec/README.md` first** and
+treat it as the source of intended behavior. Use it to ground your change, then reconcile the
+code and the spec together.
+
 Whenever you change a page's code in a way that affects its UI, flow, state, route, i18n
 keys, or status — or when you add, rename, or remove a page — update that page's
 `spec/README.md` **in the same change set** (create it if missing).
@@ -31,4 +35,5 @@ keys, or status — or when you add, rename, or remove a page — update that pa
 - Spec template for new pages: `.devin/templates/page-spec.md`
 
 When creating a new page, copy the template to `src/pages/<PageName>/spec/README.md` and add
-a `// Spec: ./spec/README.md` comment above the page's exported component.
+a `// Spec: ./spec/README.md — read before changing this page` comment above the page's
+exported component.

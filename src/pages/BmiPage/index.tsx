@@ -14,7 +14,7 @@ import {
 
 type UnitSystem = 'metric' | 'imperial';
 
-// Spec: ./spec/README.md
+// Spec: ./spec/README.md — read before changing this page
 const BmiPage = () => {
   const [unitSystem, setUnitSystem] = useState<UnitSystem>('metric');
   const [heightCm, setHeightCm] = useState('');

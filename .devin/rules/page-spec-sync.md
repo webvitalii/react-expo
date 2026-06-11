@@ -11,6 +11,13 @@ deliverable, not an afterthought.
 
 This rule currently applies only to pages under `src/pages/`.
 
+## Before editing a page
+
+Read the page's `spec/README.md` **before** you start implementing. Treat it as the source
+of intended behavior: use it to understand the page's UI, flow, state, route, and i18n
+contract, then reconcile the code and the spec together as you work. If no spec exists yet,
+create one from the template as part of the change.
+
 ## When to update specs
 
 Whenever you change code under `src/pages/`, update the matching spec **in the same
