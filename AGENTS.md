@@ -17,6 +17,25 @@ oxfmt.
 - `npm run lint` / `npm run lint:fix` — oxlint
 - `npm run fmt` / `npm run fmt:check` — oxfmt
 
+## i18n
+
+Always pass the English text as the **inline default** in every `t()` call:
+
+```tsx
+t('calculator.title', 'BMI Calculator'); // ✓
+t('calculator.title'); // ✗ — extractor can't populate en JSON
+```
+
+For **dynamic keys** (template literals), the extractor can't read them statically. Create a
+lookup map and pass it as the default instead:
+
+```tsx
+const LABELS: Record<MyKey, string> = { foo: 'Foo', bar: 'Bar' };
+t(`ns.${key}`, LABELS[key]);
+```
+
+Full pipeline details: `docs/i18n.md`.
+
 ## Colocated page specs (IMPORTANT)
 
 Every page under `src/pages/<PageName>/` is documented **colocated with its code**: the

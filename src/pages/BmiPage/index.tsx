@@ -18,6 +18,20 @@ type UnitSystem = 'metric' | 'imperial';
 const CATEGORY_KEYS = ['underweight', 'healthy', 'overweight', 'obesity'] as const;
 type BMICategory = (typeof CATEGORY_KEYS)[number];
 
+const CATEGORY_LABELS: Record<BMICategory, string> = {
+  underweight: 'Underweight',
+  healthy: 'Healthy',
+  overweight: 'Overweight',
+  obesity: 'Obesity',
+};
+
+const RANGE_LABELS: Record<BMICategory, string> = {
+  underweight: 'Below 18.5',
+  healthy: '18.5 – 24.9',
+  overweight: '25.0 – 29.9',
+  obesity: '30.0 or above',
+};
+
 const getBMICategory = (bmiValue: number): BMICategory => {
   if (bmiValue < 18.5) return 'underweight';
   if (bmiValue < 25) return 'healthy';
@@ -73,11 +87,11 @@ const BmiPage = () => {
   };
 
   return (
-    <PageLayout title={t('title')}>
+    <PageLayout title={t('title', 'Calculate Your BMI')}>
       <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
         <Card>
           <CardHeader className="pb-4">
-            <CardTitle className="text-xl">{t('calculator.title')}</CardTitle>
+            <CardTitle className="text-xl">{t('calculator.title', 'BMI Calculator')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <Tabs
@@ -87,14 +101,16 @@ const BmiPage = () => {
               }}
             >
               <TabsList className="w-full">
-                <TabsTrigger value="metric">{t('calculator.tabs.metric')}</TabsTrigger>
-                <TabsTrigger value="imperial">{t('calculator.tabs.imperial')}</TabsTrigger>
+                <TabsTrigger value="metric">{t('calculator.tabs.metric', 'Metric')}</TabsTrigger>
+                <TabsTrigger value="imperial">
+                  {t('calculator.tabs.imperial', 'Imperial')}
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="metric" className="space-y-4">
                 <div className="space-y-2">
                   <label htmlFor="height" className="text-sm font-medium">
-                    {t('calculator.height')}
+                    {t('calculator.height', 'Height')}
                   </label>
                   <div className="flex gap-2">
                     <Input
@@ -105,14 +121,14 @@ const BmiPage = () => {
                       className="flex-1"
                     />
                     <span className="flex items-center text-sm text-muted-foreground min-w-[100px]">
-                      {t('calculator.centimeters')}
+                      {t('calculator.centimeters', 'Centimeters')}
                     </span>
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label htmlFor="weight" className="text-sm font-medium">
-                    {t('calculator.weight')}
+                    {t('calculator.weight', 'Weight')}
                   </label>
                   <div className="flex gap-2">
                     <Input
@@ -123,7 +139,7 @@ const BmiPage = () => {
                       className="flex-1"
                     />
                     <span className="flex items-center text-sm text-muted-foreground min-w-[100px]">
-                      {t('calculator.kilograms')}
+                      {t('calculator.kilograms', 'Kilograms')}
                     </span>
                   </div>
                 </div>
@@ -131,7 +147,7 @@ const BmiPage = () => {
 
               <TabsContent value="imperial" className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">{t('calculator.height')}</label>
+                  <label className="text-sm font-medium">{t('calculator.height', 'Height')}</label>
                   <div className="flex gap-2">
                     <div className="flex-1">
                       <Select value={feet} onValueChange={(value) => value && setFeet(value)}>
@@ -166,7 +182,7 @@ const BmiPage = () => {
 
                 <div className="space-y-2">
                   <label htmlFor="weight-lbs" className="text-sm font-medium">
-                    {t('calculator.weight')}
+                    {t('calculator.weight', 'Weight')}
                   </label>
                   <div className="flex gap-2">
                     <Input
@@ -177,7 +193,7 @@ const BmiPage = () => {
                       className="flex-1"
                     />
                     <span className="flex items-center text-sm text-muted-foreground min-w-[100px]">
-                      {t('calculator.pounds')}
+                      {t('calculator.pounds', 'Pounds')}
                     </span>
                   </div>
                 </div>
@@ -186,10 +202,10 @@ const BmiPage = () => {
 
             <div className="flex gap-3 pt-2">
               <Button onClick={calculateBMI} className="flex-1">
-                {t('calculator.calculate')}
+                {t('calculator.calculate', 'Calculate Your BMI')}
               </Button>
               <Button onClick={handleReset} variant="outline">
-                {t('calculator.reset')}
+                {t('calculator.reset', 'Reset')}
               </Button>
             </div>
           </CardContent>
@@ -199,13 +215,13 @@ const BmiPage = () => {
           <CardHeader className="pb-4">
             {bmi !== null && (
               <div className="bg-primary text-primary-foreground text-center py-4 -mx-6 -mt-6 mb-4 rounded-t-xl">
-                <div className="text-sm font-medium">{t('result.yourBmiIs')}</div>
+                <div className="text-sm font-medium">{t('result.yourBmiIs', 'YOUR BMI IS')}</div>
                 <div className="text-4xl font-bold mt-1">{bmi.toFixed(1)}</div>
               </div>
             )}
             <div className="flex justify-between items-center border-b pb-2">
-              <span className="font-semibold">{t('result.category')}</span>
-              <span className="font-semibold">{t('result.range')}</span>
+              <span className="font-semibold">{t('result.category', 'BMI Category')}</span>
+              <span className="font-semibold">{t('result.range', 'BMI Range')}</span>
             </div>
           </CardHeader>
           <CardContent className="space-y-0 p-0">
@@ -218,9 +234,11 @@ const BmiPage = () => {
                     isActive ? 'bg-muted/50' : ''
                   } ${index !== CATEGORY_KEYS.length - 1 ? 'border-b' : ''}`}
                 >
-                  <span className={isActive ? 'font-semibold' : ''}>{t(`categories.${key}`)}</span>
+                  <span className={isActive ? 'font-semibold' : ''}>
+                    {t(`categories.${key}`, CATEGORY_LABELS[key])}
+                  </span>
                   <span className={`text-muted-foreground ${isActive ? 'font-semibold' : ''}`}>
-                    {t(`ranges.${key}`)}
+                    {t(`ranges.${key}`, RANGE_LABELS[key])}
                   </span>
                 </div>
               );
