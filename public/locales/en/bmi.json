@@ -1,34 +1,34 @@
 {
-  "title": "Calculate Your BMI",
   "calculator": {
-    "title": "BMI Calculator",
-    "tabs": {
-      "metric": "Metric",
-      "imperial": "Imperial"
-    },
-    "height": "Height",
-    "weight": "Weight",
+    "calculate": "Calculate Your BMI",
     "centimeters": "Centimeters",
+    "height": "Height",
     "kilograms": "Kilograms",
     "pounds": "Pounds",
-    "calculate": "Calculate Your BMI",
-    "reset": "Reset"
-  },
-  "result": {
-    "yourBmiIs": "YOUR BMI IS",
-    "category": "BMI Category",
-    "range": "BMI Range"
+    "reset": "Reset",
+    "tabs": {
+      "imperial": "Imperial",
+      "metric": "Metric"
+    },
+    "title": "BMI Calculator",
+    "weight": "Weight"
   },
   "categories": {
-    "underweight": "Underweight",
     "healthy": "Healthy",
+    "obesity": "Obesity",
     "overweight": "Overweight",
-    "obesity": "Obesity"
+    "underweight": "Underweight"
   },
   "ranges": {
-    "underweight": "Below 18.5",
     "healthy": "18.5 – 24.9",
+    "obesity": "30.0 or above",
     "overweight": "25.0 – 29.9",
-    "obesity": "30.0 or above"
-  }
+    "underweight": "Below 18.5"
+  },
+  "result": {
+    "category": "BMI Category",
+    "range": "BMI Range",
+    "yourBmiIs": "YOUR BMI IS"
+  },
+  "title": "Calculate Your BMI"
 }
