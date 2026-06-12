@@ -52,7 +52,7 @@ export const navConfig: NavEntry[] = [
     label: 'Tools',
     i18nKey: 'tools',
     items: [
-      { to: '/tools/bmi', text: 'BMI', description: 'Body Mass Index calculator' },
+      { to: '/$lang/tools/bmi', text: 'BMI', description: 'Body Mass Index calculator' },
       { to: '/$lang/tools/diff', text: 'Diff', description: 'Text diff viewer' },
     ],
   },

@@ -1,0 +1,34 @@
+{
+  "title": "Calculer votre IMC",
+  "calculator": {
+    "title": "Calculateur d'IMC",
+    "tabs": {
+      "metric": "Métrique",
+      "imperial": "Impérial"
+    },
+    "height": "Taille",
+    "weight": "Poids",
+    "centimeters": "Centimètres",
+    "kilograms": "Kilogrammes",
+    "pounds": "Livres",
+    "calculate": "Calculer votre IMC",
+    "reset": "Réinitialiser"
+  },
+  "result": {
+    "yourBmiIs": "VOTRE IMC EST",
+    "category": "Catégorie IMC",
+    "range": "Plage IMC"
+  },
+  "categories": {
+    "underweight": "Insuffisance pondérale",
+    "healthy": "Poids normal",
+    "overweight": "Surpoids",
+    "obesity": "Obésité"
+  },
+  "ranges": {
+    "underweight": "En dessous de 18,5",
+    "healthy": "18,5 – 24,9",
+    "overweight": "25,0 – 29,9",
+    "obesity": "30,0 et plus"
+  }
+}
