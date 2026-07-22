@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
 import { TMDB_API, TMDB_API_KEY } from '@/components/TMDB/config';
-import type { Movie, TVShow, SearchResult, Genre, GenreResponse, TMDBResponse } from '@/types/TMDB';
+import type { Movie, TVShow, SearchResult, GenreResponse, TMDBResponse } from '@/types/TMDB';
 
 const fetchJson = async <T>(url: string): Promise<T> => {
   const res = await fetch(url);
@@ -14,7 +14,7 @@ export const movieGenresQueryOptions = queryOptions({
   queryKey: ['movieGenres'],
   queryFn: async () => {
     const data = await fetchJson<GenreResponse>(`${TMDB_API.movie.genres}?api_key=${TMDB_API_KEY}`);
-    return data.genres as Genre[];
+    return data.genres;
   },
 });
 
@@ -22,7 +22,7 @@ export const tvGenresQueryOptions = queryOptions({
   queryKey: ['tvGenres'],
   queryFn: async () => {
     const data = await fetchJson<GenreResponse>(`${TMDB_API.tv.genres}?api_key=${TMDB_API_KEY}`);
-    return data.genres as Genre[];
+    return data.genres;
   },
 });
 

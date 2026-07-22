@@ -6,7 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import { postQueryOptions, postCommentsQueryOptions } from '@/queries/posts';
 
 function PostDetail() {
-  const params = useParams({ strict: false }) as { lang?: string; postId: string };
+  const params = useParams({ from: '/$lang/posts/$postId' });
   const { postId } = params;
   const currentLang = params.lang || 'en';
   const navigate = useNavigate();

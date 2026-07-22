@@ -48,7 +48,7 @@ const Search = () => {
   const includeAdult = searchParams.include_adult === 'true';
 
   const handleSearch = (newQuery: string) => {
-    navigate({
+    void navigate({
       search: (prev) => ({
         ...prev,
         query: newQuery || undefined,
@@ -58,13 +58,13 @@ const Search = () => {
   };
 
   const handlePageChange = (newPage: number) => {
-    navigate({
+    void navigate({
       search: (prev) => ({ ...prev, page: newPage }),
     });
   };
 
   const handleAdultContentChange = (checked: boolean) => {
-    navigate({
+    void navigate({
       search: (prev) => ({ ...prev, include_adult: checked.toString() }),
     });
   };
@@ -85,7 +85,7 @@ const Search = () => {
           <Checkbox
             id="include_adult"
             checked={includeAdult}
-            onCheckedChange={(checked) => handleAdultContentChange(checked === true)}
+            onCheckedChange={(checked) => handleAdultContentChange(checked)}
           />
           <label
             htmlFor="include_adult"

@@ -32,7 +32,7 @@ const formSchema = z.object({
   notifications: z.enum(['all', 'mentions', 'none'], {
     message: 'Please select a notification preference.',
   }),
-  agreeToTerms: z.boolean().refine((val) => val === true, 'You must agree to the terms.'),
+  agreeToTerms: z.boolean().refine((val) => val, 'You must agree to the terms.'),
 });
 
 const TanStackFormPage = () => {
@@ -67,13 +67,12 @@ const TanStackFormPage = () => {
         id="form-id"
         onSubmit={(e) => {
           e.preventDefault();
-          form.handleSubmit();
+          void form.handleSubmit();
         }}
       >
         <FieldGroup>
-          <form.Field
-            name="username"
-            children={(field) => {
+          <form.Field name="username">
+            {(field) => {
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
@@ -92,11 +91,10 @@ const TanStackFormPage = () => {
                 </Field>
               );
             }}
-          />
+          </form.Field>
 
-          <form.Field
-            name="description"
-            children={(field) => {
+          <form.Field name="description">
+            {(field) => {
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
@@ -116,11 +114,10 @@ const TanStackFormPage = () => {
                 </Field>
               );
             }}
-          />
+          </form.Field>
 
-          <form.Field
-            name="email"
-            children={(field) => {
+          <form.Field name="email">
+            {(field) => {
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
@@ -140,11 +137,10 @@ const TanStackFormPage = () => {
                 </Field>
               );
             }}
-          />
+          </form.Field>
 
-          <form.Field
-            name="gender"
-            children={(field) => {
+          <form.Field name="gender">
+            {(field) => {
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
@@ -174,11 +170,10 @@ const TanStackFormPage = () => {
                 </Field>
               );
             }}
-          />
+          </form.Field>
 
-          <form.Field
-            name="notifications"
-            children={(field) => {
+          <form.Field name="notifications">
+            {(field) => {
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
@@ -215,11 +210,10 @@ const TanStackFormPage = () => {
                 </Field>
               );
             }}
-          />
+          </form.Field>
 
-          <form.Field
-            name="agreeToTerms"
-            children={(field) => {
+          <form.Field name="agreeToTerms">
+            {(field) => {
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
@@ -228,7 +222,7 @@ const TanStackFormPage = () => {
                       id={field.name}
                       checked={field.state.value}
                       onCheckedChange={(checked) => {
-                        field.handleChange(checked as boolean);
+                        field.handleChange(checked);
                         field.handleBlur();
                       }}
                     />
@@ -241,7 +235,7 @@ const TanStackFormPage = () => {
                 </Field>
               );
             }}
-          />
+          </form.Field>
 
           <form.Subscribe
             selector={(state) => ({

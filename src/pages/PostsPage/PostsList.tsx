@@ -14,7 +14,7 @@ import { postsListQueryOptions, POSTS_PER_PAGE, TOTAL_POSTS } from '@/queries/po
 
 function PostsList() {
   const navigate = useNavigate();
-  const { lang } = useParams({ strict: false }) as { lang?: string };
+  const { lang } = useParams({ strict: false });
   const currentLang = lang || 'en';
   const { page } = useSearch({ from: '/$lang/posts/' });
   const currentPage = page || 1;
@@ -24,7 +24,7 @@ function PostsList() {
   const { data: posts } = useSuspenseQuery(postsListQueryOptions(currentPage));
 
   const handlePageChange = (newPage: number) => {
-    navigate({
+    void navigate({
       to: '/$lang/posts',
       params: { lang: currentLang },
       search: { page: newPage },
