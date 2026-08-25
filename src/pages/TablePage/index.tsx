@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import {
-  type ColumnDef,
   type ColumnFiltersState,
+  type ColumnVisibilityState,
   type SortingState,
-  type VisibilityState,
   flexRender,
+} from '@tanstack/react-table';
+import {
+  type LegacyColumnDef,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+  useLegacyTable,
+} from '@tanstack/react-table/legacy';
 import { ArrowUpDown, ArrowUp, ArrowDown, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -70,7 +72,7 @@ const generateSortableHeader = ({ column }: SortableHeaderProps) => {
   );
 };
 
-const columns: ColumnDef<Post>[] = [
+const columns: LegacyColumnDef<Post>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -145,12 +147,12 @@ const columns: ColumnDef<Post>[] = [
 const TablePage = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = useState<ColumnVisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
   const { data: posts } = useSuspenseQuery(allPostsQueryOptions);
 
-  const table = useReactTable({
+  const table = useLegacyTable({
     data: posts,
     columns,
     onSortingChange: setSorting,

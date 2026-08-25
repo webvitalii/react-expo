@@ -17,7 +17,8 @@
     ],
     "@typescript-eslint/no-explicit-any": "warn",
     "react/react-in-jsx-scope": "off",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "react/incompatible-library": "warn"
   },
   "ignorePatterns": [
     "dist/**",
