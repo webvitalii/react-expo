@@ -10,6 +10,7 @@ import {
 import PageLayout from '@/components/PageLayout';
 import { allPostsQueryOptions } from '@/queries/posts';
 
+// Spec: ./spec/README.md — read before changing this page
 const TableSimplePage = () => {
   const { data: posts } = useSuspenseQuery(allPostsQueryOptions);
 

@@ -1,19 +1,24 @@
 import { useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import {
+  columnFilteringFeature,
+  columnVisibilityFeature,
+  createColumnHelper,
+  createFilteredRowModel,
+  createPaginatedRowModel,
+  createSortedRowModel,
+  filterFn_includesString,
+  rowPaginationFeature,
+  rowSelectionFeature,
+  rowSortingFeature,
+  tableFeatures,
+  useTable,
+  type Column,
   type ColumnFiltersState,
   type ColumnVisibilityState,
+  type RowSelectionState,
   type SortingState,
-  flexRender,
 } from '@tanstack/react-table';
-import {
-  type LegacyColumnDef,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useLegacyTable,
-} from '@tanstack/react-table/legacy';
 import { ArrowUpDown, ArrowUp, ArrowDown, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -48,16 +53,29 @@ import { allPostsQueryOptions } from '@/queries/posts';
 
 import type { Post } from '@/types/Post';
 
-interface SortableHeaderProps {
-  column: {
-    getIsSorted: () => 'asc' | 'desc' | false;
-    toggleSorting: (asc: boolean) => void;
-    id: string;
-  };
-}
+// Table V9 requires an explicit `features` declaration; only the row models
+// this page actually uses are registered so unused feature code tree-shakes away.
+// `filterFns` must be registered explicitly too: unlike sorting's auto-fn,
+// `column.getAutoFilterFn()` looks up its chosen name (`includesString` for the
+// string `title` column) in this registry and returns `undefined` if it's missing,
+// silently disabling the filter.
+const features = tableFeatures({
+  columnFilteringFeature,
+  columnVisibilityFeature,
+  rowPaginationFeature,
+  rowSelectionFeature,
+  rowSortingFeature,
+  filteredRowModel: createFilteredRowModel(),
+  paginatedRowModel: createPaginatedRowModel(),
+  sortedRowModel: createSortedRowModel(),
+  filterFns: { includesString: filterFn_includesString },
+});
 
-const generateSortableHeader = ({ column }: SortableHeaderProps) => {
-  // console.log("header", column);
+// The `any` value type lets this header renderer be shared across columns with
+// different cell value types (number, string); `Column`'s value parameter is
+// otherwise invariant, so `unknown` would reject narrower columns here.
+// oxlint-disable-next-line no-explicit-any
+const generateSortableHeader = ({ column }: { column: Column<typeof features, Post, any> }) => {
   const isSorted = column.getIsSorted();
   const isAsc = isSorted === 'asc';
   const isDesc = isSorted === 'desc';
@@ -72,8 +90,10 @@ const generateSortableHeader = ({ column }: SortableHeaderProps) => {
   );
 };
 
-const columns: LegacyColumnDef<Post>[] = [
-  {
+const columnHelper = createColumnHelper<typeof features, Post>();
+
+const columns = columnHelper.columns([
+  columnHelper.display({
     id: 'select',
     header: ({ table }) => (
       <Checkbox
@@ -92,28 +112,24 @@ const columns: LegacyColumnDef<Post>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
-  },
-  {
-    accessorKey: 'id',
+  }),
+  columnHelper.accessor('id', {
     header: generateSortableHeader,
     cell: ({ row }) => <div>{row.getValue('id')}</div>,
-  },
-  {
-    accessorKey: 'userId',
+  }),
+  columnHelper.accessor('userId', {
     header: generateSortableHeader,
     cell: ({ row }) => <div>{row.getValue('userId')}</div>,
-  },
-  {
-    accessorKey: 'title',
+  }),
+  columnHelper.accessor('title', {
     header: generateSortableHeader,
     cell: ({ row }) => <div>{row.getValue('title')}</div>,
-  },
-  {
-    accessorKey: 'body',
+  }),
+  columnHelper.accessor('body', {
     header: generateSortableHeader,
     cell: ({ row }) => <div>{row.getValue('body')}</div>,
-  },
-  {
+  }),
+  columnHelper.display({
     id: 'actions',
     enableHiding: false,
     cell: ({ row }) => {
@@ -141,26 +157,24 @@ const columns: LegacyColumnDef<Post>[] = [
         </DropdownMenu>
       );
     },
-  },
-];
+  }),
+]);
 
+// Spec: ./spec/README.md — read before changing this page
 const TablePage = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<ColumnVisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const { data: posts } = useSuspenseQuery(allPostsQueryOptions);
 
-  const table = useLegacyTable({
+  const table = useTable({
+    features,
     data: posts,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
@@ -173,7 +187,7 @@ const TablePage = () => {
 
   const {
     pagination: { pageIndex },
-  } = table.getState();
+  } = table.state;
 
   const renderHeader = () => (
     <TableHeader>
@@ -182,9 +196,7 @@ const TablePage = () => {
           {headerGroup.headers.map((header) => {
             return (
               <TableHead key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(header.column.columnDef.header, header.getContext())}
+                {header.isPlaceholder ? null : <table.FlexRender header={header} />}
               </TableHead>
             );
           })}
@@ -200,7 +212,7 @@ const TablePage = () => {
           <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
             {row.getVisibleCells().map((cell) => (
               <TableCell key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                <table.FlexRender cell={cell} />
               </TableCell>
             ))}
           </TableRow>
