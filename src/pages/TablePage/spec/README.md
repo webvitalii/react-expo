@@ -85,10 +85,16 @@ N/A — this page does not use `useTranslation`; all copy is inline English.
 
 ## Logic / Helpers
 
-Self-contained in `index.tsx`: `generateSortableHeader` (shared sortable header renderer,
-typed generically over cell value via `Column<typeof features, Post, any>` since `Column`'s
-value parameter is otherwise invariant), the `columns` array, and inline `renderHeader` /
-`renderBody` closures plus the numbered pagination control builder.
+- `index.tsx`: `generateSortableHeader` (shared sortable header renderer, typed generically
+  over cell value via `Column<typeof features, Post, any>` since `Column`'s value parameter is
+  otherwise invariant), the `columns` array, and inline `renderHeader` / `renderBody` closures.
+- `TablePaginationControls.tsx`: presentational numbered-pagination control (prev / numbered
+  pages with ellipses / next). Deliberately table-agnostic — takes plain
+  `currentPage`/`totalPages`/callback props instead of a `Table<...>` instance — so it stays
+  independently testable and reusable outside TanStack Table.
+- `paginationRange.ts`: pure `getPaginationRange(currentPage, totalPages, maxVisiblePages)`
+  helper that computes the page-number/ellipsis sequence rendered by
+  `TablePaginationControls`.
 
 ## Output
 
@@ -98,11 +104,13 @@ writes to the clipboard; no other persistence or network side effects.
 ## Files to Touch
 
 ```
-src/pages/TablePage/index.tsx       ← table setup, columns, rendering
-src/routes/tables/table.tsx         ← route + posts query preload
-src/components/Navbar/navConfig.ts  ← "Tables" nav entry (to: '/tables/table')
-src/queries/posts.ts                ← allPostsQueryOptions
-src/types/Post.tsx                  ← Post type used by columns
+src/pages/TablePage/index.tsx                       ← table setup, columns, rendering
+src/pages/TablePage/TablePaginationControls.tsx     ← numbered pagination control (presentational)
+src/pages/TablePage/paginationRange.ts              ← pure page-range/ellipsis calculation
+src/routes/tables/table.tsx                         ← route + posts query preload
+src/components/Navbar/navConfig.ts                  ← "Tables" nav entry (to: '/tables/table')
+src/queries/posts.ts                                ← allPostsQueryOptions
+src/types/Post.tsx                                  ← Post type used by columns
 ```
 
 ## Out of Scope

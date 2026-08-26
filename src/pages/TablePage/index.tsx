@@ -41,17 +41,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
 import PageLayout from '@/components/PageLayout';
 import { allPostsQueryOptions } from '@/queries/posts';
+import TablePaginationControls from './TablePaginationControls';
 
 import type { Post } from '@/types/Post';
 
@@ -278,102 +270,15 @@ const TablePage = () => {
             {table.getFilteredSelectedRowModel().rows.length} of{' '}
             {table.getFilteredRowModel().rows.length} row(s) selected.
           </div>
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  size="default"
-                  onClick={() => table.previousPage()}
-                  className={
-                    !table.getCanPreviousPage()
-                      ? 'pointer-events-none opacity-50'
-                      : 'cursor-pointer'
-                  }
-                />
-              </PaginationItem>
-
-              {(() => {
-                const totalPages = table.getPageCount();
-                const currentPage = pageIndex + 1;
-                const pages = [];
-                const maxVisiblePages = 3;
-                let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-                const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-                if (endPage - startPage < maxVisiblePages - 1) {
-                  startPage = Math.max(1, endPage - maxVisiblePages + 1);
-                }
-
-                if (startPage > 1) {
-                  pages.push(
-                    <PaginationItem key={1}>
-                      <PaginationLink
-                        size="icon"
-                        onClick={() => table.setPageIndex(0)}
-                        isActive={currentPage === 1}
-                      >
-                        1
-                      </PaginationLink>
-                    </PaginationItem>,
-                  );
-                  if (startPage > 2) {
-                    pages.push(
-                      <PaginationItem key="ellipsis-start">
-                        <PaginationEllipsis />
-                      </PaginationItem>,
-                    );
-                  }
-                }
-
-                for (let i = startPage; i <= endPage; i++) {
-                  pages.push(
-                    <PaginationItem key={i}>
-                      <PaginationLink
-                        size="icon"
-                        onClick={() => table.setPageIndex(i - 1)}
-                        isActive={currentPage === i}
-                      >
-                        {i}
-                      </PaginationLink>
-                    </PaginationItem>,
-                  );
-                }
-
-                if (endPage < totalPages) {
-                  if (endPage < totalPages - 1) {
-                    pages.push(
-                      <PaginationItem key="ellipsis-end">
-                        <PaginationEllipsis />
-                      </PaginationItem>,
-                    );
-                  }
-                  pages.push(
-                    <PaginationItem key={totalPages}>
-                      <PaginationLink
-                        size="icon"
-                        onClick={() => table.setPageIndex(totalPages - 1)}
-                        isActive={currentPage === totalPages}
-                      >
-                        {totalPages}
-                      </PaginationLink>
-                    </PaginationItem>,
-                  );
-                }
-
-                return pages;
-              })()}
-
-              <PaginationItem>
-                <PaginationNext
-                  size="default"
-                  onClick={() => table.nextPage()}
-                  className={
-                    !table.getCanNextPage() ? 'pointer-events-none opacity-50' : 'cursor-pointer'
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <TablePaginationControls
+            currentPage={pageIndex + 1}
+            totalPages={table.getPageCount()}
+            canPreviousPage={table.getCanPreviousPage()}
+            canNextPage={table.getCanNextPage()}
+            onPreviousPage={() => table.previousPage()}
+            onNextPage={() => table.nextPage()}
+            onPageChange={(page) => table.setPageIndex(page)}
+          />
         </div>
       </div>
     </PageLayout>
