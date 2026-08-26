@@ -20,14 +20,15 @@ Registered at `/tables/table` via `createFileRoute('/tables/table')` in
 
 ## UI
 
-| Field                              | Type                                                      | Notes                                                                                                    |
-| ---------------------------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Filter posts...                    | `Input`                                                   | Filters rows by the `title` column's filter value.                                                       |
-| Select column                      | `Checkbox` (header + per-row)                             | Header toggles all rows on the current page; indeterminate when some but not all page rows are selected. |
-| id / userId / title / body columns | Sortable header (`Button`)                                | Click toggles asc/desc/none; shows an up/down/unsorted arrow icon.                                       |
-| Actions column                     | Dropdown menu (`MoreHorizontal` trigger)                  | "Copy post title" (writes to clipboard), "Edit post" and "Delete post" (no-op placeholders).             |
-| Pagination                         | `Pagination` (prev / numbered pages with ellipses / next) | Prev/next disabled at the first/last page. Shows up to 3 page numbers around the current page.           |
-| Selection count                    | Text (`"{n} of {m} row(s) selected."`)                    | Derived from `getFilteredSelectedRowModel()` / `getFilteredRowModel()`.                                  |
+| Field                              | Type                                                      | Notes                                                                                                                                  |
+| ---------------------------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Filter posts...                    | `Input`                                                   | Filters rows by the `title` column's filter value.                                                                                     |
+| Columns                            | Dropdown menu (`Button` trigger, checkbox items)          | Toggles per-column visibility for every column with `getCanHide() === true` (`id`, `userId`, `title`, `body`; not `select`/`actions`). |
+| Select column                      | `Checkbox` (header + per-row)                             | Header toggles all rows on the current page; indeterminate when some but not all page rows are selected.                               |
+| id / userId / title / body columns | Sortable header (`Button`)                                | Click toggles asc/desc/none; shows an up/down/unsorted arrow icon.                                                                     |
+| Actions column                     | Dropdown menu (`MoreHorizontal` trigger)                  | "Copy post title" (writes to clipboard), "Edit post" and "Delete post" (no-op placeholders).                                           |
+| Pagination                         | `Pagination` (prev / numbered pages with ellipses / next) | Prev/next disabled at the first/last page. Shows up to 3 page numbers around the current page.                                         |
+| Selection count                    | Text (`"{n} of {m} row(s) selected."`)                    | Derived from `getFilteredSelectedRowModel()` / `getFilteredRowModel()`.                                                                |
 
 ## Flow
 
@@ -42,15 +43,19 @@ Registered at `/tables/table` via `createFileRoute('/tables/table')` in
 6. User opens the actions dropdown on a row → "Copy post title" copies `post.title` to the
    clipboard via `navigator.clipboard.writeText`; "Edit post" / "Delete post" have no handlers
    yet.
+7. User opens the "Columns" dropdown and checks/unchecks a column → `column.toggleVisibility()`
+   updates `columnVisibility` state; hidden columns disappear from both the header row and body
+   cells (via `getVisibleFlatColumns()` / `getVisibleCells()`), and the empty-state row's
+   `colSpan` is computed from `getVisibleLeafColumns().length` so it still spans correctly.
 
 ## State
 
-| State              | Type                    | Default | Purpose                                                |
-| ------------------ | ----------------------- | ------- | ------------------------------------------------------ |
-| `sorting`          | `SortingState`          | `[]`    | Controlled sort state passed to `useTable`.            |
-| `columnFilters`    | `ColumnFiltersState`    | `[]`    | Controlled column filter state (title text filter).    |
-| `columnVisibility` | `ColumnVisibilityState` | `{}`    | Controlled column visibility state (no UI toggle yet). |
-| `rowSelection`     | `RowSelectionState`     | `{}`    | Controlled row selection state.                        |
+| State              | Type                    | Default | Purpose                                                               |
+| ------------------ | ----------------------- | ------- | --------------------------------------------------------------------- |
+| `sorting`          | `SortingState`          | `[]`    | Controlled sort state passed to `useTable`.                           |
+| `columnFilters`    | `ColumnFiltersState`    | `[]`    | Controlled column filter state (title text filter).                   |
+| `columnVisibility` | `ColumnVisibilityState` | `{}`    | Controlled column visibility state, driven by the "Columns" dropdown. |
+| `rowSelection`     | `RowSelectionState`     | `{}`    | Controlled row selection state.                                       |
 
 Pagination (`pagination.pageIndex` / `pageSize`) is left uncontrolled — TanStack Table owns it
 internally and it is read from `table.state.pagination` (the default `useTable` selector
@@ -102,6 +107,5 @@ src/types/Post.tsx                  ← Post type used by columns
 
 ## Out of Scope
 
-- Column visibility UI (state exists, no toggle control rendered).
 - "Edit post" / "Delete post" actions (menu items have no handlers).
 - Server-side sorting/filtering/pagination (all client-side row models).

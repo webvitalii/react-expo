@@ -24,6 +24,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -219,7 +220,7 @@ const TablePage = () => {
         ))
       ) : (
         <TableRow>
-          <TableCell colSpan={columns.length} className="h-24 text-center">
+          <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24 text-center">
             No results.
           </TableCell>
         </TableRow>
@@ -230,13 +231,37 @@ const TablePage = () => {
   return (
     <PageLayout title="Table with sorting, filtering and pagination.">
       <div className="w-full">
-        <div className="flex items-center py-4">
+        <div className="flex items-center justify-between py-4">
           <Input
             placeholder="Filter posts..."
             value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
             onChange={(event) => table.getColumn('title')?.setFilterValue(event.target.value)}
             className="max-w-sm"
           />
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={(props) => (
+                <Button {...props} variant="outline" className="ml-auto">
+                  Columns
+                </Button>
+              )}
+            />
+            <DropdownMenuContent align="end">
+              {table
+                .getAllLeafColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <div className="rounded-md border">
