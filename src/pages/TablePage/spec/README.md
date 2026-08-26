@@ -20,15 +20,16 @@ Registered at `/tables/table` via `createFileRoute('/tables/table')` in
 
 ## UI
 
-| Field                              | Type                                                      | Notes                                                                                                                                  |
-| ---------------------------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Filter posts...                    | `Input`                                                   | Filters rows by the `title` column's filter value.                                                                                     |
-| Columns                            | Dropdown menu (`Button` trigger, checkbox items)          | Toggles per-column visibility for every column with `getCanHide() === true` (`id`, `userId`, `title`, `body`; not `select`/`actions`). |
-| Select column                      | `Checkbox` (header + per-row)                             | Header toggles all rows on the current page; indeterminate when some but not all page rows are selected.                               |
-| id / userId / title / body columns | Sortable header (`Button`)                                | Click toggles asc/desc/none; shows an up/down/unsorted arrow icon.                                                                     |
-| Actions column                     | Dropdown menu (`MoreHorizontal` trigger)                  | "Copy post title" (writes to clipboard), "Edit post" and "Delete post" (no-op placeholders).                                           |
-| Pagination                         | `Pagination` (prev / numbered pages with ellipses / next) | Prev/next disabled at the first/last page. Shows up to 3 page numbers around the current page.                                         |
-| Selection count                    | Text (`"{n} of {m} row(s) selected."`)                    | Derived from `getFilteredSelectedRowModel()` / `getFilteredRowModel()`.                                                                |
+| Field                              | Type                                                          | Notes                                                                                                                                                |
+| ---------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Filter posts...                    | `Input`                                                       | Filters rows by the `title` column's filter value.                                                                                                   |
+| Columns                            | Dropdown menu (`Button` trigger, checkbox items)              | Toggles per-column visibility for every column with `getCanHide() === true` (`id`, `userId`, `title`, `body`; not `select`/`actions`).               |
+| Select column                      | `Checkbox` (header + per-row)                                 | Header toggles all rows on the current page; indeterminate when some but not all page rows are selected.                                             |
+| id / userId / title / body columns | Sortable header (`Button`)                                    | Click toggles asc/desc/none; shows an up/down/unsorted arrow icon.                                                                                   |
+| title / body cell text             | Truncated `div` (`max-w-[240px]`/`max-w-[320px]`, `truncate`) | Long post titles/bodies are clipped with an ellipsis (full text via the native tooltip) instead of stretching the table into a horizontal scrollbar. |
+| Actions column                     | Dropdown menu (`MoreHorizontal` trigger)                      | "Copy post title" (writes to clipboard), "Edit post" and "Delete post" (no-op placeholders).                                                         |
+| Pagination                         | `Pagination` (prev / numbered pages with ellipses / next)     | Prev/next disabled at the first/last page. Shows up to 3 page numbers around the current page.                                                       |
+| Selection count                    | Text (`"{n} of {m} row(s) selected."`)                        | Derived from `getFilteredSelectedRowModel()` / `getFilteredRowModel()`.                                                                              |
 
 ## Flow
 

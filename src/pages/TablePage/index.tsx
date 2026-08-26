@@ -117,11 +117,22 @@ const columns = columnHelper.columns([
   }),
   columnHelper.accessor('title', {
     header: generateSortableHeader,
-    cell: ({ row }) => <div>{row.getValue('title')}</div>,
+    // Capped width + truncation keeps long titles from stretching the table
+    // wide enough to force a horizontal scrollbar; full text is still
+    // available via the native `title` tooltip.
+    cell: ({ row }) => (
+      <div className="max-w-[240px] truncate" title={row.getValue<string>('title')}>
+        {row.getValue<string>('title')}
+      </div>
+    ),
   }),
   columnHelper.accessor('body', {
     header: generateSortableHeader,
-    cell: ({ row }) => <div>{row.getValue('body')}</div>,
+    cell: ({ row }) => (
+      <div className="max-w-[320px] truncate" title={row.getValue<string>('body')}>
+        {row.getValue<string>('body')}
+      </div>
+    ),
   }),
   columnHelper.display({
     id: 'actions',
